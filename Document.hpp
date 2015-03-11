@@ -1,7 +1,37 @@
 #ifndef _DOCUMENT_HPP
 #define _DOCUMENT_HPP
 
+#include <string>
+#include <stdio.h>
+#include <wchar.h>
+
 #include <boost/filesystem.hpp>
+#include <sal/main.h>
+#include <cppuhelper/bootstrap.hxx>
+
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/process.h>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::bridge;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::registry;
+
+using namespace boost;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+
 
 struct format {
 	enum type {
@@ -9,14 +39,7 @@ struct format {
 	};
 };
 
-class Document {
-	private:
-		filesystem::path file_path;
-	public:
-		Document();
-		~Document();
-		void open(const filesystem::path& path);
-		void export(const filesystem::path& filenane,format::type format = format::PDF);
-};
+void open(const boost::filesystem::path& path);
+//void export(const filesystem::path& filename,format::type format = format::PDF);
 
 #endif
