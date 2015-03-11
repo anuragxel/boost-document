@@ -1,8 +1,9 @@
 #include "Document.hpp"
-#include "Document.cpp"
+//#include "Document.cpp"
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
 	boost::filesystem::path pth(argv[1]);
 	open(pth);
+	export(pth,format::PDF);
 }

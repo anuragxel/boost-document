@@ -40,6 +40,6 @@ struct format {
 };
 
 void open(const boost::filesystem::path& path);
-//void export(const filesystem::path& filename,format::type format = format::PDF);
+void export(const filesystem::path& path,format::type format = format::PDF);
 
 #endif

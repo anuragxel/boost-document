@@ -40,16 +40,15 @@ include $(SETTINGS)/settings.mk
 include $(SETTINGS)/std.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT_NAME=Test
+COMPONENT_NAME=test
 
 OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
 CXXFILES = Document.cpp test.cxx
+OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 BOOSTLIB = -lboost_system -lboost_filesystem
-
-OBJFILES = $(patsubst %.cpp,%.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 ENV_OFFICE_TYPES=-env:URE_MORE_TYPES=$(URLPREFIX)$(OFFICE_TYPES)
 
@@ -60,11 +59,11 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx %.cpp $(SDKTYPEFLAG)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/Test$(EXE_EXT) : $(OUT_COMP_OBJ)/Test.$(OBJ_EXT)
+$(OUT_BIN)/DocumentLoader$(EXE_EXT) : $(OUT_COMP_OBJ)/test.$(OBJ_EXT)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 ifeq "$(OS)" "WIN"
@@ -78,7 +77,7 @@ ifeq "$(OS)" "MACOSX"
 endif
 endif
 
-Test : $(OUT_BIN)/Test$(EXE_EXT)
+CppDocumentLoaderExample : $(OUT_BIN)/test$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
 	@echo The example loads the "$(QM)test.odt$(QM)" document in the DocumentLoader example directory.
 	@echo If you want to load your own document, please use: 
@@ -96,7 +95,7 @@ Test : $(OUT_BIN)/Test$(EXE_EXT)
 	@echo $(SQM)  $(SQM)soffice "$(QM)--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_BIN)/Test$(EXE_EXT)
+%.run: $(OUT_BIN)/test$(EXE_EXT)
 	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(ENV_OFFICE_TYPES) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.odt"))
 
 .PHONY: clean
@@ -104,4 +103,4 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/Test*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/test*))
