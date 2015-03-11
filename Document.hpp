@@ -29,6 +29,8 @@ using namespace com::sun::star::registry;
 
 using namespace boost;
 
+
+using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
@@ -39,7 +41,7 @@ struct format {
 	};
 };
 
-void open(const boost::filesystem::path& path);
-void export(const filesystem::path& path,format::type format = format::PDF);
+extern void open_spreadsheet(const boost::filesystem::path& path);
+extern void export_spreadsheet(const filesystem::path& path,format::type format = format::PDF);
 
 #endif

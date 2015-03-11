@@ -46,10 +46,10 @@ OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
-CXXFILES = Document.cpp test.cxx
+CXXFILES = Document.cxx Test.cxx
 BOOSTLIB = -lboost_system -lboost_filesystem
 
-OBJFILES = $(patsubst %.cpp,%.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
+OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 ENV_OFFICE_TYPES=-env:URE_MORE_TYPES=$(URLPREFIX)$(OFFICE_TYPES)
 
@@ -60,7 +60,7 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx %.cpp $(SDKTYPEFLAG)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 

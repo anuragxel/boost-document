@@ -3,8 +3,8 @@
 
 #include "Document.hpp"
 
-
-Reference< XMultiServiceFactory > ooConnect(OUString con_string){
+/*
+Reference< XMultiServiceFactory > ooConnect(){
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
 				defaultBootstrap_InitialComponentContext();
@@ -48,12 +48,13 @@ Reference< XMultiServiceFactory > ooConnect(OUString con_string){
    }
    return NULL;
 }
+*/
 
 // Code Adapted from the DocumentLoader Example given
 // in the LibreOffice Documentation
-int open_oo(const filesystem::path& path, std::string con_string="uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") {
+int open_oo(const filesystem::path& path) {
 
-	OUString OU_con_string = OUString::createFromAscii(con_string.c_str());
+	OUString OU_con_string = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
     Reference< XMultiComponentFactory > xMultiComponentFactoryClient(
@@ -98,72 +99,35 @@ int open_oo(const filesystem::path& path, std::string con_string="uno:socket,hos
     return 0;
 }
 
-void open(const boost::filesystem::path& path) {
-	open_oo(path,"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");	
+void open_spreadsheet(const boost::filesystem::path& path) {
+	open_oo(path);	
 }
 
-
-void export(const filesystem::path& path,format::type format=format::PDF) {
+/*
+void export_spreadsheet(const filesystem::path& path,format::type format=format::PDF) {
 	Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = ooConnect();
+    rOfficeServiceManager = ooConnect(OUString::createFromAscii(path.string().c_str()));
     if( rOfficeServiceManager.is() ){
         printf( "Connected sucessfully to the office\n" );
     }
  
-	//get the desktop service using createInstance returns an XInterface type
+	 //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
     OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
  
-	//query for the XComponentLoader interface
+	 //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
     if( rComponentLoader.is() ){
         	printf( "XComponentloader successfully instanciated\n" );
     }
 
-	//get an instance of the spreadsheet
+	 //get an instance of the spreadsheet
     Reference< XComponent > xcomponent = rComponentLoader->loadComponentFromURL(
 		OUString::createFromAscii("private:factory/scalc"),
         OUString::createFromAscii("_blank"),
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >()
         );
-    
-    // access its XTextDocument interface
-    XTextDocument xTextDocument = (XTextDocument) UnoRuntime.queryInterface(
-            XTextDocument.class, xComponent);
-     
-    // access the text body and set a string
-    XText xText = xTextDocument.getText();
-    xText.setString("Simple PDF export demo.");
-     
-    // XStorable to store the document
-    XStorable xStorable = (XStorable) UnoRuntime.queryInterface(
-            XStorable.class, xComponent);
-     
-    // XStorable.storeToURL() expects an URL telling where to store the document
-    // and an array of PropertyValue indicating how to store it
-
-    // URL
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
-    OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
-
-    osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath( sArgDocUrl, sDocPathUrl);
-    osl::FileBase::getAbsoluteFileURL( sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
-
-    sAbsoluteDocUrl = sAbsoluteDocUrl + ".pdf";
-
-    // Exporting to PDF consists of giving the proper
-    // filter name in the property "FilterName"
-    // With only this, the document will be exported
-    // using the existing PDF export settings
-    // (the one used the last time, or the default if the first time)
-    PropertyValue[] aMediaDescriptor = new PropertyValue[1];
-    aMediaDescriptor[0] = new PropertyValue();
-    aMediaDescriptor[0].Name = "FilterName";
-    aMediaDescriptor[0].Value = "writer_pdf_Export";
-    xStorable.storeToURL(sAbsoluteDocUrl, aMediaDescriptor);
-    return 0;
 }
-
+*/
 #endif
