@@ -1,5 +1,4 @@
-#ifndef _DOCUMENT_HPP
-#define _DOCUMENT_HPP
+#pragma once 
 
 #include <string>
 #include <stdio.h>
@@ -53,7 +52,6 @@ struct format {
 	};
 };
 
-extern void open_spreadsheet(const boost::filesystem::path& path);
+void open_spreadsheet(const boost::filesystem::path& path);
+int __open_oo(const boost::filesystem::path& path);
 //extern void export_spreadsheet(const filesystem::path& path,format::type format = format::PDF);
-
-#endif
