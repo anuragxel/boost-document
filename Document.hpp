@@ -22,6 +22,7 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -36,6 +37,7 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
+//using namespace com::sun::star::text;
 
 using namespace rtl;
 using namespace cppu;

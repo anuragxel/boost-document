@@ -11,6 +11,31 @@ Document::~Document() {
 
 }
 
+std::string __convertExtensionToPdfFilterType(std::string extension)
+{
+    if(	extension == ".doc"  ||
+        extension == ".docx" ||
+        extension == ".txt"  ||
+        extension == ".rtf"  ||
+        extension == ".html" ||
+        extension == ".htm"  ||
+        extension == ".xml"  ||
+       	extension == ".odt"  ||
+        extension == ".wps"  ||
+        extension == ".wpd" ) {
+            return "writer_pdf_Export";
+    }
+    else if( extension == ".xls"  || extension == ".xlsb" || extension == ".ods" ) {
+            return "calc_pdf_Export";
+    }
+    else if (extension == ".ppt"  || extension == ".pptx" || extension == ".odp" ) {
+            return "impress_pdf_Export";
+    }
+    else {
+        return "";
+    }
+}
+
 // Helper which returns the OfficeServiceManager
 // if connection is established.
 Reference< XMultiServiceFactory > connectWithOO(){
@@ -132,12 +157,13 @@ int __openOO(const boost::filesystem::path& path) {
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
     if( !xComponentLoader.is() ){
             std::cerr << "XComponentloader not successfully instantiated" << std::endl;
-            return;
+            return -1;
     }
     return 0;
 }
 
-void __exportOO(const filesystem::path &path, office_file_format::type format) {
+
+int __exportOO(const filesystem::path &inputPath, office_file_format::type format) {
 
     __initializeOffapi();
 
@@ -145,32 +171,49 @@ void __exportOO(const filesystem::path &path, office_file_format::type format) {
     rOfficeServiceManager = connectWithOO();
     if( !rOfficeServiceManager.is() ){
         std::cerr << "Not Connected sucessfully to the office" << std::endl;
-        return;
+        return -1;
     }
- 
      //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
     OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
- 
+    
      //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
-    
+    Reference< XComponent > xComponent;
     //get an instance of the spreadsheet
-    Reference< XComponent > xComponent = rComponentLoader->loadComponentFromURL(
-        getURLfromPath(path),
-        OUString::createFromAscii("_blank"),
-        0,
-        Sequence < ::com::sun::star::beans::PropertyValue >()
-    );
-    if( !rComponentLoader.is() ){
+    try {
+		xComponent = rComponentLoader->loadComponentFromURL(
+        	getURLfromPath(inputPath),
+        	OUString::createFromAscii("_blank"),
+        	0,
+        	Sequence < ::com::sun::star::beans::PropertyValue >()
+    	);
+    	if( !rComponentLoader.is() ){
             std::cerr << "XComponentloader not successfully instantiated" << std::endl;
-            return;
+            return -1;
+    	}
     }
+    catch( Exception &e ){
+    	std::cerr << "Error While Loading File." << std::endl;
+    	return -1;
+    }
+    
+    
+    boost::filesystem::path outputPath(inputPath);
+    std::string filter;
+    if(format == boost::office_file_format::PDF) {
+    	outputPath.replace_extension(".pdf");
+    	filter = __convertExtensionToPdfFilterType( inputPath.extension().string() );
+  	}
+   	
+   	Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(1);
+    pdfProperties[0].Name = OUString::createFromAscii("FilterName");
+    pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
+    //pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
+    //pdfProperties[1].Value <<= (sal_Bool)true; 
 
-    // code here. :)
-    Reference < XTextDocument > xTextDocument = UnoRuntime.queryInterface(
-        XTextDocument.class, xComponent);
-
+    Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+    xStorable->storeToURL(OUString::createFromAscii(outputPath.string().c_str()),pdfProperties); 
 }
 
 void Document::open_document(const boost::filesystem::path& path) {
@@ -179,7 +222,7 @@ void Document::open_document(const boost::filesystem::path& path) {
 
 
 void Document::export_document(const filesystem::path& path,office_file_format::type format) {
-    __exportOO(path,format);
+    __exportOO(path,format); // This the open office internal function.
 }
 
 #endif
