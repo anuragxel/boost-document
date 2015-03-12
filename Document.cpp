@@ -1,5 +1,5 @@
 #ifndef _DOCUMENT_CPP
-#define _DICUMENT_CPP
+#define _DOCUMENT_CPP
 
 #include "Document.hpp"
 
@@ -11,7 +11,8 @@ Document::~Document() {
 
 }
 
-
+// Helper which returns the OfficeServiceManager
+// if connection is established.
 Reference< XMultiServiceFactory > connectWithOO(){
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
@@ -27,8 +28,8 @@ Reference< XMultiServiceFactory > connectWithOO(){
  
    // Query for the XUnoUrlResolver interface
    Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
-   if( ! rResolver.is() ){
-      printf( "Error: Couldn't instantiate com.sun.star.bridge.UnoUrlResolver service\n" );
+   if( !rResolver.is() ){
+      std::cerr << "Error: Couldn't instantiate com.sun.star.bridge.UnoUrlResolver service." << std::endl;
       return NULL;
    }
    try {
@@ -37,7 +38,7 @@ Reference< XMultiServiceFactory > connectWithOO(){
         "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
  
       if( ! rInstance.is() ){
-         printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
+         std::cerr << "StarOffice.ServiceManager is not exported from remote counterpart\n" << std::endl;
          return NULL;
       }
 
@@ -45,7 +46,7 @@ Reference< XMultiServiceFactory > connectWithOO(){
       Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
  
       if( ! rOfficeServiceManager.is() ){
-            printf( "XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n" );
+            std::cerr << "XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n" << std::endl;
             return NULL;
         }       
         return rOfficeServiceManager;
@@ -111,6 +112,7 @@ int __openOO(const boost::filesystem::path& path) {
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server here and then try again, but i don't think that's a good way to go about this.
         // Will find the correct way ASAP, after export is done.
+
         exit(1);
     }
 
@@ -127,24 +129,23 @@ int __openOO(const boost::filesystem::path& path) {
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >() 
     );
-    Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();
-    
+    Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
+    if( !xComponentLoader.is() ){
+            std::cerr << "XComponentloader not successfully instantiated" << std::endl;
+            return;
+    }
     return 0;
 }
 
-void Document::open_spreadsheet(const boost::filesystem::path& path) {
-    __openOO(path); // This the open office internal function.
-}
-
-
-void Document::export_spreadsheet(const filesystem::path& path,office_file_format::type format) {
+void __exportOO(const filesystem::path &path, office_file_format::type format) {
 
     __initializeOffapi();
 
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = connectWithOO();
-    if( rOfficeServiceManager.is() ){
-        printf( "Connected sucessfully to the office\n" );
+    if( !rOfficeServiceManager.is() ){
+        std::cerr << "Not Connected sucessfully to the office" << std::endl;
+        return;
     }
  
      //get the desktop service using createInstance returns an XInterface type
@@ -153,19 +154,32 @@ void Document::export_spreadsheet(const filesystem::path& path,office_file_forma
  
      //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
-    if( rComponentLoader.is() ){
-            printf( "XComponentloader successfully instantiated\n" );
-    }
-
+    
     //get an instance of the spreadsheet
-    Reference< XComponent > xcomponent = rComponentLoader->loadComponentFromURL(
+    Reference< XComponent > xComponent = rComponentLoader->loadComponentFromURL(
         getURLfromPath(path),
         OUString::createFromAscii("_blank"),
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >()
     );
+    if( !rComponentLoader.is() ){
+            std::cerr << "XComponentloader not successfully instantiated" << std::endl;
+            return;
+    }
 
     // code here. :)
+    Reference < XTextDocument > xTextDocument = UnoRuntime.queryInterface(
+        XTextDocument.class, xComponent);
+
+}
+
+void Document::open_document(const boost::filesystem::path& path) {
+    __openOO(path); // This the open office internal function.
+}
+
+
+void Document::export_document(const filesystem::path& path,office_file_format::type format) {
+    __exportOO(path,format);
 }
 
 #endif

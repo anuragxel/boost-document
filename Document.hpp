@@ -3,8 +3,9 @@
 
 #include <string>
 #include <iostream>
-#include <stdio.h>
-#include <wchar.h>
+
+//#include <string.h>
+//#include <wchar.h>
 
 #include <boost/filesystem.hpp>
 
@@ -26,7 +27,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -55,13 +55,13 @@ namespace boost {
 	};
 
 	class Document {
-		public:
-			Document();
-			~Document();
-			void open_spreadsheet(const boost::filesystem::path& path);
-			void export_spreadsheet(const boost::filesystem::path& path,office_file_format::type format = office_file_format::PDF);
+	public:
+		Document();
+		~Document();
+		void open_document(const boost::filesystem::path& path);
+		void export_document(const boost::filesystem::path& path,office_file_format::type format = office_file_format::PDF);
 	};
-	
+
 } // namespace boost
 
 #endif
