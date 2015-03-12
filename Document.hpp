@@ -14,11 +14,19 @@
 #include <rtl/process.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
+
+#include <cppuhelper/bootstrap.hxx>
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

@@ -1,5 +1,5 @@
 #include "Document.hpp"
-#include "Document.cxx"
+#include "Document.cpp"
 
 int main(int argc, char **argv) {
 	boost::filesystem::path pth(argv[1]);

@@ -7,7 +7,7 @@
 Reference< XMultiServiceFactory > ooConnect(){
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
-				defaultBootstrap_InitialComponentContext();
+				::cppu::defaultBootstrap_InitialComponentContext();
  
    // retrieve the servicemanager from the context
    Reference< XMultiComponentFactory > rServiceManager = 
@@ -66,17 +66,16 @@ int open_oo(const filesystem::path& path) {
             xComponentContext );
 
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
-
     try {
         xInterface = Reference< XInterface >(
             resolver->resolve( OU_con_string ), UNO_QUERY );
     }
     catch ( Exception& e ) {
+    	printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
         exit(1);
     }
-    Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
+   	Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
     xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
-
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);

@@ -46,10 +46,10 @@ OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
-CXXFILES = Document.cxx Test.cxx
+CXXFILES = Document.cpp Test.cpp
 BOOSTLIB = -lboost_system -lboost_filesystem
 
-OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
+OBJFILES = $(patsubst %.cpp,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 ENV_OFFICE_TYPES=-env:URE_MORE_TYPES=$(URLPREFIX)$(OFFICE_TYPES)
 
@@ -60,7 +60,7 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cpp $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
@@ -80,24 +80,11 @@ endif
 
 Test : $(OUT_BIN)/Test$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
-	@echo The example loads the "$(QM)test.odt$(QM)" document in the DocumentLoader example directory.
-	@echo If you want to load your own document, please use: 
-	@echo $(SQM)  $(SQM)DocumentLoader -env:URE_MORE_TYPES="$(QM)<fileurl_office_types_rdb>$(QM)" "$(QM)filename$(QM)" [connection_url]
-	@echo -
-	@echo Use the following command to execute the example!
-	@echo -
-	@echo $(MAKE) DocumentLoader.run
-	@echo -
-	@echo NOTE: This example does not use the new UNO bootstrap mechanism, it uses still a socket
-	@echo $(SQM)      $(SQM)connection. The example use the defaultBootstrap_InitialComponentContext method and provides 
-	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
-	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
-	@echo -
-	@echo $(SQM)  $(SQM)soffice "$(QM)--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
+	@echo ---------------------------------Success----------------------------------------
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/Test$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(ENV_OFFICE_TYPES) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.odt"))
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(OUT_BIN)/untitled.ods
 
 .PHONY: clean
 clean :
