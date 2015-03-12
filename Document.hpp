@@ -6,12 +6,13 @@
 #include <wchar.h>
 
 #include <boost/filesystem.hpp>
+
 #include <sal/main.h>
 #include <cppuhelper/bootstrap.hxx>
-
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/process.h>
+#include <rtl/bootstrap.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -25,15 +26,18 @@
 
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#include <cppuhelper/bootstrap.hxx>
 
-
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
+using namespace com::sun::star::io;
+
+using namespace rtl;
+using namespace cppu;
 
 using namespace boost;
 
@@ -50,6 +54,6 @@ struct format {
 };
 
 extern void open_spreadsheet(const boost::filesystem::path& path);
-extern void export_spreadsheet(const filesystem::path& path,format::type format = format::PDF);
+//extern void export_spreadsheet(const filesystem::path& path,format::type format = format::PDF);
 
 #endif

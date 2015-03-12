@@ -7,11 +7,11 @@
 Reference< XMultiServiceFactory > ooConnect(){
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
-				::cppu::defaultBootstrap_InitialComponentContext();
+                ::cppu::defaultBootstrap_InitialComponentContext();
  
    // retrieve the servicemanager from the context
    Reference< XMultiComponentFactory > rServiceManager = 
-				rComponentContext->getServiceManager();
+                rComponentContext->getServiceManager();
  
    // instantiate a sample service with the servicemanager.
    Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
@@ -51,16 +51,28 @@ Reference< XMultiServiceFactory > ooConnect(){
 */
 
 // Code Adapted from the DocumentLoader Example given
-// in the LibreOffice Documentation
-int open_oo(const filesystem::path& path) {
+// in the LibreOffice/OpenOffice Documentation
+int __open_oo(const boost::filesystem::path& path) {
 
-	OUString OU_con_string = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+    // setting up the bootstrapping and the params. :')
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getFileURLFromSystemPath(
+        OUString::createFromAscii("/usr/lib/libreoffice/program/types/offapi.rdb"), // This makes it non portable. Think workaround. :(
+        sDocPathUrl);
+    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+    rtl::Bootstrap::set(
+        OUString::createFromAscii("URE_MORE_TYPES"),
+        rtl::Bootstrap::encode(sAbsoluteDocUrl)
+    );
+
+    OUString OU_con_string = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
+    
     Reference< XMultiComponentFactory > xMultiComponentFactoryClient(
         xComponentContext->getServiceManager() );
-
-   	Reference< XInterface > xInterface =
+    Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
             OUString("com.sun.star.bridge.UnoUrlResolver"),
             xComponentContext );
@@ -71,58 +83,57 @@ int open_oo(const filesystem::path& path) {
             resolver->resolve( OU_con_string ), UNO_QUERY );
     }
     catch ( Exception& e ) {
-    	printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
+        printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
+        // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
+        // to start the server here and then try again, but i don't think that's a good way to go about this.
         exit(1);
     }
-   	Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
+    Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
     xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
+    
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
-
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
-
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath( sArgDocUrl, sDocPathUrl);
     osl::FileBase::getAbsoluteFileURL( sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
-
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
         sAbsoluteDocUrl, 
         OUString( "_blank" ), 
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >() 
-       	);
+        );
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();
 
     return 0;
 }
 
 void open_spreadsheet(const boost::filesystem::path& path) {
-	open_oo(path);	
+    __open_oo(path);    
 }
 
 /*
 void export_spreadsheet(const filesystem::path& path,format::type format=format::PDF) {
-	Reference< XMultiServiceFactory > rOfficeServiceManager;
+    Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = ooConnect(OUString::createFromAscii(path.string().c_str()));
     if( rOfficeServiceManager.is() ){
         printf( "Connected sucessfully to the office\n" );
     }
  
-	 //get the desktop service using createInstance returns an XInterface type
+     //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
     OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
  
-	 //query for the XComponentLoader interface
+     //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
     if( rComponentLoader.is() ){
-        	printf( "XComponentloader successfully instanciated\n" );
+            printf( "XComponentloader successfully instanciated\n" );
     }
 
-	 //get an instance of the spreadsheet
+     //get an instance of the spreadsheet
     Reference< XComponent > xcomponent = rComponentLoader->loadComponentFromURL(
-		OUString::createFromAscii("private:factory/scalc"),
+        OUString::createFromAscii("private:factory/scalc"),
         OUString::createFromAscii("_blank"),
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >()
