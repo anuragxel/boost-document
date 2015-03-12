@@ -2,6 +2,7 @@
 #define _DOCUMENT_HPP
 
 #include <string>
+#include <iostream>
 #include <stdio.h>
 #include <wchar.h>
 
@@ -39,23 +40,28 @@ using namespace com::sun::star::io;
 using namespace rtl;
 using namespace cppu;
 
-using namespace boost;
-
-
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
+using namespace boost;
 
-struct format {
-	enum type {
-		PDF,CSV,
+namespace boost {
+
+	struct office_file_format {
+		enum type {
+			PDF,CSV,
+		};
 	};
-};
 
-void open_spreadsheet(const boost::filesystem::path& path);
-int __openOO(const boost::filesystem::path& path);
-void __initializeOffapi();
-//void export_spreadsheet(const filesystem::path& path,format::type format = format::PDF);
+	class Document {
+		public:
+			Document();
+			~Document();
+			void open_spreadsheet(const boost::filesystem::path& path);
+			void export_spreadsheet(const boost::filesystem::path& path,office_file_format::type format = office_file_format::PDF);
+	};
+	
+} // namespace boost
 
 #endif

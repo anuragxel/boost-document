@@ -3,6 +3,14 @@
 
 #include "Document.hpp"
 
+Document::Document() {
+
+}
+
+Document::~Document() {
+
+}
+
 
 Reference< XMultiServiceFactory > connectWithOO(){
    // create the initial component context
@@ -51,6 +59,7 @@ Reference< XMultiServiceFactory > connectWithOO(){
 }
 
 // Setting up the bootstrapping and the params. :')
+// Inportant for Open Office server communication
 void __initializeOffapi() {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
@@ -97,7 +106,8 @@ int __openOO(const boost::filesystem::path& path) {
             resolver->resolve( conString ), UNO_QUERY );
     }
     catch ( Exception& e ) {
-        printf( "StarOffice.ServiceManager is not exported from remote counterpart\n" );
+        std::cerr <<  "StarOffice.ServiceManager is not exported from remote counterpart" << std::endl;
+
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server here and then try again, but i don't think that's a good way to go about this.
         // Will find the correct way ASAP, after export is done.
@@ -111,8 +121,6 @@ int __openOO(const boost::filesystem::path& path) {
     
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
     
-    
-    
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
         getURLfromPath(path), 
         OUString::createFromAscii( "_blank" ), 
@@ -120,15 +128,16 @@ int __openOO(const boost::filesystem::path& path) {
         Sequence < ::com::sun::star::beans::PropertyValue >() 
     );
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();
+    
     return 0;
 }
 
-void open_spreadsheet(const boost::filesystem::path& path) {
-    __openOO(path);    
+void Document::open_spreadsheet(const boost::filesystem::path& path) {
+    __openOO(path); // This the open office internal function.
 }
 
 
-void export_spreadsheet(const filesystem::path& path,format::type format=format::PDF) {
+void Document::export_spreadsheet(const filesystem::path& path,office_file_format::type format) {
 
     __initializeOffapi();
 
