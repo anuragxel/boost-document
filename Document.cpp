@@ -123,7 +123,7 @@ int __openOO(const boost::filesystem::path& path) {
         xComponentContext->getServiceManager() );
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
-            OUString("com.sun.star.bridge.UnoUrlResolver"),
+            OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver"),
             xComponentContext );
     
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
@@ -198,7 +198,6 @@ int __exportOO(const filesystem::path &inputPath, office_file_format::type forma
     	return -1;
     }
     
-    
     boost::filesystem::path outputPath(inputPath);
     std::string filter;
     if(format == boost::office_file_format::PDF) {
@@ -206,14 +205,14 @@ int __exportOO(const filesystem::path &inputPath, office_file_format::type forma
     	filter = __convertExtensionToPdfFilterType( inputPath.extension().string() );
   	}
    	
-   	Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(1);
+   	Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
     pdfProperties[0].Name = OUString::createFromAscii("FilterName");
     pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
-    //pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
-    //pdfProperties[1].Value <<= (sal_Bool)true; 
+    pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
+    pdfProperties[1].Value <<= (sal_Bool)true;
 
     Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-    xStorable->storeToURL(OUString::createFromAscii(outputPath.string().c_str()),pdfProperties); 
+    xStorable->storeToURL(getURLfromPath(outputPath), pdfProperties); 
 }
 
 void Document::open_document(const boost::filesystem::path& path) {
