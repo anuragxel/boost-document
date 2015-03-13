@@ -11,7 +11,7 @@ OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
-CXXFILES = Document.cpp Test.cpp
+CXXFILES = Document.cpp,Test.cpp,ooFunctions.cpp 
 BOOSTLIB = -lboost_system -lboost_filesystem
 
 OBJFILES = $(patsubst %.cpp,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))

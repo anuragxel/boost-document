@@ -1,61 +1,12 @@
 #ifndef _DOCUMENT_HPP
 #define _DOCUMENT_HPP
 
-#include <string>
-#include <iostream>
-
-//#include <string.h>
-//#include <wchar.h>
-
-#include <boost/filesystem.hpp>
-
-#include <sal/main.h>
-#include <cppuhelper/bootstrap.hxx>
-#include <osl/file.hxx>
-#include <osl/process.h>
-#include <rtl/process.h>
-#include <rtl/bootstrap.hxx>
-
-#include <com/sun/star/beans/XPropertySet.hpp>
-
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::io;
-//using namespace com::sun::star::text;
-
-using namespace rtl;
-using namespace cppu;
-
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
+#include "OfficeFileFormat.hpp"
+#include "ooFunctions.hpp"
 
 using namespace boost;
 
 namespace boost {
-
-	struct office_file_format {
-		enum type {
-			PDF,CSV,
-		};
-	};
-
 	class Document {
 	public:
 		Document();
