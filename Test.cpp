@@ -1,5 +1,5 @@
 #include "Document.hpp"
-#include "Document.cpp" // Hacky. TODO. Remove ASAP.
+// #include "Document.cpp" // Hacky. TODO. Remove ASAP.
 
 int main(int argc, char **argv) {
 

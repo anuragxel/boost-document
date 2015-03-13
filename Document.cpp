@@ -2,7 +2,7 @@
 #define _DOCUMENT_CPP
 
 #include "Document.hpp"
-#include "ooFunctions.cpp" // Hacky. TODO. Remove ASAP.
+// #include "ooFunctions.cpp" // Hacky. TODO. Remove ASAP.
 
 Document::Document() {
 

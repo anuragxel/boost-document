@@ -90,6 +90,11 @@ void __initializeOffapi() {
     );
 }
 
+void __startOOServer() {
+    std::system("soffice --invisible \"--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"");
+    sleep(1);
+}
+
 OUString __getURLfromPath(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
@@ -127,8 +132,9 @@ int __openOO(const boost::filesystem::path& path) {
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server here and then try again, but i don't think that's a good way to go about this.
         // Will find the correct way ASAP, after export is done.
-
-        exit(1);
+        __startOOServer();
+        xInterface = Reference< XInterface >(
+            resolver->resolve( conString ), UNO_QUERY );    
     }
 
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );

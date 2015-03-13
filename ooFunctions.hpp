@@ -11,6 +11,7 @@
 
 #include <string>
 #include <iostream>
+#include <cstdlib>
 
 #include <boost/filesystem.hpp>
 
@@ -56,6 +57,6 @@ Reference< XMultiServiceFactory > __connectWithOO();
 void __initializeOffapi();
 OUString __getURLfromPath(const boost::filesystem::path& path);
 int __openOO(const boost::filesystem::path& path);
-//int __exportOO(const filesystem::path &inputPath, office_file_format::type format);
+int __exportOO(const filesystem::path &inputPath, office_file_format::type format);
 
 #endif

@@ -11,7 +11,8 @@ OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
-CXXFILES = Document.cpp,Test.cpp,ooFunctions.cpp 
+CXXFILES = Document.cpp ooFunctions.cpp Test.cpp  
+OXXFILES = $(OUT_COMP_OBJ)/Test.$(OBJ_EXT) $(OUT_COMP_OBJ)/Document.$(OBJ_EXT) $(OUT_COMP_OBJ)/ooFunctions.$(OBJ_EXT)
 BOOSTLIB = -lboost_system -lboost_filesystem
 
 OBJFILES = $(patsubst %.cpp,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
@@ -25,18 +26,18 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cpp $(SDKTYPEFLAG)
+$(OUT_COMP_OBJ)/%.o : %.cpp
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_BIN)/Test$(EXE_EXT) : $(OUT_COMP_OBJ)/Test.$(OBJ_EXT)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
+$(OUT_BIN)/Test$(EXE_EXT) : $(OXXFILES)
+	-$(MKDIR) $(subst /,$(PS),$(@D)) 
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
 ifeq "$(OS)" "WIN"
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(basename $(@F)).map \
 	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(BOOSTLIB)
 else
-	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
+	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $(OXXFILES) \
 	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STDC++LIB) $(BOOSTLIB) 
 ifeq "$(OS)" "MACOSX"
 	$(INSTALL_NAME_URELIBS_BIN)  $@
