@@ -30,6 +30,10 @@ $(OUT_COMP_OBJ)/%.o : %.cpp
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
+$(OUT_COMP_OBJ)/%.o : detail/%.cpp
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
 $(OUT_BIN)/Test$(EXE_EXT) : $(OXXFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D)) 
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
