@@ -2,12 +2,12 @@
 #define _DOCUMENT_CPP
 
 #include "document.hpp"
+#include "document_exception.hpp"
 #include "oo_functions.hpp"
 
 using namespace boost;
 
 document::document() {
-	this->file_path = NULL;
 }
 
 document::document(const boost::filesystem::path path) {
@@ -28,7 +28,7 @@ void document::open_document() {
 
 
 void document::export_document(const filesystem::path& path,office_file_format::type format) {
-     boost::oo_functions::export_oo(path,format); // This the open office internal function.
+    boost::oo_functions::export_oo(path,format); // This the open office internal function.
 }
 
 void document::export_document(office_file_format::type format) {

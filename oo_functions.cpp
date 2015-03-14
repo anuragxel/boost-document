@@ -32,8 +32,10 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <boost/throw_exception.hpp>
 
 #include "oo_functions.hpp"
+#include "document_exception.hpp"
 
 
 using namespace com::sun::star;
@@ -55,14 +57,14 @@ using ::rtl::OUStringToOString;
 using namespace boost;
 
 std::string boost::oo_functions::convert_extension_to_pdf_filter(const std::string extension) {
-    if(	extension == ".doc"  ||
+    if( extension == ".doc"  ||
         extension == ".docx" ||
         extension == ".txt"  ||
         extension == ".rtf"  ||
         extension == ".html" ||
         extension == ".htm"  ||
         extension == ".xml"  ||
-       	extension == ".odt"  ||
+        extension == ".odt"  ||
         extension == ".wps"  ||
         extension == ".wpd" ) {
             return "writer_pdf_Export";
@@ -96,15 +98,17 @@ std::string boost::oo_functions::convert_extension_to_pdf_filter(const std::stri
    // Query for the XUnoUrlResolver interface
    Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
    if( !rResolver.is() ) {
-      std::cerr << "Error: Couldn't instantiate com.sun.star.bridge.UnoUrlResolver service." << std::endl;
-      return NULL;
+      boost::throw_exception(document_exception(
+        "Error: Couldn't instantiate com.sun.star.bridge.UnoUrlResolver service."));
+      
    }
    try {
       // resolve the uno-url
       rInstance = rResolver->resolve( OUString::createFromAscii("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
 
       if( ! rInstance.is() ) {
-         std::cerr << "StarOffice.ServiceManager is not exported from remote counterpart\n" << std::endl;
+         boost::throw_exception(document_exception(
+          "StarOffice.ServiceManager is not exported from remote counterpart\n"));
          return NULL;
       }
 
@@ -112,14 +116,12 @@ std::string boost::oo_functions::convert_extension_to_pdf_filter(const std::stri
       Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
 
       if( ! rOfficeServiceManager.is() ) {
-            std::cerr << "XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n" << std::endl;
-            return NULL;
+            boost::throw_exception(document_exception(
+              "Error :XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n"));
         }       
         return rOfficeServiceManager;
    }
    catch( Exception &e ) {
-      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-      printf( "Error: %s\n", o.pData->buffer );
       return NULL;
    }
    return NULL;
@@ -140,14 +142,6 @@ void boost::oo_functions::set_bootstrap_offapi() {
     );
 }
 
-// Really Bad idea but just for now.
-// Will find a better way. :)
-void boost::oo_functions::start_oo_server() {
-    if(std::system("soffice --invisible \"--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"") == 0) {
-      sleep(2);
-    }
-}
-
 ::rtl::OUString  boost::oo_functions::get_url_from_path(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
@@ -157,10 +151,12 @@ void boost::oo_functions::start_oo_server() {
     return sAbsoluteDocUrl;
 }
 
-
 // Code Adapted from the DocumentLoader Example given
 // in the LibreOffice/OpenOffice Documentation
-int boost::oo_functions::open_oo(const boost::filesystem::path& path) {
+void boost::oo_functions::open_oo(const boost::filesystem::path& path) {
+    if(!boost::filesystem::exists(path)) {
+        boost::throw_exception(document_exception("Error: Path is Empty"));
+    }
 
     boost::oo_functions::set_bootstrap_offapi();
     
@@ -181,13 +177,14 @@ int boost::oo_functions::open_oo(const boost::filesystem::path& path) {
             resolver->resolve( conString ), UNO_QUERY );
     }
     catch ( Exception& e ) {
-        std::cerr <<  "StarOffice.ServiceManager is not exported from remote counterpart" << std::endl;
+        //std::cerr <<  "StarOffice.ServiceManager is not exported from remote counterpart" << std::endl;
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server here and then try again, but i don't think that's a good way to go about this.
         // Will find the correct way ASAP, after export is done.
-        boost::oo_functions::start_oo_server();
-        xInterface = Reference< XInterface >(
-            resolver->resolve( conString ), UNO_QUERY );    
+        //boost::oo_functions::start_oo_server();
+        //xInterface = Reference< XInterface >(
+        //    resolver->resolve( conString ), UNO_QUERY );    
+        boost::throw_exception(document_exception("Error: Open Office server is not running."));
     }
 
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
@@ -205,22 +202,22 @@ int boost::oo_functions::open_oo(const boost::filesystem::path& path) {
     );
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
     if( !xComponentLoader.is() ){
-            std::cerr << "XComponentloader not successfully instantiated" << std::endl;
-            return -1;
+            boost::throw_exception(document_exception("XComponentloader not successfully instantiated"));
     }
-    return 0;
 }
 
 
-int boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::office_file_format::type format) {
+void boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::office_file_format::type format) {
+    if(!boost::filesystem::exists(inputPath)) {
+        boost::throw_exception(document_exception("Error: Path is Empty"));
+    }
     
     boost::oo_functions::set_bootstrap_offapi();
     
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = boost::oo_functions::connect_to_oo_server();
     if( !rOfficeServiceManager.is() ){
-        std::cerr << "Not Connected sucessfully to the office" << std::endl;
-        return -1;
+        boost::throw_exception(document_exception("Error: Not Connected sucessfully to the office"));
     }
      //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
@@ -231,24 +228,21 @@ int boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boo
     Reference< XComponent > xComponent;
     //get an instance of the spreadsheet
     try {
-    	
-    	Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
-    	frameProperties[0].Name = OUString::createFromAscii("Hidden");
-    	frameProperties[0].Value <<= (sal_Bool)true;
-		xComponent = rComponentLoader->loadComponentFromURL(
-        	boost::oo_functions::get_url_from_path(inputPath),
-        	OUString::createFromAscii("_default"),
-        	0,
-        	frameProperties
-    	);
-    	if( !rComponentLoader.is() ){
-            std::cerr << "XComponentloader not successfully instantiated" << std::endl;
-            return -1;
-    	}
+        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
+        frameProperties[0].Name = OUString::createFromAscii("Hidden");
+        frameProperties[0].Value <<= (sal_Bool)true;
+        xComponent = rComponentLoader->loadComponentFromURL(
+            boost::oo_functions::get_url_from_path(inputPath),
+            OUString::createFromAscii("_default"),
+            0,
+            frameProperties
+        );
+        if( !rComponentLoader.is() ){
+            boost::throw_exception(document_exception("Error: XComponentloader not successfully instantiated"));
+        }
     }
     catch( Exception &e ){
-    	std::cerr << "Error While Loading File." << std::endl;
-    	return -1;
+        boost::throw_exception(document_exception("Error: Unable to Load File."));
     }
     // Creating the output path in the 
     // same location as the input file path
@@ -257,12 +251,12 @@ int boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boo
     boost::filesystem::path outputPath(inputPath);
     std::string filter;
     if(format == boost::office_file_format::PDF) {
-    	outputPath.replace_extension(".pdf");
-    	filter = boost::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
-  	}
-   	// Other Options can be added later
-   	// to improve the API
-   	Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
+        outputPath.replace_extension(".pdf");
+        filter = boost::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
+    }
+    // Other Options can be added later
+    // to improve the API
+    Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
     pdfProperties[0].Name = OUString::createFromAscii("FilterName");
     pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
     pdfProperties[1].Name = OUString::createFromAscii("Overwrite");

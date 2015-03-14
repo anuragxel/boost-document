@@ -2,20 +2,12 @@
 #define _DOCUMENT_HPP
 
 #include <boost/filesystem.hpp>
-#include "office_file_format.hpp"
 
+#include "office_file_format.hpp"
+#include "document_exception.hpp"
 
 namespace boost {
 
-	/*
-	class document_exception : public std::logic_error {
-	public:
-    	explicit document_exception(const std::string& msg) {
-       		std::logic_error(msg)
-    	}
-	};
-	*/
-	
 	class document {
 	private:
 		boost::filesystem::path file_path;
