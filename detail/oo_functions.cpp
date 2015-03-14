@@ -9,6 +9,7 @@
 #define OFFAPI "/usr/lib/libreoffice/program/types/offapi.rdb"
 #endif
 
+#include "document_file_format.hpp"
 
 #include <string>
 #include <iostream>
@@ -33,9 +34,8 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <boost/throw_exception.hpp>
 
-#include "detail/document_file_format.hpp"
-#include "detail/oo_functions.hpp"
-#include "detail/document_exception.hpp"
+#include "oo_functions.hpp"
+#include "document_exception.hpp"
 
 
 using namespace com::sun::star;
@@ -179,11 +179,14 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     catch ( Exception& e ) {
         //std::cerr <<  "StarOffice.ServiceManager is not exported from remote counterpart" << std::endl;
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
-        // to start the server here and then try again, but i don't think that's a good way to go about this.
-        // Will find the correct way ASAP, after export is done.
+        // to start the server and then try again, but I don't think that's a good way to go about this.
+        // Will find a good way ASAP, after export is done.
+        // Till then, we just throw an exception.
+
         //boost::doc::oo_functions::start_oo_server();
         //xInterface = Reference< XInterface >(
         //    resolver->resolve( conString ), UNO_QUERY );    
+        
         boost::throw_exception(document_exception("Error: Open Office server is not running."));
     }
 
@@ -244,6 +247,7 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
     catch( Exception &e ){
         boost::throw_exception(document_exception("Error: Unable to Load File."));
     }
+    
     // Creating the output path in the 
     // same location as the input file path
     // And the filter. Right now works with docs
@@ -254,6 +258,7 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
         outputPath.replace_extension(".pdf");
         filter = boost::doc::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
     }
+
     // Other Options can be added later
     // to improve the API
     Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);

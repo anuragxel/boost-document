@@ -3,8 +3,8 @@
 
 #include <boost/filesystem.hpp>
 
-#include "document_file_format.hpp"
-#include "document_exception.hpp"
+#include "detail/document_file_format.hpp"
+#include "detail/document_exception.hpp"
 
 namespace boost {
 
