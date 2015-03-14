@@ -7,6 +7,6 @@ namespace boost {
 			PDF,CSV,
 		};
 	};
-}
+} // namespace boost
 
 #endif

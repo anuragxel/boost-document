@@ -1,14 +1,6 @@
 #ifndef _OO_FUNCTIONS_HPP
 #define _OO_FUNCTIONS_HPP
 
-#ifdef _WIN32
-#define OFFAPI "C:\\Program Files\\OpenOffice.org 3\\basis\\program\\offapi.rdb"	
-#elif _WIN64
-#define OFFAPI "C:\\Program Files (x86)\\OpenOffice.org 3\\basis\\program\\offapi.rdb"
-#elif __linux
-#define OFFAPI "/usr/lib/libreoffice/program/types/offapi.rdb"
-#endif
-
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -31,32 +23,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#include "OfficeFileFormat.hpp"
+namespace boost { namespace ooInternalFunctions {
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::frame;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::io;
-//using namespace com::sun::star::text;
-
-using namespace rtl;
-using namespace cppu;
-
-using ::rtl::OString;
-using ::rtl::OUString;
-using ::rtl::OUStringToOString;
-
-using namespace boost;
-
-std::string __convertExtensionToPdfFilterType(std::string extension);
-Reference< XMultiServiceFactory > __connectWithOO();
-void __initializeOffapi();
-OUString __getURLfromPath(const boost::filesystem::path& path);
-int __openOO(const boost::filesystem::path& path);
-int __exportOO(const filesystem::path &inputPath, office_file_format::type format);
-
+	std::string convertExtensionToPdfFilterType(const std::string extension);
+	::rtl::Reference<com::sun::star::lang::XMultiServiceFactory> connectWithOO();
+	void initializeOffapi();
+	::rtl::OUString getURLfromPath(const boost::filesystem::path& path);
+	int openOO(const boost::filesystem::path& path);
+	int exportOO(const boost::filesystem::path &inputPath, boost::office_file_format::type format);
+}
+}
 #endif

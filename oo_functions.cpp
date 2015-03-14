@@ -1,9 +1,60 @@
 #ifndef _OO_FUNCTIONS_CPP
 #define _OO_FUNCTIONS_CPP
 
-#include "ooFunctions.hpp"
+#ifdef _WIN32
+#define OFFAPI "C:\\Program Files\\OpenOffice.org 3\\basis\\program\\offapi.rdb"    
+#elif _WIN64
+#define OFFAPI "C:\\Program Files (x86)\\OpenOffice.org 3\\basis\\program\\offapi.rdb"
+#elif __linux
+#define OFFAPI "/usr/lib/libreoffice/program/types/offapi.rdb"
+#endif
 
-std::string __convertExtensionToPdfFilterType(std::string extension) {
+#include "office_file_format.hpp"
+
+#include <string>
+#include <iostream>
+#include <cstdlib>
+
+#include <boost/filesystem.hpp>
+
+#include <sal/main.h>
+#include <cppuhelper/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <rtl/process.h>
+#include <rtl/bootstrap.hxx>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+
+#include "oo_functions.hpp"
+
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::bridge;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::registry;
+using namespace com::sun::star::io;
+
+using namespace rtl;
+using namespace cppu;
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
+
+using namespace boost;
+
+std::string boost::oo_functions::convert_extension_to_pdf_filter(const std::string extension) {
     if(	extension == ".doc"  ||
         extension == ".docx" ||
         extension == ".txt"  ||
@@ -29,19 +80,19 @@ std::string __convertExtensionToPdfFilterType(std::string extension) {
 
 // Helper which returns the OfficeServiceManager
 // if connection is established.
-Reference< XMultiServiceFactory > __connectWithOO() {
+::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> boost::oo_functions::connect_to_oo_server() {
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
                 ::cppu::defaultBootstrap_InitialComponentContext();
- 
+
    // retrieve the servicemanager from the context
    Reference< XMultiComponentFactory > rServiceManager = 
                 rComponentContext->getServiceManager();
- 
+
    // instantiate a sample service with the servicemanager.
    Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
          OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
- 
+
    // Query for the XUnoUrlResolver interface
    Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
    if( !rResolver.is() ) {
@@ -50,9 +101,8 @@ Reference< XMultiServiceFactory > __connectWithOO() {
    }
    try {
       // resolve the uno-url
-      rInstance = rResolver->resolve( OUString::createFromAscii(
-        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
- 
+      rInstance = rResolver->resolve( OUString::createFromAscii("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
+
       if( ! rInstance.is() ) {
          std::cerr << "StarOffice.ServiceManager is not exported from remote counterpart\n" << std::endl;
          return NULL;
@@ -60,7 +110,7 @@ Reference< XMultiServiceFactory > __connectWithOO() {
 
       // query for the simpler XMultiServiceFactory interface, sufficient for scripting
       Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
- 
+
       if( ! rOfficeServiceManager.is() ) {
             std::cerr << "XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n" << std::endl;
             return NULL;
@@ -77,7 +127,7 @@ Reference< XMultiServiceFactory > __connectWithOO() {
 
 // Setting up the bootstrapping and the params. :')
 // Important for Open Office server communication
-void __initializeOffapi() {
+void boost::oo_functions::set_bootstrap_offapi() {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath(
@@ -90,12 +140,15 @@ void __initializeOffapi() {
     );
 }
 
-void __startOOServer() {
-    std::system("soffice --invisible \"--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"");
-    sleep(1);
+// Really Bad idea but just for now.
+// Will find a better way. :)
+void boost::oo_functions::start_oo_server() {
+    if(std::system("soffice --invisible \"--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"") == 0) {
+      sleep(2);
+    }
 }
 
-OUString __getURLfromPath(const boost::filesystem::path& path) {
+::rtl::OUString  boost::oo_functions::get_url_from_path(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
     osl_getProcessWorkingDir(&sWorkingDir.pData);
@@ -107,9 +160,9 @@ OUString __getURLfromPath(const boost::filesystem::path& path) {
 
 // Code Adapted from the DocumentLoader Example given
 // in the LibreOffice/OpenOffice Documentation
-int __openOO(const boost::filesystem::path& path) {
+int boost::oo_functions::open_oo(const boost::filesystem::path& path) {
 
-    __initializeOffapi();
+    boost::oo_functions::set_bootstrap_offapi();
     
     OUString conString = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
@@ -132,7 +185,7 @@ int __openOO(const boost::filesystem::path& path) {
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server here and then try again, but i don't think that's a good way to go about this.
         // Will find the correct way ASAP, after export is done.
-        __startOOServer();
+        boost::oo_functions::start_oo_server();
         xInterface = Reference< XInterface >(
             resolver->resolve( conString ), UNO_QUERY );    
     }
@@ -145,7 +198,7 @@ int __openOO(const boost::filesystem::path& path) {
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
     
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-        __getURLfromPath(path), 
+        boost::oo_functions::get_url_from_path(path), 
         OUString::createFromAscii( "_default" ), 
         0,
         Sequence < ::com::sun::star::beans::PropertyValue >() 
@@ -159,10 +212,12 @@ int __openOO(const boost::filesystem::path& path) {
 }
 
 
-int __exportOO(const filesystem::path &inputPath, office_file_format::type format) {
-    __initializeOffapi();
+int boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::office_file_format::type format) {
+    
+    boost::oo_functions::set_bootstrap_offapi();
+    
     Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = __connectWithOO();
+    rOfficeServiceManager = boost::oo_functions::connect_to_oo_server();
     if( !rOfficeServiceManager.is() ){
         std::cerr << "Not Connected sucessfully to the office" << std::endl;
         return -1;
@@ -181,7 +236,7 @@ int __exportOO(const filesystem::path &inputPath, office_file_format::type forma
     	frameProperties[0].Name = OUString::createFromAscii("Hidden");
     	frameProperties[0].Value <<= (sal_Bool)true;
 		xComponent = rComponentLoader->loadComponentFromURL(
-        	__getURLfromPath(inputPath),
+        	boost::oo_functions::get_url_from_path(inputPath),
         	OUString::createFromAscii("_default"),
         	0,
         	frameProperties
@@ -203,7 +258,7 @@ int __exportOO(const filesystem::path &inputPath, office_file_format::type forma
     std::string filter;
     if(format == boost::office_file_format::PDF) {
     	outputPath.replace_extension(".pdf");
-    	filter = __convertExtensionToPdfFilterType( inputPath.extension().string() );
+    	filter = boost::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
   	}
    	// Other Options can be added later
    	// to improve the API
@@ -213,7 +268,7 @@ int __exportOO(const filesystem::path &inputPath, office_file_format::type forma
     pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
     pdfProperties[1].Value <<= (sal_Bool)true;
     Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-    xStorable->storeToURL(__getURLfromPath(outputPath), pdfProperties);  
+    xStorable->storeToURL(boost::oo_functions::get_url_from_path(outputPath), pdfProperties);  
 }
 
 #endif
