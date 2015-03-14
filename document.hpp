@@ -3,7 +3,7 @@
 
 #include <boost/filesystem.hpp>
 
-#include "office_file_format.hpp"
+#include "document_file_format.hpp"
 #include "document_exception.hpp"
 
 namespace boost {
@@ -17,8 +17,8 @@ namespace boost {
 		~document();
 		void open_document();
 		void open_document(const boost::filesystem::path& path);
-		void export_document(const boost::filesystem::path& path,boost::office_file_format::type format = office_file_format::PDF);
-		void export_document(boost::office_file_format::type format = office_file_format::PDF);
+		void export_document(const boost::filesystem::path& path,boost::document_file_format::type format = document_file_format::PDF);
+		void export_document(boost::document_file_format::type format = document_file_format::PDF);
 	};
 } // namespace boost
 

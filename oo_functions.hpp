@@ -13,7 +13,7 @@ namespace boost { namespace oo_functions {
 	void start_oo_server();
 	::rtl::OUString get_url_from_path(const boost::filesystem::path& path);
 	void open_oo(const boost::filesystem::path& path);
-	void export_oo(const boost::filesystem::path &inputPath, boost::office_file_format::type format);
+	void export_oo(const boost::filesystem::path &inputPath, boost::document_file_format::type format);
 
 }}
 #endif

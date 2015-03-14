@@ -27,11 +27,11 @@ void document::open_document() {
 }
 
 
-void document::export_document(const filesystem::path& path,office_file_format::type format) {
+void document::export_document(const filesystem::path& path,document_file_format::type format) {
     boost::oo_functions::export_oo(path,format); // This the open office internal function.
 }
 
-void document::export_document(office_file_format::type format) {
+void document::export_document(document_file_format::type format) {
     boost::oo_functions::export_oo(this->file_path,format); // This the open office internal function.
 }
 

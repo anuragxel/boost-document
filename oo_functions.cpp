@@ -9,7 +9,7 @@
 #define OFFAPI "/usr/lib/libreoffice/program/types/offapi.rdb"
 #endif
 
-#include "office_file_format.hpp"
+#include "document_file_format.hpp"
 
 #include <string>
 #include <iostream>
@@ -207,7 +207,7 @@ void boost::oo_functions::open_oo(const boost::filesystem::path& path) {
 }
 
 
-void boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::office_file_format::type format) {
+void boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::document_file_format::type format) {
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception("Error: Path is Empty"));
     }
@@ -250,7 +250,7 @@ void boost::oo_functions::export_oo(const boost::filesystem::path &inputPath, bo
     // and calc. 
     boost::filesystem::path outputPath(inputPath);
     std::string filter;
-    if(format == boost::office_file_format::PDF) {
+    if(format == boost::document_file_format::PDF) {
         outputPath.replace_extension(".pdf");
         filter = boost::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
     }
