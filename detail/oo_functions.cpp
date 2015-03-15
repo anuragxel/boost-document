@@ -16,6 +16,7 @@
 #include <cstdlib>
 
 #include <boost/filesystem.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <sal/main.h>
 #include <cppuhelper/bootstrap.hxx>
@@ -27,12 +28,17 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <boost/throw_exception.hpp>
 
 #include "oo_functions.hpp"
 #include "document_exception.hpp"
@@ -46,6 +52,7 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::io;
+using namespace com::sun::star::util;
 
 using namespace rtl;
 using namespace cppu;
@@ -104,7 +111,8 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
    }
    try {
       // resolve the uno-url
-      rInstance = rResolver->resolve( OUString::createFromAscii("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
+      rInstance = rResolver->resolve( OUString::createFromAscii(
+        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
 
       if( ! rInstance.is() ) {
          boost::throw_exception(document_exception(
@@ -160,7 +168,8 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
 
     boost::doc::oo_functions::set_bootstrap_offapi();
     
-    OUString conString = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+    OUString conString = OUString(
+        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
     
@@ -187,7 +196,8 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
         //xInterface = Reference< XInterface >(
         //    resolver->resolve( conString ), UNO_QUERY );    
         
-        boost::throw_exception(document_exception("Error: Open Office server is not running."));
+        boost::throw_exception(document_exception(
+            "Error: Open Office server is not running."));
     }
 
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
@@ -205,14 +215,16 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     );
     Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
     if( !xComponentLoader.is() ){
-            boost::throw_exception(document_exception("XComponentloader not successfully instantiated"));
+            boost::throw_exception(document_exception(
+                "XComponentloader not successfully instantiated"));
     }
 }
 
 
 void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::document_file_format::type format) {
     if(!boost::filesystem::exists(inputPath)) {
-        boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
+        boost::throw_exception(document_exception(
+            "Error: Path is empty or does not exist."));
     }
     
     boost::doc::oo_functions::set_bootstrap_offapi();
@@ -220,7 +232,8 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = boost::doc::oo_functions::connect_to_oo_server();
     if( !rOfficeServiceManager.is() ){
-        boost::throw_exception(document_exception("Error: Not Connected sucessfully to the office"));
+        boost::throw_exception(document_exception(
+            "Error: Not Connected sucessfully to the office"));
     }
      //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
@@ -241,11 +254,13 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
             frameProperties
         );
         if( !rComponentLoader.is() ){
-            boost::throw_exception(document_exception("Error: XComponentloader not successfully instantiated"));
+            boost::throw_exception(document_exception(
+                "Error: XComponentloader not successfully instantiated"));
         }
     }
     catch( Exception &e ){
-        boost::throw_exception(document_exception("Error: Unable to Load File."));
+        boost::throw_exception(document_exception(
+            "Error: Unable to Load File."));
     }
     
     // Creating the output path in the 
@@ -256,7 +271,8 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
     std::string filter;
     if(format == boost::document_file_format::PDF) {
         outputPath.replace_extension(".pdf");
-        filter = boost::doc::oo_functions::convert_extension_to_pdf_filter( inputPath.extension().string() );
+        filter = boost::doc::oo_functions::convert_extension_to_pdf_filter( 
+            inputPath.extension().string() );
     }
 
     // Other Options can be added later
@@ -268,6 +284,75 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
     pdfProperties[1].Value <<= (sal_Bool)true;
     Reference < XStorable > xStorable(xComponent,UNO_QUERY);
     xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), pdfProperties);  
+}
+
+
+void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath,bool save) {
+    if(!boost::filesystem::exists(inputPath)) {
+        boost::throw_exception(document_exception(
+            "Error: Path is empty or does not exist."));
+    }
+    
+    boost::doc::oo_functions::set_bootstrap_offapi();
+    
+    Reference< XMultiServiceFactory > rOfficeServiceManager;
+    rOfficeServiceManager = boost::doc::oo_functions::connect_to_oo_server();
+    if( !rOfficeServiceManager.is() ){
+        boost::throw_exception(document_exception(
+            "Error: Not Connected sucessfully to the office"));
+    }
+     //get the desktop service using createInstance returns an XInterface type
+    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
+    OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
+    
+    //query for the XComponentLoader interface
+    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
+    Reference< XComponent > xComponent;
+    //get an instance of the spreadsheet
+    try {
+        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
+        frameProperties[0].Name = OUString::createFromAscii("Hidden");
+        frameProperties[0].Value <<= (sal_Bool)true;
+        xComponent = rComponentLoader->loadComponentFromURL(
+            boost::doc::oo_functions::get_url_from_path(inputPath),
+            OUString::createFromAscii("_default"),
+            0,
+            frameProperties
+        );
+        if( !rComponentLoader.is() ){
+            boost::throw_exception(document_exception(
+                "Error: XComponentloader not successfully instantiated"));
+        }
+    }
+    catch( Exception &e ){
+        boost::throw_exception(document_exception(
+            "Error: Unable to Load File."));
+    }
+
+    Reference < XModel > xModel(xComponent, UNO_QUERY);
+    if(xModel != NULL) { 
+        
+        Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
+        Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+        if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified() && save == true) {
+            xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(inputPath), 
+                Sequence < ::com::sun::star::beans::PropertyValue >());
+        }
+
+        Reference < XCloseable > xCloseable(xComponent,UNO_QUERY);
+        if(xCloseable != NULL) {
+            try {
+                xCloseable->close((sal_Bool)true);
+            }
+            catch (Exception &e) {
+                boost::throw_exception(document_exception("close of XCloseable object failed."));
+            }
+        }
+        else { // No xClosable.
+
+        }
+    }
+
 }
 
 #endif
