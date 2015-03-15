@@ -1,0 +1,363 @@
+==5202== Memcheck, a memory error detector
+==5202== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==5202== Using Valgrind-3.10.0.SVN and LibVEX; rerun with -h for copyright info
+==5202== Command: Test /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/untitled.ods
+==5202== 
+--5202-- Valgrind options:
+--5202--    -v
+--5202-- Contents of /proc/version:
+--5202--   Linux version 3.16.0 (root@cynthia) (gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ) #4 SMP Fri Nov 21 13:02:27 IST 2014
+--5202-- Arch and hwcaps: AMD64, amd64-cx16-lzcnt-rdtscp-sse3-avx-avx2-bmi
+--5202-- Page sizes: currently 4096, max supported 4096
+--5202-- Valgrind library directory: /usr/lib/valgrind
+--5202-- Reading syms from /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test
+--5202-- Reading syms from /lib/x86_64-linux-gnu/ld-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/ld-2.19.so ..
+--5202--   .. CRC mismatch (computed 4cbae35e wanted 8d683c31)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--5202--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--5202--   .. CRC mismatch (computed 37cdde19 wanted adc367dd)
+--5202--    object doesn't have a symbol table
+--5202--    object doesn't have a dynamic symbol table
+--5202-- Scheduler: using generic scheduler lock implementation.
+--5202-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==5202== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-5202-by-anurag-on-???
+==5202== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-5202-by-anurag-on-???
+==5202== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-5202-by-anurag-on-???
+==5202== 
+==5202== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==5202== don't want to do, unless you know exactly what you're doing,
+==5202== or are doing some strange experiment):
+==5202==   /usr/lib/valgrind/../../bin/vgdb --pid=5202 ...command...
+==5202== 
+==5202== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==5202==   /path/to/gdb Test
+==5202== and then give GDB the following command
+==5202==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=5202
+==5202== --pid is optional if only one valgrind process is running
+==5202== 
+--5202-- REDIR: 0x4019ca0 (strlen) redirected to 0x38068331 (???)
+--5202-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--5202--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--5202--   .. CRC mismatch (computed 329d6860 wanted c0186920)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--5202--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--5202--   .. CRC mismatch (computed 1fb85af8 wanted 2e9e3c16)
+--5202--    object doesn't have a symbol table
+==5202== WARNING: new redirection conflicts with existing -- ignoring it
+--5202--     old: 0x04019ca0 (strlen              ) R-> (0000.0) 0x38068331 ???
+--5202--     new: 0x04019ca0 (strlen              ) R-> (2007.0) 0x04c2e1a0 strlen
+--5202-- REDIR: 0x4019a50 (index) redirected to 0x4c2dd50 (index)
+--5202-- REDIR: 0x4019c70 (strcmp) redirected to 0x4c2f2f0 (strcmp)
+--5202-- REDIR: 0x401a9c0 (mempcpy) redirected to 0x4c31da0 (mempcpy)
+--5202-- Reading syms from /usr/lib/ure/lib/libuno_cppuhelpergcc3.so.3
+--5202--   Considering /usr/lib/ure/lib/libuno_cppuhelpergcc3.so.3 ..
+--5202--   .. CRC mismatch (computed a587119e wanted 7fe47ace)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libuno_cppu.so.3
+--5202--   Considering /usr/lib/ure/lib/libuno_cppu.so.3 ..
+--5202--   .. CRC mismatch (computed 94dd4624 wanted 843665d9)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libuno_sal.so.3
+--5202--   Considering /usr/lib/ure/lib/libuno_sal.so.3 ..
+--5202--   .. CRC mismatch (computed 1bd2f30a wanted eb2972bf)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/x86_64-linux-gnu/libboost_system.so.1.55.0
+--5202--   Considering /usr/lib/debug/.build-id/13/4821b98ac49720bcd70b805743552fdf857496.debug ..
+--5202--   .. build-id is valid
+--5202-- Reading syms from /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.55.0
+--5202--   Considering /usr/lib/debug/.build-id/94/052ff9d57a5f104f4bb082cc5262bf470a43b8.debug ..
+--5202--   .. build-id is valid
+--5202-- Reading syms from /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19
+--5202--   Considering /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19 ..
+--5202--   .. CRC mismatch (computed a220b90a wanted 886349ba)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libgcc_s.so.1
+--5202--   Considering /lib/x86_64-linux-gnu/libgcc_s.so.1 ..
+--5202--   .. CRC mismatch (computed ea519b66 wanted 0c00ddb3)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libc-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libc-2.19.so ..
+--5202--   .. CRC mismatch (computed dc620abc wanted 148cbd6e)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- REDIR: 0x401ab10 (stpcpy) redirected to 0x4c31120 (stpcpy)
+--5202-- Reading syms from /usr/lib/ure/lib/libreglo.so
+--5202--   Considering /usr/lib/ure/lib/libreglo.so ..
+--5202--   .. CRC mismatch (computed 271a99c6 wanted d1b2c535)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libuno_salhelpergcc3.so.3
+--5202--   Considering /usr/lib/ure/lib/libuno_salhelpergcc3.so.3 ..
+--5202--   .. CRC mismatch (computed cdcc1984 wanted a0018ce3)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libunoidllo.so
+--5202--   Considering /usr/lib/ure/lib/libunoidllo.so ..
+--5202--   .. CRC mismatch (computed 6a0485a3 wanted 12d2c19b)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libxmlreaderlo.so
+--5202--   Considering /usr/lib/ure/lib/libxmlreaderlo.so ..
+--5202--   .. CRC mismatch (computed ddf798c5 wanted cc6970bb)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libm-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libm-2.19.so ..
+--5202--   .. CRC mismatch (computed a46ef660 wanted 767bfa33)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libpthread-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libpthread-2.19.so ..
+--5202--   .. CRC mismatch (computed d568bf33 wanted fb00d679)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libpthread-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libdl-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libdl-2.19.so ..
+--5202--   .. CRC mismatch (computed c1315e8c wanted 37097b60)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libdl-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /lib/x86_64-linux-gnu/librt-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/librt-2.19.so ..
+--5202--   .. CRC mismatch (computed aa86d720 wanted d04e3800)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/librt-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /usr/lib/ure/lib/libstorelo.so
+--5202--   Considering /usr/lib/ure/lib/libstorelo.so ..
+--5202--   .. CRC mismatch (computed db75d90d wanted 102b1a3d)
+--5202--    object doesn't have a symbol table
+--5202-- REDIR: 0x5f85d60 (strcasecmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f88050 (strncasecmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f85530 (memcpy@GLIBC_2.2.5) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f837c0 (rindex) redirected to 0x4c2da30 (rindex)
+--5202-- REDIR: 0x5f7b750 (malloc) redirected to 0x4c2ab10 (malloc)
+--5202-- REDIR: 0x5f81ac0 (strlen) redirected to 0x4c2e0e0 (strlen)
+--5202-- REDIR: 0x5f853a0 (__GI_memmove) redirected to 0x4c31660 (__GI_memmove)
+--5202-- REDIR: 0x5f7bdf0 (free) redirected to 0x4c2bd80 (free)
+--5202-- REDIR: 0x5a3df10 (operator new(unsigned long)) redirected to 0x4c2b070 (operator new(unsigned long))
+--5202-- REDIR: 0x5f8a730 (memcpy@@GLIBC_2.14) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f90fd0 (__memcpy_sse2_unaligned) redirected to 0x4c2f6b0 (memcpy@@GLIBC_2.14)
+--5202-- REDIR: 0x5f84fa0 (__GI_memcmp) redirected to 0x4c30b80 (__GI_memcmp)
+--5202-- REDIR: 0x5f80070 (strcmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x6039200 (__strcmp_ssse3) redirected to 0x4c2f1b0 (strcmp)
+--5202-- REDIR: 0x5f81f30 (__GI_strncmp) redirected to 0x4c2e930 (__GI_strncmp)
+--5202-- REDIR: 0x5f84f60 (bcmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x6059060 (__memcmp_sse4_1) redirected to 0x4c30c00 (__memcmp_sse4_1)
+--5202-- REDIR: 0x5a3c260 (operator delete(void*)) redirected to 0x4c2c250 (operator delete(void*))
+--5202-- REDIR: 0x5f7fe50 (__GI_strchr) redirected to 0x4c2db90 (__GI_strchr)
+--5202-- REDIR: 0x5f8a780 (__GI_memcpy) redirected to 0x4c2fc90 (__GI_memcpy)
+--5202-- REDIR: 0x5f800b0 (__GI_strcmp) redirected to 0x4c2f200 (__GI_strcmp)
+--5202-- REDIR: 0x5f84c10 (memchr) redirected to 0x4c2f390 (memchr)
+--5202-- REDIR: 0x5f8cac0 (strchrnul) redirected to 0x4c319b0 (strchrnul)
+--5202-- REDIR: 0x5f85bf0 (__GI_stpcpy) redirected to 0x4c30da0 (__GI_stpcpy)
+--5202-- REDIR: 0x5a3e020 (operator new[](unsigned long)) redirected to 0x4c2b790 (operator new[](unsigned long))
+--5202-- REDIR: 0x5f7fe20 (index) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f7c220 (calloc) redirected to 0x4c2cbf0 (calloc)
+--5202-- REDIR: 0x5f9bdc0 (wcslen) redirected to 0x4c32370 (wcslen)
+--5202-- REDIR: 0x5f81c80 (strnlen) redirected to 0x4c2e080 (strnlen)
+--5202-- REDIR: 0x5f81500 (strcpy) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f95b90 (__strcpy_sse2_unaligned) redirected to 0x4c2e1c0 (strcpy)
+--5202-- REDIR: 0x5f83780 (strncpy) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--5202-- REDIR: 0x5f961c0 (__strncpy_sse2_unaligned) redirected to 0x4c2e770 (__strncpy_sse2_unaligned)
+--5202-- REDIR: 0x5f855c0 (memset) redirected to 0x4c31350 (memset)
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403DCC: boost::document::close_document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40320E: negative_try_closing_null() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40379D: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403CE5: boost::document::~document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x403226: negative_try_closing_null() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40379D: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403CE5: boost::document::~document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40353C: negative_absurd_path_opening() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x4037DA: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+--5202-- REDIR: 0x5f7bef0 (realloc) redirected to 0x4c2ce10 (realloc)
+--5202-- REDIR: 0xffffffffff600000 (???) redirected to 0x38068313 (???)
+--5202-- Reading syms from /usr/lib/ure/lib/libgcc3_uno.so
+--5202--   Considering /usr/lib/ure/lib/libgcc3_uno.so ..
+--5202--   .. CRC mismatch (computed 0ff80c2c wanted b3ed7586)
+--5202--    object doesn't have a symbol table
+--5202-- REDIR: 0x6049090 (__memmove_ssse3_back) redirected to 0x4c2f450 (memcpy@GLIBC_2.2.5)
+--5202-- REDIR: 0x5a3c290 (operator delete[](void*)) redirected to 0x4c2c7d0 (operator delete[](void*))
+--5202-- Reading syms from /usr/lib/ure/lib/libuuresolverlo.so
+--5202--   Considering /usr/lib/ure/lib/libuuresolverlo.so ..
+--5202--   .. CRC mismatch (computed 46817dab wanted 0d0d9013)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /usr/lib/ure/lib/libiolo.so
+--5202--   Considering /usr/lib/ure/lib/libiolo.so ..
+--5202--   .. CRC mismatch (computed 6d7d4adf wanted 17bc4044)
+--5202--    object doesn't have a symbol table
+--5202-- REDIR: 0x5f84410 (__GI_strstr) redirected to 0x4c32030 (__strstr_sse2)
+--5202-- REDIR: 0x5f90c20 (__GI_strncpy) redirected to 0x4c2e4d0 (__GI_strncpy)
+--5202-- REDIR: 0x6037850 (__strncasecmp_avx) redirected to 0x4c2eb60 (strncasecmp)
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libnss_files-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libnss_files-2.19.so ..
+--5202--   .. CRC mismatch (computed 76d67c28 wanted 59ea999f)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libnss_files-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- REDIR: 0x5f81540 (__GI_strcpy) redirected to 0x4c2e2a0 (__GI_strcpy)
+--5202-- REDIR: 0x5f8c8b0 (rawmemchr) redirected to 0x4c319f0 (rawmemchr)
+--5202-- REDIR: 0x60361e0 (__strcasecmp_avx) redirected to 0x4c2ea80 (strcasecmp)
+--5202-- Reading syms from /usr/lib/ure/lib/libbinaryurplo.so
+--5202--   Considering /usr/lib/ure/lib/libbinaryurplo.so ..
+--5202--   .. CRC mismatch (computed 7cd8fa36 wanted eae3d19f)
+--5202--    object doesn't have a symbol table
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libnss_compat-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libnss_compat-2.19.so ..
+--5202--   .. CRC mismatch (computed f379a8ef wanted 04dce491)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libnss_compat-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libnsl-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libnsl-2.19.so ..
+--5202--   .. CRC mismatch (computed ea6302f9 wanted daf19eb9)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libnsl-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- Reading syms from /lib/x86_64-linux-gnu/libnss_nis-2.19.so
+--5202--   Considering /lib/x86_64-linux-gnu/libnss_nis-2.19.so ..
+--5202--   .. CRC mismatch (computed 8cddb751 wanted d4c1aeab)
+--5202--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libnss_nis-2.19.so ..
+--5202--   .. CRC is valid
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooog2s2A7 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooog2s2A7 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooTZD95i (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooTZD95i (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooo2UsPCu (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooo2UsPCu (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooo61x6bG (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooo61x6bG (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooolHg70R (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooolHg70R (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooofIYQQ3 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooofIYQQ3 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooK8J1Gf (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooK8J1Gf (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooaH1XDr (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooaH1XDr (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooQhOSBD (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooQhOSBD (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoootcrF9P (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoootcrF9P (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooohnDaI2 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execooohnDaI2 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooYa63fg (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooYa63fg (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooO5umlv (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooO5umlv (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooopvQtL (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooopvQtL (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooF5wVG1 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooF5wVG1 (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooZ3maWh (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- WARNING: Serious error when reading debug info
+--5202-- When reading debug info from /home/anurag/.execoooZ3maWh (deleted):
+--5202-- failed to stat64/stat this file
+--5202-- REDIR: 0x5f9b030 (wcscmp) redirected to 0x4c32390 (wcscmp)
+--5202-- Discarding syms at 0xa4103b0-0xa4162fe in /lib/x86_64-linux-gnu/libnss_compat-2.19.so due to munmap()
+--5202-- Discarding syms at 0xa8351a0-0xa83b6da in /lib/x86_64-linux-gnu/libnss_nis-2.19.so due to munmap()
+--5202-- Discarding syms at 0xa61d160-0xa629ea3 in /lib/x86_64-linux-gnu/libnsl-2.19.so due to munmap()
+--5202-- Discarding syms at 0x8fdb2a0-0x8fe1f63 in /lib/x86_64-linux-gnu/libnss_files-2.19.so due to munmap()
+==5202== 
+==5202== HEAP SUMMARY:
+==5202==     in use at exit: 305,994 bytes in 4,601 blocks
+==5202==   total heap usage: 35,640 allocs, 31,039 frees, 2,720,318 bytes allocated
+==5202== 
+==5202== Searching for pointers to 4,601 not-freed blocks
+==5202== Checked 684,056 bytes
+==5202== 
+==5202== LEAK SUMMARY:
+==5202==    definitely lost: 4,176 bytes in 23 blocks
+==5202==    indirectly lost: 207,783 bytes in 3,674 blocks
+==5202==      possibly lost: 32 bytes in 1 blocks
+==5202==    still reachable: 94,003 bytes in 903 blocks
+==5202==         suppressed: 0 bytes in 0 blocks
+==5202== Rerun with --leak-check=full to see details of leaked memory
+==5202== 
+==5202== Use --track-origins=yes to see where uninitialised values come from
+==5202== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+==5202== 
+==5202== 1 errors in context 1 of 3:
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403CE5: boost::document::~document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40353C: negative_absurd_path_opening() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x4037DA: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+==5202== 
+==5202== 1 errors in context 2 of 3:
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403CE5: boost::document::~document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x403226: negative_try_closing_null() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40379D: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+==5202== 
+==5202== 1 errors in context 3 of 3:
+==5202== Conditional jump or move depends on uninitialised value(s)
+==5202==    at 0x403DCC: boost::document::close_document() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40320E: negative_try_closing_null() (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202==    by 0x40379D: main (in /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test)
+==5202== 
+==5202== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
