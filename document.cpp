@@ -36,7 +36,7 @@ void document::save_document() {
 }
 
 void document::close_document() {
-	if(this->is_file_opened) {
+	if(this->is_file_opened && boost::filesystem::exists(this->file_path)) {
 		boost::doc::oo_functions::close_oo(this->file_path,true);
 		this->is_file_opened = false;
 	}
@@ -46,7 +46,7 @@ void document::close_document() {
 }
 
 void document::close_document(const boost::filesystem::path& path) {
-	if(this->is_file_opened) {
+	if(this->is_file_opened && boost::filesystem::exists(path)) {
 		boost::doc::oo_functions::close_oo(path,true);
 		this->is_file_opened = false;
 	}

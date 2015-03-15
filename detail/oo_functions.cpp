@@ -190,13 +190,8 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
         //std::cerr <<  "StarOffice.ServiceManager is not exported from remote counterpart" << std::endl;
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server and then try again, but I don't think that's a good way to go about this.
-        // Will find a good way ASAP, after export is done.
         // Till then, we just throw an exception.
 
-        //boost::doc::oo_functions::start_oo_server();
-        //xInterface = Reference< XInterface >(
-        //    resolver->resolve( conString ), UNO_QUERY );    
-        
         boost::throw_exception(document_exception(
             "Error: Open Office server is not running."));
     }
@@ -227,15 +222,14 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     }
 }
 
+// Gets the xComponent from the path of the office file
+// given. Assumes file path is a valid one.
 ::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > 
     boost::doc::oo_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
         
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = boost::doc::oo_functions::connect_to_oo_server();
-    if( !rOfficeServiceManager.is() ){
-        boost::throw_exception(document_exception(
-            "Error: Not Connected sucessfully to the office"));
-    }
+
      //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
     OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
@@ -260,8 +254,8 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
         }
     }
     catch( Exception &e ){
-        boost::throw_exception(document_exception(
-            "Error: Unable to Load File. Check Permissions."));
+        //boost::throw_exception(document_exception(
+        //    "Error: Unable to Load File. Check Permissions."));
     }
     return xComponent;
 }
@@ -271,7 +265,12 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
         boost::throw_exception(document_exception(
             "Error: Path is empty or does not exist."));
     }
+
     Reference< XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
+    if( !xComponent.is() ) {
+        boost::throw_exception(document_exception(
+            "Error: Unable to load Document for exporting. Check Permissions."));
+    }
     // Creating the output path in the 
     // same location as the input file path
     // And the filter. Right now works with docs
@@ -291,8 +290,16 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
     pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
     pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
     pdfProperties[1].Value <<= (sal_Bool)true;
-    Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-    xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), pdfProperties);  
+
+    try {
+        Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+        xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), pdfProperties);  
+    }
+    catch(Exception& e) {
+        boost::throw_exception(document_exception(
+            "Error: Unable to export Document. Check Permissions."));
+    }
+
 }
 
 
@@ -319,7 +326,7 @@ void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath
                 xCloseable->close((sal_Bool)true);
             }
             catch (Exception &e) {
-                boost::throw_exception(document_exception("close of XCloseable object failed."));
+                boost::throw_exception(document_exception("Error: Close XCloseable object failed."));
             }
         }
         else { // No xClosable. Use dispose to handle this.

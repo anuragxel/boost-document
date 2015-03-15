@@ -27,8 +27,8 @@ void working_on_multiple_documents(boost::document b, boost::document c) {
 		c.open_document();
 		b.export_document(boost::document_file_format::PDF);
 		c.export_document(boost::document_file_format::PDF);
-	//	b.close_document();
-	//	c.close_document();
+		b.close_document();
+		c.close_document();
 		std::cout << "Test working_on_multiple_documents Passed." << std::endl;
 	}
 	catch(boost::document_exception& e) {
@@ -77,13 +77,10 @@ void negative_exporting_file_without_permission(boost::document d) {
 
 
 int main(int argc, char **argv) {
-
 	boost::filesystem::path path(argv[1]);
-
 	boost::document b = boost::document(path);
 	// Create a document. Change to the correct path there to run the tests.
 	boost::document c = boost::document("/home/anurag/testing.ods");
-
 	// Create a document, change the rwx permission to 000. Change to the correct path there to run the test.
 	boost::document d = boost::document("/home/anurag/permission.ods");
 
