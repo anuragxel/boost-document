@@ -3,6 +3,7 @@
 
 #include <string>
 #include <boost/filesystem.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 namespace boost { namespace doc { namespace oo_functions {
@@ -14,6 +15,8 @@ namespace boost { namespace doc { namespace oo_functions {
 	void open_oo(const boost::filesystem::path& path);
 	void export_oo(const boost::filesystem::path &inputPath, boost::document_file_format::type format);
 	void close_oo(const boost::filesystem::path &inputPath,bool save);
+	void save_oo(const boost::filesystem::path &inputPath);
+	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent> get_xComponent_from_path(const boost::filesystem::path& inputPath);
 
 }}}
 

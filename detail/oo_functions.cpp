@@ -89,7 +89,8 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
 
 // Helper which returns the OfficeServiceManager
 // if connection is established.
-::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> boost::doc::oo_functions::connect_to_oo_server() {
+::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
+                                boost::doc::oo_functions::connect_to_oo_server() {
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
                 ::cppu::defaultBootstrap_InitialComponentContext();
@@ -163,7 +164,7 @@ void boost::doc::oo_functions::set_bootstrap_offapi() {
 // in the LibreOffice/OpenOffice Documentation
 void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     if(!boost::filesystem::exists(path)) {
-        boost::throw_exception(document_exception("Error: Path is Empty"));
+        boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
     }
 
     boost::doc::oo_functions::set_bootstrap_offapi();
@@ -207,28 +208,28 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     
     Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
     
-    Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-        boost::doc::oo_functions::get_url_from_path(path), 
-        OUString::createFromAscii( "_default" ), 
-        0,
-        Sequence < ::com::sun::star::beans::PropertyValue >() 
-    );
-    Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
-    if( !xComponentLoader.is() ){
-            boost::throw_exception(document_exception(
-                "XComponentloader not successfully instantiated"));
+    try {
+        Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
+            boost::doc::oo_functions::get_url_from_path(path), 
+            OUString::createFromAscii( "_default" ), 
+            0,
+            Sequence < ::com::sun::star::beans::PropertyValue >() 
+        );
+        Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
+        if( !xComponentLoader.is() ){
+                boost::throw_exception(document_exception(
+                    "XComponentloader not successfully instantiated"));
+        }
+    }
+    catch(Exception& e) {
+        boost::throw_exception(document_exception(
+           "Error: Unable to Load File. Check Permissions."));
     }
 }
 
-
-void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPath, boost::document_file_format::type format) {
-    if(!boost::filesystem::exists(inputPath)) {
-        boost::throw_exception(document_exception(
-            "Error: Path is empty or does not exist."));
-    }
-    
-    boost::doc::oo_functions::set_bootstrap_offapi();
-    
+::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > 
+    boost::doc::oo_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
+        
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = boost::doc::oo_functions::connect_to_oo_server();
     if( !rOfficeServiceManager.is() ){
@@ -260,9 +261,17 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path &inputPat
     }
     catch( Exception &e ){
         boost::throw_exception(document_exception(
-            "Error: Unable to Load File."));
+            "Error: Unable to Load File. Check Permissions."));
     }
-    
+    return xComponent;
+}
+
+void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPath, boost::document_file_format::type format) {
+    if(!boost::filesystem::exists(inputPath)) {
+        boost::throw_exception(document_exception(
+            "Error: Path is empty or does not exist."));
+    }
+    Reference< XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
     // Creating the output path in the 
     // same location as the input file path
     // And the filter. Right now works with docs
@@ -292,43 +301,8 @@ void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath
         boost::throw_exception(document_exception(
             "Error: Path is empty or does not exist."));
     }
-    
-    boost::doc::oo_functions::set_bootstrap_offapi();
-    
-    Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = boost::doc::oo_functions::connect_to_oo_server();
-    if( !rOfficeServiceManager.is() ){
-        boost::throw_exception(document_exception(
-            "Error: Not Connected sucessfully to the office"));
-    }
-     //get the desktop service using createInstance returns an XInterface type
-    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
-    OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-    
-    //query for the XComponentLoader interface
-    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
-    Reference< XComponent > xComponent;
-    //get an instance of the spreadsheet
-    try {
-        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
-        frameProperties[0].Name = OUString::createFromAscii("Hidden");
-        frameProperties[0].Value <<= (sal_Bool)true;
-        xComponent = rComponentLoader->loadComponentFromURL(
-            boost::doc::oo_functions::get_url_from_path(inputPath),
-            OUString::createFromAscii("_default"),
-            0,
-            frameProperties
-        );
-        if( !rComponentLoader.is() ){
-            boost::throw_exception(document_exception(
-                "Error: XComponentloader not successfully instantiated"));
-        }
-    }
-    catch( Exception &e ){
-        boost::throw_exception(document_exception(
-            "Error: Unable to Load File."));
-    }
 
+    Reference < XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
     Reference < XModel > xModel(xComponent, UNO_QUERY);
     if(xModel != NULL) { 
         
@@ -348,11 +322,29 @@ void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath
                 boost::throw_exception(document_exception("close of XCloseable object failed."));
             }
         }
-        else { // No xClosable.
+        else { // No xClosable. Use dispose to handle this.
 
         }
     }
+}
 
+void boost::doc::oo_functions::save_oo(const boost::filesystem::path &inputPath) {
+    Reference < XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
+    Reference < XModel > xModel(xComponent, UNO_QUERY);
+    if(xModel != NULL) { 
+        Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
+        Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+        try {
+            if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified()) {
+                xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(inputPath), 
+                    Sequence < ::com::sun::star::beans::PropertyValue >());
+            }
+        }
+        catch(Exception& e) {
+            boost::throw_exception(document_exception(
+                "Error: File Can't be saved. Check Permissions."));
+        }
+    }
 }
 
 #endif

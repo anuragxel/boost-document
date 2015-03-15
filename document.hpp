@@ -19,6 +19,7 @@ namespace boost {
 		void open_document(const boost::filesystem::path& path);
 		void close_document();
 		void close_document(const boost::filesystem::path& path);
+		void save_document();
 		void export_document(const boost::filesystem::path& path,boost::document_file_format::type format = document_file_format::PDF);
 		void export_document(boost::document_file_format::type format = document_file_format::PDF);
 	};
