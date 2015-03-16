@@ -11,6 +11,16 @@ void negative_try_opening_null() {
 	}
 }
 
+void negative_try_exporting_null() {
+	try {
+		boost::document d = boost::document();
+		d.export_document();
+	}
+	catch(boost::document_exception& e) {	
+		std::cout << "Test negative_try_exporting_null Passed. Expected -- " << e.what() << std::endl;
+	}
+}
+
 void negative_try_closing_null() {
 	try {
 		boost::document d = boost::document();
@@ -75,6 +85,14 @@ void negative_exporting_file_without_permission(boost::document d) {
 	}
 }
 
+void negative_closing_file_without_permission(boost::document d) {
+	try {
+		d.close_document();
+	}
+	catch(boost::document_exception& e) {
+		std::cout << "Test negative_closing_file_without_permission Passed. Expected -- " << e.what() << std::endl;
+	}
+}
 
 int main(int argc, char **argv) {
 	boost::filesystem::path path(argv[1]);

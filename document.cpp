@@ -7,7 +7,8 @@
 using namespace boost;
 
 document::document() {
-	   boost::doc::oo_functions::set_bootstrap_offapi();
+	boost::doc::oo_functions::set_bootstrap_offapi();
+	this->is_file_opened = false;
 }
 
 document::document(const boost::filesystem::path path) {
