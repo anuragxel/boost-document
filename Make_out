@@ -1,0 +1,10 @@
+mkdir -p /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test
+gcc -c -fpic -fvisibility=hidden -O -I. -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/examples -I../../../include -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/Test -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE -o/home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/test.o test.cpp
+mkdir -p /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test
+gcc -c -fpic -fvisibility=hidden -O -I. -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/examples -I../../../include -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/Test -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE -o/home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/document.o document.cpp
+mkdir -p /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test
+gcc -c -fpic -fvisibility=hidden -O -I. -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/examples -I../../../include -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/Test -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE -o/home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/oo_functions.o detail/oo_functions.cpp
+mkdir -p /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin 
+mkdir -p /home/anurag/libreoffice4.2_sdk/LINUXexample.out/misc/Test
+g++ -Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive -L"/home/anurag/libreoffice4.2_sdk/LINUXexample.out/lib" -L"/usr/lib/libreoffice/sdk/lib" -L"/usr/lib/libreoffice/ure-link/lib" -o /home/anurag/libreoffice4.2_sdk/LINUXexample.out/bin/Test /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/test.o /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/document.o /home/anurag/libreoffice4.2_sdk/LINUXexample.out/obj/Test/oo_functions.o \
+	  -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal  -lboost_system -lboost_filesystem

@@ -3,11 +3,11 @@
 
 //          Copyright Anurag Ghosh 2015.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file LICENSE_1_0.txt or copy at
+//    (See accompanying file ../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include "document.hpp"
-#include "detail/oo_functions.hpp"
+#include "../include/boost/document/document.hpp"
+#include "../include/boost/document/detail/oo_functions.hpp"
 
 using namespace boost;
 

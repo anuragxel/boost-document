@@ -1,0 +1,24 @@
+# Boost Document Library Build Jamfile
+# Copyright 2015 Anurag Ghosh.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
+
+import testing ;
+import feature ;
+
+project
+    : requirements
+        <library>/boost/document//boost_document
+        <library>/boost/system//boost_system
+        <library>/boost/filesystem//boost_filesystem
+        <link>static
+        # default to all warnings on:
+        <warnings>all
+        # set warnings as errors for those compilers we know we get warning free:
+        <toolset>gcc:<cxxflags>-Wextra
+        <toolset>gcc:<cxxflags>-Wno-uninitialized
+    ;
+
+test-suite document_tests
+  : [ run test.cpp ]
+  ;

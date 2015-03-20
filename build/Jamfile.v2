@@ -1,0 +1,19 @@
+# Boost Document Library Build Jamfile
+# Copyright 2015 Anurag Ghosh.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
+
+project boost/document
+    : source-location ../src
+    : requirements
+        <target-os>linux:<linkflags>"-lopen_office_library_if_any" # remove this line if not required
+    ;
+
+SOURCES = document detail/oo_functions ;
+
+lib boost_document
+    : $(SOURCES).cpp
+    :
+    <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
+    <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
+    ;

@@ -14,8 +14,6 @@
 #define OFFAPI "/usr/lib/libreoffice/program/types/offapi.rdb"
 #endif
 
-#include "document_file_format.hpp"
-
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -45,8 +43,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#include "oo_functions.hpp"
-#include "document_exception.hpp"
+
+#include "../include/boost/document/detail/document_file_format.hpp"
+#include "../include/boost/document/detail/oo_functions.hpp"
+#include "../include/boost/document/detail/document_exception.hpp"
 
 
 using namespace com::sun::star;
