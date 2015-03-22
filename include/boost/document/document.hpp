@@ -12,20 +12,56 @@
 
 namespace boost {
 
+    /* \brief This is the main class interface to be 
+     *        exposed to the library user.
+     */
 	class document {
 	private:
 		boost::filesystem::path file_path;
 		bool is_file_opened;
 	public:
+		
+		//! \brief Default Constructor.
+		//!        Not preferred at all.
 		document();
+		
+		//! \brief The de facto Constructor.
+		//!        Creates a new document object.  
 		document(const boost::filesystem::path path);
+		
+		//! \brief Destructor
+		//!        Closes Unsaved Documents.
 		~document();
+		
+		//! \brief Opens document using Calc/Excel given in
+		//!        the file path.
 		void open_document();
+
+
+		//! \brief Opens document using Calc/Excel given in
+		//!        the file path.
 		void open_document(const boost::filesystem::path& path);
+		
+		//! \brief Closes document using Calc/Excel given in
+		//!        the file path.
 		void close_document();
+		
+		//! \brief Closes document using Calc/Excel given in
+		//!        the file path.
 		void close_document(const boost::filesystem::path& path);
+
+		//! \brief saves document using Calc/Excel given in
+		//!        the file path.
 		void save_document();
+
+		//! \brief Exports document using Calc/Excel given in
+		//!        the file path and the file format. Default
+		//!        format is PDF.
 		void export_document(const boost::filesystem::path& path,boost::document_file_format::type format = document_file_format::PDF);
+
+		//! \brief Exports document using Calc/Excel given in
+		//!        the file path and the file format. Default
+		//!        format is PDF.
 		void export_document(boost::document_file_format::type format = document_file_format::PDF);
 	};
 

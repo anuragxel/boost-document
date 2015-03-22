@@ -68,6 +68,14 @@ using ::rtl::OUStringToOString;
 
 using namespace boost;
 
+
+//! \brief Provides the corresponding filter with respect to
+//!        the extension given.
+//!
+//! The Star Office Backend provides filters to convert data
+//! from one format to another, they have a specific name
+//! for every filter which needs to be specified before calling
+//! storeToURL()
 std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std::string extension) {
     if( extension == ".doc"  ||
         extension == ".docx" ||
@@ -92,8 +100,13 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
     }
 }
 
-// Helper which returns the OfficeServiceManager
-// if connection is established.
+//! \brief Helper which returns the OfficeServiceManager
+//!        if connection is established.
+//!
+//! The StartOffice Backend uses a client server model in which document
+//! component ojects act as the client and request the server to perform
+//! actions for them. The OfficeServiceManager of type XMultiServiceFactory
+//! is sufficient for scripting purposes.
 ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
                                 boost::doc::oo_functions::connect_to_oo_server() {
    // create the initial component context
@@ -125,10 +138,8 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
           "StarOffice.ServiceManager is not exported from remote counterpart\n"));
          return NULL;
       }
-
       // query for the simpler XMultiServiceFactory interface, sufficient for scripting
       Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
-
       if( ! rOfficeServiceManager.is() ) {
             boost::throw_exception(document_exception(
               "Error :XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n"));
@@ -141,8 +152,12 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
    return NULL;
 }
 
-// Setting up the bootstrapping and the params. :')
-// Important for Open Office server communication
+//! \brief The C++ Language Bindings need to be bootstrapped 
+//!        to the offapi.rdb file of the StarOffice backend.
+//! 
+//! Setting up the bootstrapping and the parameters.
+//! Important for Open Office server communication. 
+//! UNO & cppuhelper needs this to be run at least once.
 void boost::doc::oo_functions::set_bootstrap_offapi() {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
@@ -156,6 +171,9 @@ void boost::doc::oo_functions::set_bootstrap_offapi() {
     );
 }
 
+
+//! \brief Converts boost::filesystem::path to
+//!        absolute path and then to OUString.
 ::rtl::OUString  boost::doc::oo_functions::get_url_from_path(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
@@ -165,8 +183,11 @@ void boost::doc::oo_functions::set_bootstrap_offapi() {
     return sAbsoluteDocUrl;
 }
 
-// Code Adapted from the DocumentLoader Example given
-// in the LibreOffice/OpenOffice Documentation
+//! \brief Opens the document given in the path,
+//!        using appropriate client.
+//!
+//! Code Adapted from the DocumentLoader Example given
+//! in the LibreOffice/OpenOffice Documentation
 void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     if(!boost::filesystem::exists(path)) {
         boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
@@ -227,8 +248,8 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     }
 }
 
-// Gets the xComponent from the path of the office file
-// given. Assumes file path is a valid one.
+//! \brief Gets the xComponent from the path of the office file
+//!        given. Assumes file path is a valid one.
 ::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > 
     boost::doc::oo_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
         
@@ -265,6 +286,9 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     return xComponent;
 }
 
+//! \brief Exports document using Calc/Excel given in
+//!        the file path and the file format. Default
+//!        format is PDF.
 void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPath, boost::document_file_format::type format) {
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception(
@@ -307,7 +331,8 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
 
 }
 
-
+//! \brief Closes document using Calc/Excel given in
+//!        the file path.
 void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath,bool save) {
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception(
@@ -340,6 +365,8 @@ void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath
     }
 }
 
+//! \brief saves document using Calc/Excel given in
+//!        the file path.
 void boost::doc::oo_functions::save_oo(const boost::filesystem::path &inputPath) {
     Reference < XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
     Reference < XModel > xModel(xComponent, UNO_QUERY);

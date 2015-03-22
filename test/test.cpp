@@ -111,16 +111,16 @@ int main(int argc, char **argv) {
 	boost::document d = boost::document("/home/anurag/permission.ods");
 
 	// Sanity Checks
-	negative_try_opening_null();
-	negative_try_exporting_null();
-	negative_try_closing_null();
-	negative_closing_unopened_document(b);
-	negative_absurd_path_opening();
+	//negative_try_opening_null();
+	//negative_try_exporting_null();
+	//negative_try_closing_null();
+	//negative_closing_unopened_document(b);
+	//negative_absurd_path_opening();
 
 	// Permissions related checks
-	negative_opening_file_without_permission(d);
-	negative_exporting_file_without_permission(d);
-	negative_closing_file_without_permission(d);
+	//negative_opening_file_without_permission(d);
+	//negative_exporting_file_without_permission(d);
+	//negative_closing_file_without_permission(d);
 	
 	// Positive Checks.
 	working_on_multiple_documents(b,c);
