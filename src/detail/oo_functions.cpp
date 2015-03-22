@@ -44,9 +44,9 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
 
-#include "../include/boost/document/detail/document_file_format.hpp"
-#include "../include/boost/document/detail/oo_functions.hpp"
-#include "../include/boost/document/detail/document_exception.hpp"
+#include <boost/document/detail/document_file_format.hpp>
+#include <boost/document/detail/oo_functions.hpp>
+#include <boost/document/detail/document_exception.hpp>
 
 
 using namespace com::sun::star;

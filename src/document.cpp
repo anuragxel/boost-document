@@ -6,8 +6,8 @@
 //    (See accompanying file ../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include "../include/boost/document/document.hpp"
-#include "../include/boost/document/detail/oo_functions.hpp"
+#include <boost/document/document.hpp>
+#include <boost/document/detail/oo_functions.hpp>
 
 using namespace boost;
 

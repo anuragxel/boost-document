@@ -7,8 +7,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/filesystem.hpp>
-#include "../include/boost/document/detail/document_exception.hpp"
-#include "../include/boost/document/detail/document_file_format.hpp"
+#include <boost/document/detail/document_exception.hpp>
+#include <boost/document/detail/document_file_format.hpp>
 
 namespace boost {
 

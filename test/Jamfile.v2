@@ -11,7 +11,7 @@ project
         <library>/boost/document//boost_document
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
-        <link>static
+        #<link>static
         # default to all warnings on:
         <warnings>all
         # set warnings as errors for those compilers we know we get warning free:

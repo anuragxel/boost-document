@@ -7,7 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
-#include "document.hpp"
+#include <boost/document/document.hpp>
 
 void negative_try_opening_null() {
 	try {
