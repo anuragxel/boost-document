@@ -1,3 +1,5 @@
+//! \file
+//! \brief Open Office Internal Functions
 #ifndef _OO_FUNCTIONS_CPP
 #define _OO_FUNCTIONS_CPP
 
@@ -69,7 +71,7 @@ using ::rtl::OUStringToOString;
 using namespace boost;
 
 
-//! \brief Provides the corresponding filter with respect to
+//! \fn Provides the corresponding filter with respect to
 //!        the extension given.
 //!
 //! The Star Office Backend provides filters to convert data
@@ -100,7 +102,7 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
     }
 }
 
-//! \brief Helper which returns the OfficeServiceManager
+//! \fn Helper which returns the OfficeServiceManager
 //!        if connection is established.
 //!
 //! The StartOffice Backend uses a client server model in which document
@@ -152,7 +154,7 @@ std::string boost::doc::oo_functions::convert_extension_to_pdf_filter(const std:
    return NULL;
 }
 
-//! \brief The C++ Language Bindings need to be bootstrapped 
+//! \fn The C++ Language Bindings need to be bootstrapped 
 //!        to the offapi.rdb file of the StarOffice backend.
 //! 
 //! Setting up the bootstrapping and the parameters.
@@ -172,7 +174,7 @@ void boost::doc::oo_functions::set_bootstrap_offapi() {
 }
 
 
-//! \brief Converts boost::filesystem::path to
+//! \fn Converts boost::filesystem::path to
 //!        absolute path and then to OUString.
 ::rtl::OUString  boost::doc::oo_functions::get_url_from_path(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
@@ -183,7 +185,7 @@ void boost::doc::oo_functions::set_bootstrap_offapi() {
     return sAbsoluteDocUrl;
 }
 
-//! \brief Opens the document given in the path,
+//! \fn Opens the document given in the path,
 //!        using appropriate client.
 //!
 //! Code Adapted from the DocumentLoader Example given
@@ -248,7 +250,7 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     }
 }
 
-//! \brief Gets the xComponent from the path of the office file
+//! \fn Gets the xComponent from the path of the office file
 //!        given. Assumes file path is a valid one.
 ::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > 
     boost::doc::oo_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
@@ -286,7 +288,7 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     return xComponent;
 }
 
-//! \brief Exports document using Calc/Excel given in
+//! \fn Exports document using Calc/Excel given in
 //!        the file path and the file format. Default
 //!        format is PDF.
 void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPath, boost::document_file_format::type format) {
@@ -310,28 +312,50 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
         outputPath.replace_extension(".pdf");
         filter = boost::doc::oo_functions::convert_extension_to_pdf_filter( 
             inputPath.extension().string() );
+
+        // Other Options can be added later
+        // to improve the API
+        Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
+        pdfProperties[0].Name = OUString::createFromAscii("FilterName");
+        pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
+        pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
+        pdfProperties[1].Value <<= (sal_Bool)true;
+
+        try {
+            Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+            xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), pdfProperties);  
+        }
+        catch(Exception& e) {
+            boost::throw_exception(document_exception(
+                "Error: Unable to export Document. Check Permissions."));
+        }
+
     }
 
-    // Other Options can be added later
-    // to improve the API
-    Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
-    pdfProperties[0].Name = OUString::createFromAscii("FilterName");
-    pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
-    pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
-    pdfProperties[1].Value <<= (sal_Bool)true;
+    else if(format == boost::document_file_format::CSV) {
+        outputPath.replace_extension(".csv");
+        filter = "Text - txt - csv (StarCalc)"; 
+        Sequence < ::com::sun::star::beans::PropertyValue > properties(3);
+        properties[0].Name = OUString::createFromAscii("FilterName");
+        properties[0].Value <<= OUString::createFromAscii(filter.c_str());
+        properties[1].Name = OUString::createFromAscii("FilterOptions");
+        properties[1].Value <<= OUString::createFromAscii("44,34,0,1,1"); // 44 for comma separation, 34 for text quotation mark
+        properties[2].Name = OUString::createFromAscii("Overwrite");
+        properties[2].Value <<= (sal_Bool)true;
 
-    try {
-        Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-        xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), pdfProperties);  
-    }
-    catch(Exception& e) {
-        boost::throw_exception(document_exception(
-            "Error: Unable to export Document. Check Permissions."));
+        try {
+            Reference < XStorable > xStorable(xComponent,UNO_QUERY);
+            xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), properties);  
+        }
+        catch(Exception& e) {
+            boost::throw_exception(document_exception(
+                "Error: Unable to export Document. Check Permissions."));
+        }
     }
 
 }
 
-//! \brief Closes document using Calc/Excel given in
+//! \fn Closes document using Calc/Excel given in
 //!        the file path.
 void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath,bool save) {
     if(!boost::filesystem::exists(inputPath)) {
@@ -365,7 +389,7 @@ void boost::doc::oo_functions::close_oo(const boost::filesystem::path &inputPath
     }
 }
 
-//! \brief saves document using Calc/Excel given in
+//! \fn saves document using Calc/Excel given in
 //!        the file path.
 void boost::doc::oo_functions::save_oo(const boost::filesystem::path &inputPath) {
     Reference < XComponent > xComponent = boost::doc::oo_functions::get_xComponent_from_path(inputPath);
