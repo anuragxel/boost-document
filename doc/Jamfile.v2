@@ -1,0 +1,65 @@
+# Boost Document Library Build Jamfile
+# Copyright 2015 Anurag Ghosh.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
+
+using quickbook ;
+using boostbook ;
+using doxygen ;
+using xsltproc ;
+
+import set ;
+import doxygen ;
+import xsltproc ;
+import notfile ;
+import path ;
+
+project boost_document/doc ;
+
+#
+# Common params for doxygen
+# 
+
+local doxygen_params =
+    <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+    <doxygen:param>HIDE_UNDOC_CLASSES=YES
+    <doxygen:param>HIDE_SCOPE_NAMES=YES
+    <doxygen:param>EXTRACT_ALL=NO
+    <doxygen:param>EXTRACT_PRIVATE=NO
+    <doxygen:param>BUILTIN_STL_SUPPORT=YES
+    <doxygen:param>ENABLE_PREPROCESSING=YES
+    <doxygen:param>MACRO_EXPANSION=YES
+    <doxygen:param>"ALIASES= \\
+        \"forcedlink{1}=\\xmlonly<link linkend='boost.document.\\1'>boost::document::\\1</link>\\endxmlonly\" \\
+        \"forcedmacrolink{1}=\\xmlonly<link linkend='\\1'>\\1</link>\\endxmlonly\" "
+    <doxygen:param>"PREDEFINED= \\
+        \"BOOST_RV_REF(T)=T&&\" \\
+        \"BOOST_DLL_DOXYGEN\" "
+    ;
+
+#
+# Ref Sessions Generation
+#
+doxygen autodoc_boost_document_library_core
+    :
+        [ glob 
+            ../include/boost/document/document.hpp
+        ]
+    :
+        $(doxygen_params)
+        <xsl:param>"boost.doxygen.reftitle=Document Library Reference"
+    ;
+
+#
+# Docs Generation
+#
+boostbook boost_document-doc
+    :
+        document.qbk
+    :
+        <dependency>autodoc_boost_document_library_core
+        <xsl:param>boost.root=http://www.boost.org/doc/libs/1_57_0
+        #<xsl:param>boost.root=../../../.
+        <xml:param>html.stylesheet=../../../../doc/src/boostbook.css
+    ;
+

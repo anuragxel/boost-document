@@ -1,0 +1,14 @@
+[/
+    Copyright 2015 Anurag Ghosh.
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
+[section:introduction Motivation]
+
+[warning This is not an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement. The intention is to submit the library to a formal review and get included as an official library, if community think that it is interesting!]
+ 
+
+Boost.Document library is meant to simplify tasks related to manipulation of Office Documents in general and Spreadsheet Documents in particular. All the Current Office API's, be it LibreOffice/OpenOffice or MS Excel are not intuitive to use at all and the effort to write applications which use such API's distracts the developer from performing the core problems at hand. The idea here is to provide a simple, cross-platform and useable interface for developers to use to make their own applications which involve manipulating Excel/OpenOffice/LibreOffice sheets. Such a library will have many takers such as Students/Professors in academia, Banking/CRM softwares etc.
+
+[endsect]

@@ -342,7 +342,6 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
         properties[1].Value <<= OUString::createFromAscii("44,34,0,1,1"); // 44 for comma separation, 34 for text quotation mark
         properties[2].Name = OUString::createFromAscii("Overwrite");
         properties[2].Value <<= (sal_Bool)true;
-
         try {
             Reference < XStorable > xStorable(xComponent,UNO_QUERY);
             xStorable->storeToURL(boost::doc::oo_functions::get_url_from_path(outputPath), properties);  
@@ -352,7 +351,6 @@ void boost::doc::oo_functions::export_oo(const boost::filesystem::path& inputPat
                 "Error: Unable to export Document. Check Permissions."));
         }
     }
-
 }
 
 //! \fn Closes document using Calc/Excel given in

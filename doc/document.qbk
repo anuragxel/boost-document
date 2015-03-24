@@ -1,0 +1,25 @@
+[/
+    Copyright 2015 Anurag Ghosh.
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+/]
+
+[library Boost.Document
+    [quickbook 1.5]
+    [authors [Ghosh, Anurag ]]
+    [copyright 2015 Anurag Ghosh]
+    [id document]
+    [dirname document]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        http://www.boost.org/LICENSE_1_0.txt)
+    ]
+]
+
+[include introduction.qbk]
+
+[section Reference]
+[xinclude autodoc_boost_document_library_core.xml]
+[endsect]
+
