@@ -32,7 +32,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -197,8 +197,7 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
 
     boost::doc::oo_functions::set_bootstrap_offapi();
     
-    OUString conString = OUString(
-        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+    OUString conString = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
     
@@ -219,7 +218,6 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
         // I can add one execute `soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"`
         // to start the server and then try again, but I don't think that's a good way to go about this.
         // Till then, we just throw an exception.
-
         boost::throw_exception(document_exception(
             "Error: Open Office server is not running."));
     }
@@ -229,12 +227,15 @@ void boost::doc::oo_functions::open_oo(const boost::filesystem::path& path) {
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
     
-    Reference < XDesktop2 > xComponentLoader = Desktop::create(xComponentContext);
-    
+    Reference < XComponentLoader > xComponentLoader(
+        xMultiComponentFactoryServer->createInstanceWithContext(
+             OUString("com.sun.star.frame.Desktop" ),
+             xComponentContext ), UNO_QUERY );     
+
     try {
         Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
             boost::doc::oo_functions::get_url_from_path(path), 
-            OUString::createFromAscii( "_default" ), 
+            OUString::createFromAscii("_default"), 
             0,
             Sequence < ::com::sun::star::beans::PropertyValue >() 
         );

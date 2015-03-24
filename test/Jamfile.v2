@@ -8,15 +8,16 @@ import feature ;
 
 project
     : requirements
+	<target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal"
         <library>/boost/document//boost_document
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
         <link>static
         # default to all warnings on:
-        #<warnings>all
+        <warnings>all
         # set warnings as errors for those compilers we know we get warning free:
-        #<toolset>gcc:<cxxflags>-Wextra
-        #<toolset>gcc:<cxxflags>-Wno-uninitialized
+        <toolset>gcc:<cxxflags>-Wextra
+        <toolset>gcc:<cxxflags>-Wno-uninitialized
     ;
 
 test-suite document_tests

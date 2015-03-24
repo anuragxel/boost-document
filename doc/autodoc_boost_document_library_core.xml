@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<library-reference id="document_library_reference"><title>Document Library Reference</title><header name="boost/document/document.hpp">
+<namespace name="boost">
+<class name="document"><method-group name="public member functions">
+<method name="open_document"><type>void</type><purpose>Opens document using Calc/Excel given in the file path. </purpose></method>
+<method name="open_document"><type>void</type><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><purpose>Opens document using Calc/Excel given in the file path. </purpose></method>
+<method name="close_document"><type>void</type><purpose>Closes document using Calc/Excel given in the file path. </purpose></method>
+<method name="close_document"><type>void</type><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><purpose>Closes document using Calc/Excel given in the file path. </purpose></method>
+<method name="save_document"><type>void</type><purpose>saves document using Calc/Excel given in the file path. </purpose></method>
+<method name="export_document"><type>void</type><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><parameter name="format"><paramtype>boost::document_file_format::type</paramtype><default>document_file_format::PDF</default></parameter><purpose>Exports document using Calc/Excel given in the file path and the file format. Default format is PDF. </purpose></method>
+<method name="export_document"><type>void</type><parameter name="format"><paramtype>boost::document_file_format::type</paramtype><default>document_file_format::PDF</default></parameter><purpose>Exports document using Calc/Excel given in the file path and the file format. Default format is PDF. </purpose></method>
+</method-group>
+<constructor><purpose>Default Constructor. Not preferred at all. </purpose></constructor>
+<constructor><parameter name="path"><paramtype>const boost::filesystem::path</paramtype></parameter><purpose>The de facto Constructor. Creates a new document object. </purpose></constructor>
+<destructor><purpose>Destructor Closes Unsaved Documents. </purpose></destructor>
+</class></namespace>
+</header>
+</library-reference>

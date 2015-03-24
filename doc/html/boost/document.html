@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class document</title>
+<link rel="stylesheet" href="http://www.boost.org/doc/libs/1_57_0/doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
+<link rel="up" href="../document/reference.html#header.boost.document.document_hpp" title="Header &lt;boost/document/document.hpp&gt;">
+<link rel="prev" href="../document/reference.html" title="Reference">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/1_57_0/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../document/reference.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.document_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a>
+</div>
+<div class="refentry">
+<a name="boost.document"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class document</span></h2>
+<p>boost::document</p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../document/reference.html#header.boost.document.document_hpp" title="Header &lt;boost/document/document.hpp&gt;">boost/document/document.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="document.html" title="Class document">document</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="document.html#boost.documentconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="document.html#idp20533504-bb"><span class="identifier">document</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="document.html#idp20534048-bb"><span class="identifier">document</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="document.html#idp20535376-bb"><span class="special">~</span><span class="identifier">document</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="document.html#idp20479344-bb">public member functions</a></span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20479904-bb"><span class="identifier">open_document</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20481008-bb"><span class="identifier">open_document</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20482816-bb"><span class="identifier">close_document</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20484080-bb"><span class="identifier">close_document</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20485888-bb"><span class="identifier">save_document</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20486992-bb"><span class="identifier">export_document</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span><span class="special">,</span> 
+                       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">PDF</span><span class="special">)</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="document.html#idp20489920-bb"><span class="identifier">export_document</span></a><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">type</span> <span class="special">=</span> <span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">PDF</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp99338784"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="idp99339168"></a><h3>
+<a name="boost.documentconstruct-copy-destruct"></a><code class="computeroutput">document</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><a name="idp20533504-bb"></a><span class="identifier">document</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Default Constructor. Not preferred at all. </li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp20534048-bb"></a><span class="identifier">document</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> path<span class="special">)</span><span class="special">;</span></pre>The de facto Constructor. Creates a new document object. </li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp20535376-bb"></a><span class="special">~</span><span class="identifier">document</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destructor Closes Unsaved Documents. </li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp99355136"></a><h3>
+<a name="idp20479344-bb"></a><code class="computeroutput">document</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20479904-bb"></a><span class="identifier">open_document</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Opens document using Calc/Excel given in the file path. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20481008-bb"></a><span class="identifier">open_document</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> path<span class="special">)</span><span class="special">;</span></pre>Opens document using Calc/Excel given in the file path. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20482816-bb"></a><span class="identifier">close_document</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Closes document using Calc/Excel given in the file path. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20484080-bb"></a><span class="identifier">close_document</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> path<span class="special">)</span><span class="special">;</span></pre>Closes document using Calc/Excel given in the file path. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20485888-bb"></a><span class="identifier">save_document</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>saves document using Calc/Excel given in the file path. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20486992-bb"></a><span class="identifier">export_document</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="special">&amp;</span> path<span class="special">,</span> 
+                     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">type</span> format <span class="special">=</span> <span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">PDF</span><span class="special">)</span><span class="special">;</span></pre>Exports document using Calc/Excel given in the file path and the file format. Default format is PDF. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp20489920-bb"></a><span class="identifier">export_document</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">type</span> format <span class="special">=</span> <span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">PDF</span><span class="special">)</span><span class="special">;</span></pre>Exports document using Calc/Excel given in the file path and the file format. Default format is PDF. </li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2015 Anurag Ghosh<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../document/reference.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.document_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a>
+</div>
+</body>
+</html>

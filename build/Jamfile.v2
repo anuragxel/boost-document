@@ -6,7 +6,7 @@
 project boost/document
     : source-location ../src
     : requirements
-        <target-os>linux:<cxxflags>"-I/usr/lib/libreoffice/sdk/include -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc -I/home/anurag/libreoffice4.2_sdk/LINUXexample.out/inc/examples -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE"
+        <target-os>linux:<cxxflags>"-I/usr/lib/libreoffice/sdk/include -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE"
         <target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lboost_system -lboost_filesystem"
     ;
 
