@@ -20,6 +20,6 @@ To install this library, you need to perform the following steps -
 
 6.  cd boost\_1\_57\_0/libs/document/build
 
-7.  ../../../b2 cxxflags= "_!$OO\_SDK\_OUT/include/"
+7.  ../../../b2 cxxflags= "-I$OO\_SDK\_OUT/include/"
 
 
