@@ -3,11 +3,18 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
 
+import os ;
+
+local oo_sdk_out = [ os.environ OO_SDK_OUT ] ;
+ 
 project boost/document
     : source-location ../src
     : requirements
+	<target-os>linux:<cxxflags>"-I"$(oo_sdk_out)/include
         <target-os>linux:<cxxflags>"-I/usr/lib/libreoffice/sdk/include -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE"
         <target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lboost_system -lboost_filesystem"
+    : usage-requirements
+        <target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lboost_system -lboost_filesystem" 
     ;
 
 SOURCES = document detail/oo_functions ;
@@ -15,6 +22,6 @@ SOURCES = document detail/oo_functions ;
 lib boost_document
     : $(SOURCES).cpp
     :
-    #<link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
-    #<link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
+    <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
+    <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
     ;

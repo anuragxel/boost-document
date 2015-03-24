@@ -12,3 +12,7 @@
 Boost.Document library is meant to simplify tasks related to manipulation of Office Documents in general and Spreadsheet Documents in particular. All the Current Office API's, be it LibreOffice/OpenOffice or MS Excel are not intuitive to use at all and the effort to write applications which use such API's distracts the developer from performing the core problems at hand. The idea here is to provide a simple, cross-platform and useable interface for developers to use to make their own applications which involve manipulating Excel/OpenOffice/LibreOffice sheets. Such a library will have many takers such as Students/Professors in academia, Banking/CRM softwares etc.
 
 [endsect]
+
+[section:introduction Brief Overview]
+
+[endsect]
