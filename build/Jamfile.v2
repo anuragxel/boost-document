@@ -3,18 +3,78 @@
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
 
-import os ;
+import modules ;
+import path ;
 
-local oo_sdk_out = [ os.environ OO_SDK_OUT ] ;
- 
+# Searching `OO_SDK_OUT` in environmant variables
+local OO_SDK_OUT = [ modules.peek : OO_SDK_OUT ] ;
+
+# If not set, searching `OO_SDK_OUT` in user-config.jam
+OO_SDK_OUT ?= [ modules.peek user-config : OO_SDK_OUT ] ;
+
+# If not set, searching `OO_SDK_OUT` in site-config
+OO_SDK_OUT ?= [ modules.peek site-config : OO_SDK_OUT ] ;
+
+
+# We may check that OO_SDK_OUT is set
+if ! ( $(OO_SDK_OUT) )
+{
+    echo "************************************************************" ;
+    echo "Trying to build Boost.Document with OpenOffice/LibraOffice support." ;
+    echo "If you need OpenOffice/LibraOffice you should specify the OO_SDK_OUT path." ;
+    echo "You can specify them in site-config.jam, user-config.jam" ;
+    echo "or in the environment." ;
+    echo "For example:" ;
+    echo "OO_SDK_OUT=C:\\Program Files\\ptw32\\Pre-built2\\include" ;
+    echo "or by running `source /usr/lib/libreoffice/sdk/setsdkenv_unix.sh`" ;
+    echo "************************************************************" ;
+}
+
+# Telling bjam that "uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal" are extern libraries and they could be found in specified directories
+lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal 
+    :   # No source files after first `:` means that this is an extern library
+    :
+        # Portable way to specify library search paths
+        <search>"$(OO_SDK_OUT)/lib"
+        <target-os>linux:<search>/usr/lib/libreoffice/ure-link/lib
+        <target-os>linux:<search>/usr/lib/libreoffice/sdk/lib
+        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\URE\bin"
+        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\ure-link\lib"
+        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\sdk\lib"
+        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\URE\bin"
+        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\ure-link\lib"
+        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\sdk\lib"
+
+        # Telling bjam that those libraries exist only in shared version
+        <link>shared
+    ;
+
 project boost/document
     : source-location ../src
     : requirements
-	<target-os>linux:<cxxflags>"-I"$(oo_sdk_out)/include
-        <target-os>linux:<cxxflags>"-I/usr/lib/libreoffice/sdk/include -DUNX -DGCC -DLINUX -DCPPU_ENV=gcc3 -DHAVE_GCC_VISIBILITY_FEATURE"
-        <target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lboost_system -lboost_filesystem"
+        # Portable way to specify include folders
+        <target-os>linux:<include>"$(OO_SDK_OUT)/include"
+        <target-os>linux:<include>/usr/lib/libreoffice/sdk/include
+        <target-os>windows:<include>"$(OO_SDK_OUT)\include"
+        <target-os>windows:<include>"C:\Program Files (x86)\LibreOffice 4\sdk\include"
+
+        # Linux specific defines for OpenOffice
+        <target-os>linux:<define>UNX <define>GCC <define>LINUX <define>CPPU_ENV=gcc3 <define>HAVE_GCC_VISIBILITY_FEATURE
+
+        # Disabling some of the GCC warnings that occur in OpenOffice/LibreOffice headers
+        <toolset>gcc:<cxxflags>"-Wno-long-long -Wno-variadic-macros -Wno-pedantic"
+
+        # This makes boost/document depend and link with boost_system and boost_filesystem
+        <library>/boost/system//boost_system
+        <library>/boost/filesystem//boost_filesystem
+
+        # This makes boost/document depend and link with extern libraries 
+        <library>uno_cppuhelpergcc3
+        <library>uno_cppu
+        <library>uno_salhelpergcc3
+        <library>uno_sal
     : usage-requirements
-        <target-os>linux:<linkflags>"-L/usr/lib/libreoffice/ure-link/lib -L/usr/lib/libreoffice/sdk/lib -L/usr/lib/libreoffice/ure-link/lib -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lboost_system -lboost_filesystem" 
+        # looks like nothing must be in here now, <library> propagates dependency automatically
     ;
 
 SOURCES = document detail/oo_functions ;
@@ -22,6 +82,6 @@ SOURCES = document detail/oo_functions ;
 lib boost_document
     : $(SOURCES).cpp
     :
-    <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
-    <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
+        <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
+        <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
     ;

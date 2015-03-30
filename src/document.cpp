@@ -6,9 +6,13 @@
 //    (See accompanying file ../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef __linux__
 #include <boost/document/document.hpp>
 #include <boost/document/detail/oo_functions.hpp>
-
+#elif _WIN32
+#include <boost\document\document.hpp>
+#include <boost\document\detail\oo_functions.hpp>
+#endif
 using namespace boost;
 
 document::document() {
