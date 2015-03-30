@@ -6,13 +6,9 @@
 //    (See accompanying file ../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifdef __linux__
 #include <boost/document/document.hpp>
 #include <boost/document/detail/oo_functions.hpp>
-#elif _WIN32
-#include <boost\document\document.hpp>
-#include <boost\document\detail\oo_functions.hpp>
-#endif
+
 using namespace boost;
 
 document::document() {
@@ -66,11 +62,21 @@ void document::close_document(const boost::filesystem::path& path) {
 }
 
 void document::export_document(const filesystem::path& path,document_file_format::type format) {
-    boost::doc::oo_functions::export_oo(path,format); // This the open office internal function.
+    if(boost::filesystem::exists(path)) {
+    	boost::doc::oo_functions::export_oo(path,format); // This the open office internal function.
+    }
+    else {
+		boost::throw_exception(document_exception("Error: Trying to export nonexistant file."));
+	}
 }
 
 void document::export_document(document_file_format::type format) {
-    boost::doc::oo_functions::export_oo(this->file_path,format); // This the open office internal function.
+    if(boost::filesystem::exists(this->file_path)) {
+        boost::doc::oo_functions::export_oo(this->file_path,format); // This the open office internal function.
+    }
+    else {
+		boost::throw_exception(document_exception("Error: Trying to export nonexistant file."));
+	}
 }
 
 #endif

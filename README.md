@@ -6,6 +6,10 @@ not reviewed, however meant as a prototype to be exhibit
 as a proof of concept to the community hoping to develop and submit
 a final library to formal review for inclusion.
 
+Documentation will be updated at the following link
+
+http://anuragxel.github.io/boost-generic-document-library/
+
 To install this library, you need to perform the following steps -
 
 On Linux
