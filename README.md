@@ -19,19 +19,19 @@ On Linux
 	
 	cd /usr/lib/libreoffice/sdk
 	
-	source setsdkenv\_unix.sh       # This sets the appropriate environment variables
+	source setsdkenv_unix.sh       # This sets the appropriate environment variables
 	
-	cd ~/libreoffice\_sdk           # The folder name may vary
+	cd ~/libreoffice_sdk           # The folder name may vary
 	
-	cppumaker -Gc -O"$OO\_SDK\_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb         # Add -BUCR after -Gc if neccessary. You can also run an example in sdk directory for the same effect.
+	cppumaker -Gc -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb         # Add -BUCR after -Gc if neccessary. You can also run an example in sdk directory for the same effect.
 	
-	cd boost\_1\_57\_0/libs/ 	# The folder name may vary, it is your boost directory which you downloaded from sourceforge.
+	cd boost_1_57_0/libs/ 	# The folder name may vary, it is your boost directory which you downloaded from sourceforge.
 
 	git clone https://github.com/anuragxel/boost-generic-document-library.git document
 
 	cd document/build
 
-	../../../b2 cxxflags="-I$OO\_SDK\_OUT/include/"
+	../../../b2
 
 	cd ../test
 
@@ -39,7 +39,7 @@ On Linux
 
 	soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" &  #Running the libreoffice server instance
 
-	../../../b2 cxxflags="-I$OO\_SDK\_OUT/include/"   # This will run the test
+	../../../b2   # This will run the test
 ```
 
 On Windows
