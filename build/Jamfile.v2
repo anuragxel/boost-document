@@ -36,15 +36,18 @@ lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal
     :
         # Portable way to specify library search paths
         <search>"$(OO_SDK_OUT)/lib"
-        <target-os>linux:<search>/usr/lib/libreoffice/ure-link/lib
-        <target-os>linux:<search>/usr/lib/libreoffice/sdk/lib
-        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\URE\bin"
-        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\ure-link\lib"
-        <target-os>windows:<search>"C:\Program Files\LibreOffice 4\sdk\lib"
-        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\URE\bin"
-        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\ure-link\lib"
-        <target-os>windows:<search>"C:\Program Files (x86)\LibreOffice 4\sdk\lib"
+        <search>/usr/lib/libreoffice/ure-link/lib
+        <search>/usr/lib/libreoffice/sdk/lib
+        # Telling bjam that those libraries exist only in shared version
+        <link>shared
+    ;
 
+lib icppuhelper icppu isalhelper isal
+    :   # No source files after first `:` means that this is an extern library
+    :
+        # Portable way to specify library search paths
+        <search>"$(OO_SDK_OUT)\\lib"
+        <search>"C:\\Program Files (x86)\\LibreOffice 4\\sdk\\lib"
         # Telling bjam that those libraries exist only in shared version
         <link>shared
     ;
@@ -55,8 +58,9 @@ project boost/document
         # Portable way to specify include folders
         <target-os>linux:<include>"$(OO_SDK_OUT)/include"
         <target-os>linux:<include>/usr/lib/libreoffice/sdk/include
-        <target-os>windows:<include>"$(OO_SDK_OUT)\include"
-        <target-os>windows:<include>"C:\Program Files (x86)\LibreOffice 4\sdk\include"
+        
+        <target-os>windows:<include>"$(OO_SDK_OUT)\\include"
+        <target-os>windows:<include>"C:\\Program Files (x86)\\LibreOffice 4\\sdk\\include"
 
         # Linux specific defines for OpenOffice
         <target-os>linux:<define>UNX <define>GCC <define>LINUX <define>CPPU_ENV=gcc3 <define>HAVE_GCC_VISIBILITY_FEATURE
@@ -69,10 +73,15 @@ project boost/document
         <library>/boost/filesystem//boost_filesystem
 
         # This makes boost/document depend and link with extern libraries 
-        <library>uno_cppuhelpergcc3
-        <library>uno_cppu
-        <library>uno_salhelpergcc3
-        <library>uno_sal
+        <target-os>linux:<library>uno_cppuhelpergcc3
+        <target-os>linux:<library>uno_cppu
+        <target-os>linux:<library>uno_salhelpergcc3
+        <target-os>linux:<library>uno_sal
+
+        <target-os>windows:<library>icppuhelper
+        <target-os>windows:<library>icppu
+        <target-os>windows:<library>isalhelper
+        <target-os>windows:<library>isal
     : usage-requirements
         # looks like nothing must be in here now, <library> propagates dependency automatically
     ;
