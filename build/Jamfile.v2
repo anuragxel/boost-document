@@ -52,9 +52,12 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
-project boost/document
-    : source-location ../src
-    : requirements
+# All the flags and options for OpenOffice are stored in those variables
+local OO_DEFINES = <define>BOOST_DOCUMENT_HAS_OO ;
+local OO_REQUIREMENTS =
+        # Defining that we have OpenOffice
+        $(OO_DEFINES)
+
         # Portable way to specify include folders
         <target-os>linux:<include>"$(OO_SDK_OUT)/include"
         <target-os>linux:<include>/usr/lib/libreoffice/sdk/include
@@ -82,15 +85,43 @@ project boost/document
         <target-os>windows:<library>icppu
         <target-os>windows:<library>isalhelper
         <target-os>windows:<library>isal
-    : usage-requirements
-        # looks like nothing must be in here now, <library> propagates dependency automatically
     ;
 
-SOURCES = document detail/oo_functions ;
+# Specific target to check OpenOffice avalability
+exe has_oo_suit : ../build/has_oo_suit.cpp : $(OO_REQUIREMENTS) ;
+# Do not build that target without explicit request
+explicit has_oo_suit ; 
+
+# All the flags and options for MS Office are stored in this variable
+local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
+local MS_REQUIREMENTS =
+        # Defining that we have MS Office
+        $(MS_DEFINES)
+    ;
+
+# Specific target to check OO avalability
+exe has_ms_suit : ../build/has_ms_suit.cpp : $(MS_REQUIREMENTS) ;
+# Do not build that target without explicit request
+explicit has_ms_suit ;
+
+project boost/document
+    : source-location ../src
+    : requirements
+        [ check-target-builds ../build//has_oo_suit : $(OO_REQUIREMENTS) ] # if we have has_oo_suit, then add $(OO_REQUIREMENTS)
+        [ check-target-builds ../build//has_ms_suit : $(MS_REQUIREMENTS) ] # if we have has_ms_suit, then add $(MS_REQUIREMENTS)
+    : usage-requirements
+        # <library> propagates dependency automatically, describing other requirements:
+        <link>shared:<define>BOOST_ALL_DYN_LINK=1                       # tell source we're building dll's
+        <link>static:<define>BOOST_All_STATIC_LINK=1                    # tell source we're building static lib's
+        
+        # We have some issues with the following code, that propogates defines to projects:
+        #[ check-target-builds ../build//has_oo_suit : $(OO_DEFINES) ]   # if we have has_oo_suit, then define BOOST_DOCUMENT_HAS_OO
+        #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
+    ;
+
+local SOURCES = document detail/libre_api/libre_functions ;
 
 lib boost_document
-    : $(SOURCES).cpp
-    :
-        <link>shared:<define>BOOST_ALL_DYN_LINK=1 # tell source we're building dll's
-        <link>static:<define>BOOST_All_STATIC_LINK=1 # tell source we're building static lib's
+    : 
+        $(SOURCES).cpp
     ;

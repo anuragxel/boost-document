@@ -7,7 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/document/document.hpp>
-#include <boost/document/detail/oo_functions.hpp>
+#include <boost/document/detail/libre_api/libre_functions.hpp>
 
 using namespace boost;
 

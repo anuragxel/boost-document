@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <library-reference id="document_library_reference"><title>Document Library Reference</title><header name="boost/document/document.hpp">
 <namespace name="boost">
-<class name="document"><method-group name="public member functions">
+<class name="document"><purpose>This is the main class interface to be exposed to the library user. </purpose><method-group name="public member functions">
 <method name="open_document"><type>void</type><purpose>Opens document using Calc/Excel given in the file path. </purpose></method>
 <method name="open_document"><type>void</type><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><purpose>Opens document using Calc/Excel given in the file path. </purpose></method>
 <method name="close_document"><type>void</type><purpose>Closes document using Calc/Excel given in the file path. </purpose></method>

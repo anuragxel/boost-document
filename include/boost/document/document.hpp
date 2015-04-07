@@ -12,9 +12,9 @@
 
 namespace boost {
 
-    /* \brief This is the main class interface to be 
-     *        exposed to the library user.
-     */
+        //! \brief This is the main class interface to be 
+        //!        exposed to the library user.
+        //!
 	class document {
 	private:
 		boost::filesystem::path file_path;
@@ -37,27 +37,14 @@ namespace boost {
 		//!        the file path.
 		void open_document();
 
-
-		//! \brief Opens document using Calc/Excel given in
-		//!        the file path.
-		void open_document(const boost::filesystem::path& path);
 		
 		//! \brief Closes document using Calc/Excel given in
 		//!        the file path.
 		void close_document();
 		
-		//! \brief Closes document using Calc/Excel given in
-		//!        the file path.
-		void close_document(const boost::filesystem::path& path);
-
 		//! \brief saves document using Calc/Excel given in
 		//!        the file path.
 		void save_document();
-
-		//! \brief Exports document using Calc/Excel given in
-		//!        the file path and the file format. Default
-		//!        format is PDF.
-		void export_document(const boost::filesystem::path& path,boost::document_file_format::type format = document_file_format::PDF);
 
 		//! \brief Exports document using Calc/Excel given in
 		//!        the file path and the file format. Default

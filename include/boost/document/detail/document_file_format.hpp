@@ -8,9 +8,9 @@
 
 namespace boost {
 	
-	/* \brief Document File Format
-	 *        which can be exported.
-	 */
+	//! \brief Document File Format
+	//!       which can be exported.
+	//!
 	struct document_file_format {
 		enum type {
 			PDF,CSV

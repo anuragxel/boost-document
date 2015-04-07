@@ -106,6 +106,7 @@ void negative_closing_file_without_permission(boost::document d) {
 void exporting_to_pdf(boost::document b) {
 	try {
 		b.export_document(boost::document_file_format::PDF);
+		std::cout << "Test exporting_to_pdf Passed." << std::endl;
 	}
 	catch(boost::document_exception& e) {
 		std::cerr << "Test exporting_to_pdf Failed." << std::endl;
@@ -116,6 +117,7 @@ void exporting_to_pdf(boost::document b) {
 void exporting_to_csv(boost::document b) {
 	try {
 		b.export_document(boost::document_file_format::CSV);
+		std::cout << "Test exporting_to_csv Passed." << std::endl;
 	}
 	catch(boost::document_exception& e) {
 		std::cerr << "Test exporting_to_csv Failed." << std::endl;
