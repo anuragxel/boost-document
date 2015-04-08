@@ -20,11 +20,7 @@ namespace boost {
 		boost::filesystem::path file_path;
 		bool is_file_opened;
 	public:
-		
-		//! \brief Default Constructor.
-		//!        Not preferred at all.
-		document();
-		
+				
 		//! \brief The de facto Constructor.
 		//!        Creates a new document object.  
 		document(const boost::filesystem::path path);

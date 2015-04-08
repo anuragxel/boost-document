@@ -108,7 +108,7 @@ std::string boost::doc::libre_functions::convert_extension_to_pdf_filter(const s
 //! actions for them. The OfficeServiceManager of type XMultiServiceFactory
 //! is sufficient for scripting purposes.
 ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
-                                boost::doc::libre_functions::connect_to_oo_server() {
+                                boost::doc::libre_functions::connect_to_libre_server() {
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
                 ::cppu::defaultBootstrap_InitialComponentContext();
@@ -188,7 +188,7 @@ void boost::doc::libre_functions::set_bootstrap_offapi() {
 //!
 //! Code Adapted from the DocumentLoader Example given
 //! in the LibreOffice/OpenOffice Documentation
-void boost::doc::libre_functions::open_oo(const boost::filesystem::path& path) {
+void boost::doc::libre_functions::open_libre(const boost::filesystem::path& path) {
     if(!boost::filesystem::exists(path)) {
         boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
     }
@@ -255,7 +255,7 @@ void boost::doc::libre_functions::open_oo(const boost::filesystem::path& path) {
     boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
         
     Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = boost::doc::libre_functions::connect_to_oo_server();
+    rOfficeServiceManager = boost::doc::libre_functions::connect_to_libre_server();
 
      //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
@@ -290,7 +290,7 @@ void boost::doc::libre_functions::open_oo(const boost::filesystem::path& path) {
 //! \fn Exports document using Calc/Excel given in
 //!        the file path and the file format. Default
 //!        format is PDF.
-void boost::doc::libre_functions::export_oo(const boost::filesystem::path& inputPath, boost::document_file_format::type format) {
+void boost::doc::libre_functions::export_libre(const boost::filesystem::path& inputPath, boost::document_file_format::type format) {
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception(
             "Error: Path is empty or does not exist."));
@@ -354,7 +354,7 @@ void boost::doc::libre_functions::export_oo(const boost::filesystem::path& input
 
 //! \fn Closes document using Calc/Excel given in
 //!        the file path.
-void boost::doc::libre_functions::close_oo(const boost::filesystem::path &inputPath,bool save) {
+void boost::doc::libre_functions::close_libre(const boost::filesystem::path &inputPath,bool save) {
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception(
             "Error: Path is empty or does not exist."));
@@ -388,7 +388,7 @@ void boost::doc::libre_functions::close_oo(const boost::filesystem::path &inputP
 
 //! \fn saves document using Calc/Excel given in
 //!        the file path.
-void boost::doc::libre_functions::save_oo(const boost::filesystem::path &inputPath) {
+void boost::doc::libre_functions::save_libre(const boost::filesystem::path &inputPath) {
     Reference < XComponent > xComponent = boost::doc::libre_functions::get_xComponent_from_path(inputPath);
     Reference < XModel > xModel(xComponent, UNO_QUERY);
     if(xModel != NULL) { 

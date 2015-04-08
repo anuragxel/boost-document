@@ -11,10 +11,10 @@
 namespace boost {
 
 	class document_interface {
-		virtual void open_document() = 0;
-		virtual void close_document() = 0;
-		virtual void save_document() = 0;
-		virtual void export_docuemnt(boost::document_file_format::type format) = 0;
+		virtual void open_instance() = 0;
+		virtual void close_instance() = 0;
+		virtual void save_instance() = 0;
+		virtual void export_instance(boost::document_file_format::type format) = 0;
 		virtual ~document_interface();
 	};	
 } // namespace boost
