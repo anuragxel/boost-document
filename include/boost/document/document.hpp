@@ -9,6 +9,11 @@
 #include <boost/filesystem.hpp>
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
+#include <boost/document/detail/document_interface.hpp>
+
+namespace detail {
+	document_interface* boost::document::detail::open_instance();
+}
 
 namespace boost {
 
@@ -18,16 +23,24 @@ namespace boost {
 	class document {
 	private:
 		boost::filesystem::path file_path;
-		bool is_file_opened;
+		document_interface* pimpl_;
+		dicument_interface* init() {
+ 	   		return boost::document::detail::open_instance();
+		}
 	public:
-				
-		//! \brief The de facto Constructor.
+		
+		//! \brief The Constructor.
 		//!        Creates a new document object.  
-		document(const boost::filesystem::path path);
+		document(const boost::filesystem::path path) : pimpl_(init()) {
+			this->file_path = path;
+
+		}
 		
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.
-		~document();
+		~document() {
+
+		}
 		
 		//! \brief Opens document using Calc/Excel given in
 		//!        the file path.

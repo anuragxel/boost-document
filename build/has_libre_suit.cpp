@@ -30,8 +30,8 @@
 #include <boost/document/detail/oo_functions.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
-#ifndef BOOST_DOCUMENT_HAS_OO
-#   error BOOST_DOCUMENT_HAS_OO is not defined in has_oo_suilt.cpp! Jamfile error!
+#ifndef BOOST_DOCUMENT_HAS_LIBRE
+#   error BOOST_DOCUMENT_HAS_LIBRE is not defined in has_oo_suilt.cpp! Jamfile error!
 #endif
 
 

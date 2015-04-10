@@ -53,10 +53,10 @@ lib icppuhelper icppu isalhelper isal
     ;
 
 # All the flags and options for OpenOffice are stored in those variables
-local OO_DEFINES = <define>BOOST_DOCUMENT_HAS_OO ;
-local OO_REQUIREMENTS =
+local LIBRE_DEFINES = <define>BOOST_DOCUMENT_HAS_LIBRE ;
+local LIBRE_REQUIREMENTS =
         # Defining that we have OpenOffice
-        $(OO_DEFINES)
+        $(LIBRE_DEFINES)
 
         # Portable way to specify include folders
         <target-os>linux:<include>"$(OO_SDK_OUT)/include"
@@ -88,9 +88,9 @@ local OO_REQUIREMENTS =
     ;
 
 # Specific target to check OpenOffice avalability
-exe has_oo_suit : ../build/has_oo_suit.cpp : $(OO_REQUIREMENTS) ;
+exe has_libre_suit : ../build/has_libre_suit.cpp : $(LIBRE_REQUIREMENTS) ;
 # Do not build that target without explicit request
-explicit has_oo_suit ; 
+explicit has_libre_suit ; 
 
 # All the flags and options for MS Office are stored in this variable
 local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
@@ -107,7 +107,7 @@ explicit has_ms_suit ;
 project boost/document
     : source-location ../src
     : requirements
-        [ check-target-builds ../build//has_oo_suit : $(OO_REQUIREMENTS) ] # if we have has_oo_suit, then add $(OO_REQUIREMENTS)
+        [ check-target-builds ../build//has_libre_suit : $(LIBRE_REQUIREMENTS) ] # if we have has_oo_suit, then add $(LIBRE_REQUIREMENTS)
         [ check-target-builds ../build//has_ms_suit : $(MS_REQUIREMENTS) ] # if we have has_ms_suit, then add $(MS_REQUIREMENTS)
     : usage-requirements
         # <library> propagates dependency automatically, describing other requirements:
@@ -115,7 +115,7 @@ project boost/document
         <link>static:<define>BOOST_All_STATIC_LINK=1                    # tell source we're building static lib's
         
         # We have some issues with the following code, that propogates defines to projects:
-        #[ check-target-builds ../build//has_oo_suit : $(OO_DEFINES) ]   # if we have has_oo_suit, then define BOOST_DOCUMENT_HAS_OO
+        #[ check-target-builds ../build//has_libre_suit : $(LIBRE_DEFINES) ]   # if we have has_oo_suit, then define BOOST_DOCUMENT_HAS_LIBRE
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
     ;
 
