@@ -258,13 +258,14 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = boost::doc::libre_functions::connect_to_libre_server();
 
-     //get the desktop service using createInstance returns an XInterface type
+    //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
     OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
     
     //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
     Reference< XComponent > xComponent;
+
     //get an instance of the spreadsheet
     try {
         Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
@@ -351,7 +352,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
 
 //! \fn Closes document using Calc/Excel given in
 //!        the file path.
-void boost::doc::libre_functions::close_libre
+void boost::doc::libre_functions::close_libre(
         const boost::filesystem::path &inputPath,
         bool save,
         Reference < XComponent > xComponent) {

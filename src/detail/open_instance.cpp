@@ -4,6 +4,8 @@
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_interface.hpp>
 
+namespace boost { namespace detail { 
+
 document_interface* open_instance() {
 
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
@@ -16,5 +18,7 @@ document_interface* open_instance() {
 #endif
 
 }
+
+}}
 
 #endif
