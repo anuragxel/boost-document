@@ -7,7 +7,7 @@
 #include <boost/document/detail/libre_api/libre_functions.hpp>
 #include <boost/document/detail/libre_api/document_interface.hpp>
 
-using namespace boost;
+namespace boost { namespace detail { 
 
 class libre_document: public document_interface {
 	
@@ -61,10 +61,11 @@ class libre_document: public document_interface {
 
 };
 
-document_interface* open_instance() {
+document_interface* open_libre_instance() {
 	return new libre_document()
 }
 
+}}
 
 
 #endif

@@ -59,7 +59,7 @@ local LIBRE_REQUIREMENTS =
         $(LIBRE_DEFINES)
 
         # Portable way to specify include folders
-        <target-os>linux:<include>"$(OO_SDK_OUT)/include"
+        <target-os>linux:<include>$(OO_SDK_OUT)/include
         <target-os>linux:<include>/usr/lib/libreoffice/sdk/include
         
         <target-os>windows:<include>"$(OO_SDK_OUT)\\include"
@@ -119,9 +119,9 @@ project boost/document
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
     ;
 
-local SOURCES = document detail/libre_api/libre_functions ;
+local SOURCES = detail/libre_api/libre_functions detail/open_instance ;
 
 lib boost_document
-    : 
+    :
         $(SOURCES).cpp
     ;
