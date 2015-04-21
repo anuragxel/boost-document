@@ -26,10 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 
-#include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/oo_functions.hpp>
-#include <boost/document/detail/document_exception.hpp>
-
 #ifndef BOOST_DOCUMENT_HAS_LIBRE
 #   error BOOST_DOCUMENT_HAS_LIBRE is not defined in has_oo_suilt.cpp! Jamfile error!
 #endif

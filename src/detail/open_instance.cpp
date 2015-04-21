@@ -8,7 +8,7 @@
 
 #include "libre_api/document_impl.hpp"
 
-namespace boost { namespace detail { 
+namespace boost { namespace doc { namespace detail { 
 
 document_interface* open_instance() {
 
@@ -22,6 +22,6 @@ document_interface* open_instance() {
 
 }
 
-}}
+}}}
 
 #endif

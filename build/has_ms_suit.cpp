@@ -4,4 +4,4 @@
 
 
 
-error No MS installed
+#error No MS installed

@@ -14,64 +14,53 @@
 
 namespace boost {
 
-	namespace detail {
-		document_interface* boost::document::detail::open_instance();
-	}
-
-    //! \brief This is the main class interface to be 
-    //!        exposed to the library user.
-    //!
+	namespace doc { namespace detail {
+		document_interface* open_instance();
+	}}
+    	//! \brief This is the main class interface to be 
+    	//!        exposed to the library user.
+    	//!
 	class document {
 	private:
-		boost::filesystem::path file_path;
 		document_interface* pimpl_;
-		
 		dicument_interface* init() {
  	   		return boost::document::detail::open_instance();
 		}
-
+		document(const document&);
+		document& operator=(const document&);
 	public:
-		
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
-		document(const boost::filesystem::path path) : pimpl_(init()) {
-			this->file_path = path;
-			pimpl_->initialize(this->file_path);
+		document(const boost::filesystem::path& path) : pimpl_(init()) {
+			pimpl_->initialize(path);
 		}
-		
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~document() {
 			delete pimpl_;
 		}
-		
 		//! \brief Opens document using Calc/Excel given in
 		//!        the file path.
 		void open_document() {
 			pimpl_->open();
 		}
-
-		
 		//! \brief Closes document using Calc/Excel given in
 		//!        the file path.
 		void close_document() {
 			pimpl_->close();
 		}
-		
 		//! \brief saves document using Calc/Excel given in
 		//!        the file path.
 		void save_document() {
 			pimpl_->save();
 		}
-
 		//! \brief Exports document using Calc/Excel given in
 		//!        the file path and the file format. Default
 		//!        format is PDF.
 		void export_document(boost::document_file_format::type format = document_file_format::PDF) {
-			pimpl_->export(format);
+			pimpl_->export_as(format);
 		}
 	};
-
 } // namespace boost
 
 #endif

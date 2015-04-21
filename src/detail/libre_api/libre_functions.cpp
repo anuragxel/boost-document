@@ -66,8 +66,9 @@ using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-using namespace boost;
 
+
+namespace boost { namespace doc { namespace libre_functions {
 
 //! \fn Provides the corresponding filter with respect to
 //!        the extension given.
@@ -76,7 +77,7 @@ using namespace boost;
 //! from one format to another, they have a specific name
 //! for every filter which needs to be specified before calling
 //! storeToURL()
-std::string boost::doc::libre_functions::convert_extension_to_pdf_filter(const std::string extension) {
+std::string convert_extension_to_pdf_filter(const std::string extension) {
     if( extension == ".doc"  ||
         extension == ".docx" ||
         extension == ".txt"  ||
@@ -107,8 +108,8 @@ std::string boost::doc::libre_functions::convert_extension_to_pdf_filter(const s
 //! component ojects act as the client and request the server to perform
 //! actions for them. The OfficeServiceManager of type XMultiServiceFactory
 //! is sufficient for scripting purposes.
-::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
-                                boost::doc::libre_functions::connect_to_libre_server() {
+//::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
+Reference< XMultiServiceFactory > connect_to_libre_server() {
    // create the initial component context
    Reference< XComponentContext > rComponentContext = 
                 ::cppu::defaultBootstrap_InitialComponentContext();
@@ -158,7 +159,7 @@ std::string boost::doc::libre_functions::convert_extension_to_pdf_filter(const s
 //! Setting up the bootstrapping and the parameters.
 //! Important for Open Office server communication. 
 //! UNO & cppuhelper needs this to be run at least once.
-void boost::doc::libre_functions::set_bootstrap_offapi() {
+void set_bootstrap_offapi() {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath(
@@ -174,7 +175,7 @@ void boost::doc::libre_functions::set_bootstrap_offapi() {
 
 //! \fn Converts boost::filesystem::path to
 //!        absolute path and then to OUString.
-::rtl::OUString  boost::doc::libre_functions::get_url_from_path(const boost::filesystem::path& path) {
+::rtl::OUString  get_url_from_path(const boost::filesystem::path& path) {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     OUString sArgDocUrl = OUString::createFromAscii(path.string().c_str());
     osl_getProcessWorkingDir(&sWorkingDir.pData);
@@ -188,13 +189,11 @@ void boost::doc::libre_functions::set_bootstrap_offapi() {
 //!
 //! Code Adapted from the DocumentLoader Example given
 //! in the LibreOffice/OpenOffice Documentation
-void boost::doc::libre_functions::open_libre(const boost::filesystem::path& path) {
+void open_libre(const boost::filesystem::path& path) {
     if(!boost::filesystem::exists(path)) {
         boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
     }
-
-    boost::doc::libre_functions::set_bootstrap_offapi();
-    
+ 
     OUString conString = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
@@ -232,7 +231,7 @@ void boost::doc::libre_functions::open_libre(const boost::filesystem::path& path
 
     try {
         Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-            boost::doc::libre_functions::get_url_from_path(path), 
+            get_url_from_path(path), 
             OUString::createFromAscii("_default"), 
             0,
             Sequence < ::com::sun::star::beans::PropertyValue >() 
@@ -251,12 +250,10 @@ void boost::doc::libre_functions::open_libre(const boost::filesystem::path& path
 
 //! \fn Gets the xComponent from the path of the office file
 //!        given. Assumes file path is a valid one.
-//::com::sun::star::uno::Reference< com::sun::star::lang::XComponent >
-Reference< XComponent > 
-boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::path& inputPath) {
+Reference< XComponent > get_xComponent_from_path(const boost::filesystem::path& inputPath) {
         
     Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = boost::doc::libre_functions::connect_to_libre_server();
+    rOfficeServiceManager = connect_to_libre_server();
 
     //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
@@ -272,7 +269,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
         frameProperties[0].Name = OUString::createFromAscii("Hidden");
         frameProperties[0].Value <<= (sal_Bool)true;
         xComponent = rComponentLoader->loadComponentFromURL(
-            boost::doc::libre_functions::get_url_from_path(inputPath),
+            get_url_from_path(inputPath),
             OUString::createFromAscii("_default"),
             0,
             frameProperties
@@ -292,7 +289,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
 //! \fn Exports document using Calc/Excel given in
 //!        the file path and the file format. Default
 //!        format is PDF.
- boost::doc::libre_functions::export_libre(const boost::filesystem::path& inputPath, 
+void export_libre(const boost::filesystem::path& inputPath, 
                                         boost::document_file_format::type format,
                                         Reference < XComponent > xComponent) {
     if( !xComponent.is() ) {
@@ -307,8 +304,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
     std::string filter;
     if(format == boost::document_file_format::PDF) {
         outputPath.replace_extension(".pdf");
-        filter = boost::doc::libre_functions::convert_extension_to_pdf_filter( 
-            inputPath.extension().string() );
+        filter = convert_extension_to_pdf_filter( inputPath.extension().string() );
 
         // Other Options can be added later
         // to improve the API
@@ -341,7 +337,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
         properties[2].Value <<= (sal_Bool)true;
         try {
             Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-            xStorable->storeToURL(boost::doc::libre_functions::get_url_from_path(outputPath), properties);  
+            xStorable->storeToURL(get_url_from_path(outputPath), properties);  
         }
         catch(Exception& e) {
             boost::throw_exception(document_exception(
@@ -352,7 +348,7 @@ boost::doc::libre_functions::get_xComponent_from_path(const boost::filesystem::p
 
 //! \fn Closes document using Calc/Excel given in
 //!        the file path.
-void boost::doc::libre_functions::close_libre(
+void close_libre(
         const boost::filesystem::path &inputPath,
         bool save,
         Reference < XComponent > xComponent) {
@@ -368,7 +364,7 @@ void boost::doc::libre_functions::close_libre(
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified() && save == true) {
-            xStorable->storeToURL(boost::doc::libre_functions::get_url_from_path(inputPath), 
+            xStorable->storeToURL(get_url_from_path(inputPath), 
                 Sequence < ::com::sun::star::beans::PropertyValue >());
         }
 
@@ -389,7 +385,7 @@ void boost::doc::libre_functions::close_libre(
 
 //! \fn saves document using Calc/Excel given in
 //!        the file path.
-void boost::doc::libre_functions::save_libre(const boost::filesystem::path &inputPath, 
+void save_libre(const boost::filesystem::path &inputPath, 
                                             Reference < XComponent > xComponent) {
     Reference < XModel > xModel(xComponent, UNO_QUERY);
     if(xModel != NULL) { 
@@ -397,7 +393,7 @@ void boost::doc::libre_functions::save_libre(const boost::filesystem::path &inpu
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         try {
             if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified()) {
-                xStorable->storeToURL(boost::doc::libre_functions::get_url_from_path(inputPath), 
+                xStorable->storeToURL(get_url_from_path(inputPath), 
                     Sequence < ::com::sun::star::beans::PropertyValue >());
             }
         }
@@ -407,5 +403,7 @@ void boost::doc::libre_functions::save_libre(const boost::filesystem::path &inpu
         }
     }
 }
+
+}}} // namespace boost::doc::libre_functions
 
 #endif

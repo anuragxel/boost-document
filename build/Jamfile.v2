@@ -30,18 +30,19 @@ if ! ( $(OO_SDK_OUT) )
     echo "************************************************************" ;
 }
 
-# Telling bjam that "uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal" are extern libraries and they could be found in specified directories
+# extern libraries, could be found in specified directories
 lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal 
     :   # No source files after first `:` means that this is an extern library
     :
         # Portable way to specify library search paths
         <search>"$(OO_SDK_OUT)/lib"
-        <search>/usr/lib/libreoffice/ure-link/lib
-        <search>/usr/lib/libreoffice/sdk/lib
+        <search>"/usr/lib/libreoffice/ure-link/lib"
+        <search>"/usr/lib/libreoffice/sdk/lib"
         # Telling bjam that those libraries exist only in shared version
         <link>shared
     ;
 
+# extern libraries, could be found in specified directories
 lib icppuhelper icppu isalhelper isal
     :   # No source files after first `:` means that this is an extern library
     :
@@ -52,15 +53,15 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
-# All the flags and options for OpenOffice are stored in those variables
+# All the flags and options for LibreOffice are stored in those variables
 local LIBRE_DEFINES = <define>BOOST_DOCUMENT_HAS_LIBRE ;
 local LIBRE_REQUIREMENTS =
-        # Defining that we have OpenOffice
+        # Defining that we have LibreOffice
         $(LIBRE_DEFINES)
 
         # Portable way to specify include folders
-        <target-os>linux:<include>$(OO_SDK_OUT)/include
-        <target-os>linux:<include>/usr/lib/libreoffice/sdk/include
+        <target-os>linux:<include>"$(OO_SDK_OUT)/include"
+        <target-os>linux:<include>"/usr/lib/libreoffice/sdk/include"
         
         <target-os>windows:<include>"$(OO_SDK_OUT)\\include"
         <target-os>windows:<include>"C:\\Program Files (x86)\\LibreOffice 4\\sdk\\include"
