@@ -12,7 +12,7 @@
 
 void negative_try_opening_null() {
 	try {
-		boost::document d = boost::document();
+		boost::document d("");
 		d.open_document();
 	}
 	catch(boost::document_exception& e) {	
@@ -22,7 +22,7 @@ void negative_try_opening_null() {
 
 void negative_try_exporting_null() {
 	try {
-		boost::document d = boost::document();
+		boost::document d("");
 		d.export_document();
 	}
 	catch(boost::document_exception& e) {	
@@ -32,7 +32,7 @@ void negative_try_exporting_null() {
 
 void negative_try_closing_null() {
 	try {
-		boost::document d = boost::document();
+		boost::document d("");
 		d.close_document();
 	}
 	catch(boost::document_exception& e) {	
@@ -40,7 +40,7 @@ void negative_try_closing_null() {
 	}
 }
 
-void working_on_multiple_documents(boost::document b, boost::document c) {
+void working_on_multiple_documents(boost::document& b, boost::document& c) {
 	try {
 		b.open_document();
 		c.open_document();
@@ -56,7 +56,7 @@ void working_on_multiple_documents(boost::document b, boost::document c) {
 	}
 }
 
-void negative_closing_unopened_document(boost::document b) {
+void negative_closing_unopened_document(boost::document& b) {
 	try {
 		b.close_document();
 		std::cerr << "Test negative_closing_unopened_document Failed." << std::endl;
@@ -68,15 +68,15 @@ void negative_closing_unopened_document(boost::document b) {
 
 void negative_absurd_path_opening() {
 	try {
-		boost::document a = boost::document();
-		a.open_document("./foo/bar.xls");
+		boost::document a("./foo/bar.xls");
+		a.open_document();
 	}
 	catch(boost::document_exception& e) {
 		std::cout << "Test negative_absurd_path Passed. Expected -- " << e.what() << std::endl;
 	}
 }
 
-void negative_opening_file_without_permission(boost::document d) {
+void negative_opening_file_without_permission(boost::document& d) {
 	try {
 		d.open_document();
 	}
@@ -85,7 +85,7 @@ void negative_opening_file_without_permission(boost::document d) {
 	}
 }
 
-void negative_exporting_file_without_permission(boost::document d) {
+void negative_exporting_file_without_permission(boost::document& d) {
 	try {
 		d.export_document();
 	}
@@ -94,7 +94,7 @@ void negative_exporting_file_without_permission(boost::document d) {
 	}
 }
 
-void negative_closing_file_without_permission(boost::document d) {
+void negative_closing_file_without_permission(boost::document& d) {
 	try {
 		d.close_document();
 	}
@@ -103,7 +103,7 @@ void negative_closing_file_without_permission(boost::document d) {
 	}
 }
 
-void exporting_to_pdf(boost::document b) {
+void exporting_to_pdf(boost::document& b) {
 	try {
 		b.export_document(boost::document_file_format::PDF);
 		std::cout << "Test exporting_to_pdf Passed." << std::endl;
@@ -114,7 +114,7 @@ void exporting_to_pdf(boost::document b) {
 	}
 }
 
-void exporting_to_csv(boost::document b) {
+void exporting_to_csv(boost::document& b) {
 	try {
 		b.export_document(boost::document_file_format::CSV);
 		std::cout << "Test exporting_to_csv Passed." << std::endl;
@@ -126,11 +126,11 @@ void exporting_to_csv(boost::document b) {
 }
 int main(int argc, char **argv) {
 	
-	boost::document b = boost::document("./Test1.ods");
+	boost::document b("./Test1.ods");
 	//Create a document. Change to the correct path there to run the tests.
-	boost::document c = boost::document("./Test2.ods");
+	boost::document c("./Test2.ods");
 	// Create a document, change the rwx permission to 000. Change to the correct path there to run the test.
-	boost::document d = boost::document("./Test3.ods");
+	boost::document d("./Test3.ods");
 
 	// Sanity Checks
 	negative_try_opening_null();
