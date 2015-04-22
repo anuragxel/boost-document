@@ -5,7 +5,7 @@
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/libre_api/libre_functions.hpp>
-#include <boost/document/detail/libre_api/document_interface.hpp>
+#include <boost/document/detail/document_interface.hpp>
 
 namespace boost { namespace detail { 
 
@@ -33,7 +33,7 @@ class libre_document: public document_interface {
  	}
 
  	void close() {
- 		if(this-`>is_file_opened) {
+ 		if(this->is_file_opened) {
 			boost::doc::libre_functions::close_libre(this->doc_path_, false, this->xComponent_);
 			this->is_file_opened = false;
 		}
@@ -48,12 +48,12 @@ class libre_document: public document_interface {
  	}
  	
  	void export_as(boost::document_file_format::type format) {
- 		boost::doc:libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
+ 		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
  	}
 
  	~libre_document() {
  		if(this->is_file_opened) {
-			boost::doc::libre_functions::close_libre(this-fpath, false, this->xComponent_);
+			boost::doc::libre_functions::close_libre(this->doc_path_, false, this->xComponent_);
 			this->is_file_opened = false;
 		}
  	}
@@ -61,7 +61,7 @@ class libre_document: public document_interface {
 };
 
 document_interface* open_libre_instance() {
-	return new libre_document()
+	return new libre_document();
 }
 
 }} // namespace boost::detail

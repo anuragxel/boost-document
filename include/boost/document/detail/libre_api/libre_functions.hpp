@@ -18,9 +18,9 @@ namespace boost { namespace doc { namespace libre_functions {
 	void set_bootstrap_offapi();
 	::rtl::OUString get_url_from_path(const boost::filesystem::path& path);
 	void open_libre(const boost::filesystem::path& path);
-	void export_libre(const boost::filesystem::path &inputPath, boost::document_file_format::type format);
-	void close_libre(const boost::filesystem::path &inputPath,bool save);
-	void save_libre(const boost::filesystem::path &inputPath);
+	void export_libre(const boost::filesystem::path &inputPath, boost::document_file_format::type format,::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent);
+	void close_libre(const boost::filesystem::path &inputPath,bool save,::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent);
+	void save_libre(const boost::filesystem::path &inputPath,::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent);
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent> get_xComponent_from_path(const boost::filesystem::path& inputPath);
 
 }}}
