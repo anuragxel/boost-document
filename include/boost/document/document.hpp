@@ -14,17 +14,17 @@
 
 namespace boost {
 
-	namespace doc { namespace detail {
+	 namespace detail {
 		document_interface* open_instance();
-	}}
+	}
     	//! \brief This is the main class interface to be 
     	//!        exposed to the library user.
     	//!
 	class document {
 	private:
 		document_interface* pimpl_;
-		dicument_interface* init() {
- 	   		return boost::document::detail::open_instance();
+		document_interface* init() {
+ 	   		return boost::detail::open_instance();
 		}
 		document(const document&);
 		document& operator=(const document&);
