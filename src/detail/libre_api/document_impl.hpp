@@ -14,6 +14,7 @@ class libre_document: public document_interface {
 	boost::filesystem::path doc_path_;
 	bool is_file_opened;	
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent_;
+
 	void initialize(const boost::filesystem::path& fpath) {
 		boost::doc::libre_functions::set_bootstrap_offapi();
 		this->doc_path_ = fpath;
@@ -27,7 +28,7 @@ class libre_document: public document_interface {
 
 	void open() {
 		if(not this->is_file_opened) {
-			boost::doc::libre_functions::open_libre(this->doc_path_);
+			boost::doc::libre_functions::open_libre(this->doc_path_,this->xComponent_);
 			this->is_file_opened = true;
 		}
  	}

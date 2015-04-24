@@ -110,47 +110,28 @@ std::string convert_extension_to_pdf_filter(const std::string extension) {
 //! is sufficient for scripting purposes.
 //::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
 Reference< XMultiServiceFactory > connect_to_libre_server() {
-   // create the initial component context
-   Reference< XComponentContext > rComponentContext = 
-                ::cppu::defaultBootstrap_InitialComponentContext();
-
-   // retrieve the servicemanager from the context
-   Reference< XMultiComponentFactory > rServiceManager = 
-                rComponentContext->getServiceManager();
-
-   // instantiate a sample service with the servicemanager.
-   Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
-         OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
-
-   // Query for the XUnoUrlResolver interface
-   Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
-   if( !rResolver.is() ) {
-      boost::throw_exception(document_exception(
-        "Error: Couldn't instantiate com.sun.star.bridge.UnoUrlResolver service."));
-      
-   }
-   try {
-      // resolve the uno-url
-      rInstance = rResolver->resolve( OUString::createFromAscii(
-        "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
-
-      if( ! rInstance.is() ) {
-         boost::throw_exception(document_exception(
-          "StarOffice.ServiceManager is not exported from remote counterpart\n"));
-         return NULL;
-      }
-      // query for the simpler XMultiServiceFactory interface, sufficient for scripting
-      Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
-      if( ! rOfficeServiceManager.is() ) {
-            boost::throw_exception(document_exception(
-              "Error :XMultiServiceFactory interface is not exported for StarOffice.ServiceManager\n"));
-        }       
-        return rOfficeServiceManager;
-   }
-   catch( Exception &e ) {
-      return NULL;
-   }
-   return NULL;
+    // create the initial component context
+    Reference< XComponentContext > rComponentContext = 
+                 ::cppu::defaultBootstrap_InitialComponentContext();
+    // retrieve the servicemanager from the context
+    Reference< XMultiComponentFactory > rServiceManager = 
+                 rComponentContext->getServiceManager();
+    // instantiate a sample service with the servicemanager.
+    Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
+          OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
+    // Query for the XUnoUrlResolver interface
+    try { 
+    	Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
+    	rInstance = rResolver->resolve( OUString::createFromAscii(
+      		"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
+    	Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY); 
+    	return rOfficeServiceManager;
+    }
+    catch(Exception &e) {
+    	boost::throw_exception(document_exception(
+		"Error: Can't Connect to LibreOffice Server.\n"));
+    }
+    return NULL;
 }
 
 //! \fn The C++ Language Bindings need to be bootstrapped 
@@ -184,12 +165,57 @@ void set_bootstrap_offapi() {
     return sAbsoluteDocUrl;
 }
 
+
+//! \fn Gets the xComponent from the path of the office file
+//!        given. Assumes file path is a valid one.
+Reference< XComponent > get_xComponent_from_path(
+			const boost::filesystem::path& inputPath) {
+        
+    Reference< XMultiServiceFactory > rOfficeServiceManager;
+    rOfficeServiceManager = connect_to_libre_server();
+
+    if(!rOfficeServiceManager.is()) {
+     	boost::throw_exception(document_exception(
+              "Error: LibreOffice Server is not running.\n"));
+    }
+    //get the desktop service using createInstance returns an XInterface type
+    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
+		OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
+    
+    //query for the XComponentLoader interface
+    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
+    Reference< XComponent > xComponent;
+
+    //get an instance of the spreadsheet
+    try {
+        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
+        frameProperties[0].Name = OUString::createFromAscii("Hidden");
+        frameProperties[0].Value <<= (sal_Bool)true;
+        xComponent = rComponentLoader->loadComponentFromURL(
+            get_url_from_path(inputPath),
+            OUString::createFromAscii("_default"),
+            0,
+            frameProperties
+        );
+        if( !rComponentLoader.is() ){
+            boost::throw_exception(document_exception(
+                "Error: XComponentloader not successfully instantiated"));
+        }
+    }
+    catch( Exception &e ){
+        //boost::throw_exception(document_exception(
+        //    "Error: Unable to Load File. Check Permissions."));
+    }
+    return xComponent;
+}
+
+
 //! \fn Opens the document given in the path,
 //!        using appropriate client.
 //!
 //! Code Adapted from the DocumentLoader Example given
 //! in the LibreOffice/OpenOffice Documentation
-void open_libre(const boost::filesystem::path& path) {
+void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) {
     if(!boost::filesystem::exists(path)) {
         boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
     }
@@ -248,43 +274,6 @@ void open_libre(const boost::filesystem::path& path) {
     }
 }
 
-//! \fn Gets the xComponent from the path of the office file
-//!        given. Assumes file path is a valid one.
-Reference< XComponent > get_xComponent_from_path(const boost::filesystem::path& inputPath) {
-        
-    Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = connect_to_libre_server();
-
-    //get the desktop service using createInstance returns an XInterface type
-    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
-    OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-    
-    //query for the XComponentLoader interface
-    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
-    Reference< XComponent > xComponent;
-
-    //get an instance of the spreadsheet
-    try {
-        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
-        frameProperties[0].Name = OUString::createFromAscii("Hidden");
-        frameProperties[0].Value <<= (sal_Bool)true;
-        xComponent = rComponentLoader->loadComponentFromURL(
-            get_url_from_path(inputPath),
-            OUString::createFromAscii("_default"),
-            0,
-            frameProperties
-        );
-        if( !rComponentLoader.is() ){
-            boost::throw_exception(document_exception(
-                "Error: XComponentloader not successfully instantiated"));
-        }
-    }
-    catch( Exception &e ){
-        //boost::throw_exception(document_exception(
-        //    "Error: Unable to Load File. Check Permissions."));
-    }
-    return xComponent;
-}
 
 //! \fn Exports document using Calc/Excel given in
 //!        the file path and the file format. Default
@@ -346,6 +335,7 @@ void export_libre(const boost::filesystem::path& inputPath,
     }
 }
 
+
 //! \fn Closes document using Calc/Excel given in
 //!        the file path.
 void close_libre(
@@ -360,14 +350,12 @@ void close_libre(
 
     Reference < XModel > xModel(xComponent, UNO_QUERY);
     if(xModel != NULL) { 
-        
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified() && save == true) {
             xStorable->storeToURL(get_url_from_path(inputPath), 
                 Sequence < ::com::sun::star::beans::PropertyValue >());
         }
-
         Reference < XCloseable > xCloseable(xComponent,UNO_QUERY);
         if(xCloseable != NULL) {
             try {
@@ -378,10 +366,11 @@ void close_libre(
             }
         }
         else { // No xClosable. Use dispose to handle this.
-
+	// Unreachable Condition. Hopefully. :)
         }
     }
 }
+
 
 //! \fn saves document using Calc/Excel given in
 //!        the file path.

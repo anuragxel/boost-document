@@ -124,6 +124,7 @@ void exporting_to_csv(boost::document& b) {
 		std::cerr << e.what() << std::endl;
 	}
 }
+
 int main(int argc, char **argv) {
 	
 	boost::document b("./Test1.ods");
