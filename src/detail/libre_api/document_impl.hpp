@@ -27,7 +27,7 @@ class libre_document: public document_interface {
 	}
 
 	void open() {
-		if(not this->is_file_opened) {
+		if(!this->is_file_opened) {
 			boost::doc::libre_functions::open_libre(this->doc_path_,this->xComponent_);
 			this->is_file_opened = true;
 		}
