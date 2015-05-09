@@ -116,7 +116,7 @@ void exporting_to_pdf(boost::document& b) {
 
 void exporting_to_csv(boost::document& b) {
 	try {
-		b.export_document(boost::document_file_format::CSV);
+		b.export_document(boost::document_file_format::CSV);		
 		std::cout << "Test exporting_to_csv Passed." << std::endl;
 	}
 	catch(boost::document_exception& e) {

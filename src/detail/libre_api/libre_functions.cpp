@@ -5,7 +5,7 @@
 
 //          Copyright Anurag Ghosh 2015.
 // Distributed under the Boost Software License, Version 1.0.
-//    (See accompanying file ../LICENSE_1_0.txt or copy at
+//    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _WIN32
@@ -281,6 +281,11 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
 void export_libre(const boost::filesystem::path& inputPath, 
                                         boost::document_file_format::type format,
                                         Reference < XComponent > xComponent) {
+    bool is_opened = true;
+    if(xComponent == NULL) {
+        xComponent = get_xComponent_from_path(inputPath);
+        is_opened = false;
+    }
     if( !xComponent.is() ) {
         boost::throw_exception(document_exception(
             "Error: Unable to load Document for exporting. Check Permissions."));
@@ -332,6 +337,9 @@ void export_libre(const boost::filesystem::path& inputPath,
             boost::throw_exception(document_exception(
                 "Error: Unable to export Document. Check Permissions."));
         }
+    }
+    if(!is_opened) {
+        close_libre(inputPath,false,xComponent);
     }
 }
 

@@ -16,6 +16,7 @@ namespace boost {
 		virtual void open() = 0;
 		virtual void close() = 0;
 		virtual void save() = 0;
+		virtual void save_as(const boost::filesystem::path& path) = 0;
 		virtual void export_as(boost::document_file_format::type format) = 0;
 		virtual ~document_interface() {}
 	};	

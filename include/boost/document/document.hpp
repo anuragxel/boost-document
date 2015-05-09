@@ -54,6 +54,13 @@ namespace boost {
 		void save_document() {
 			pimpl_->save();
 		}
+
+		//! \brief saves document at the path using Calc/Excel provided in
+		//!        first argument.
+		void save_as_document(const boost::filesystem::path& path) {
+			pimpl_->save_as(path);
+		}
+
 		//! \brief Exports document using Calc/Excel given in
 		//!        the file path and the file format. Default
 		//!        format is PDF.
