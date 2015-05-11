@@ -120,7 +120,7 @@ project boost/document
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
     ;
 
-local SOURCES = detail/libre_api/libre_functions detail/open_instance ;
+local SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
 
 lib boost_document
     :

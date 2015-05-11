@@ -1,5 +1,5 @@
 //! \file
-//! \brief Open Office Internal Functions
+//! \brief Libre Office Internal Functions
 #ifndef _LIBRE_FUNCTIONS_CPP
 #define _LIBRE_FUNCTIONS_CPP
 
@@ -121,15 +121,15 @@ Reference< XMultiServiceFactory > connect_to_libre_server() {
           OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
     // Query for the XUnoUrlResolver interface
     try { 
-    	Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
-    	rInstance = rResolver->resolve( OUString::createFromAscii(
-      		"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
-    	Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY); 
-    	return rOfficeServiceManager;
+        Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
+        rInstance = rResolver->resolve( OUString::createFromAscii(
+            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
+        Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY); 
+        return rOfficeServiceManager;
     }
     catch(Exception &e) {
-    	boost::throw_exception(document_exception(
-		"Error: Can't Connect to LibreOffice Server.\n"));
+        boost::throw_exception(document_exception(
+        "Error: Can't Connect to LibreOffice Server.\n"));
     }
     return NULL;
 }
@@ -169,18 +169,18 @@ void set_bootstrap_offapi() {
 //! \fn Gets the xComponent from the path of the office file
 //!        given. Assumes file path is a valid one.
 Reference< XComponent > get_xComponent_from_path(
-			const boost::filesystem::path& inputPath) {
+            const boost::filesystem::path& inputPath) {
         
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = connect_to_libre_server();
 
     if(!rOfficeServiceManager.is()) {
-     	boost::throw_exception(document_exception(
+        boost::throw_exception(document_exception(
               "Error: LibreOffice Server is not running.\n"));
     }
     //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
-		OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
+        OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
     
     //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
@@ -374,7 +374,7 @@ void close_libre(
             }
         }
         else { // No xClosable. Use dispose to handle this.
-	// Unreachable Condition. Hopefully. :)
+    // Unreachable Condition. Hopefully. :)
         }
     }
 }
