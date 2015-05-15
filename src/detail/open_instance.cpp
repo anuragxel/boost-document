@@ -7,6 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include "libre_api/document_impl.hpp"
+#include "ms_api/document_impl.hpp"
 
 namespace boost { namespace detail { 
 

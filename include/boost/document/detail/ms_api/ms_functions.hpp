@@ -20,11 +20,14 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
 CLSID get_clsid();
 void get_application_pointer(CLSID clsid, IDispatch *appl_ptr);
 void set_visibility(IDispatch *appl_ptr);
+void unset_visibility(IDispatch *appl_ptr);
 
-void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr);
-void export_ms(const boost::filesystem::path& inputPath, boost::document_file_format::type format, IDispatch *appl_ptr);
-void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch *appl_ptr);
-void save_ms(const boost::filesystem::path &inputPath, IDispatch *appl_ptr);
+
+IDispatch *open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
+IDispatch *create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
+void export_ms(const boost::filesystem::path& inputPath, boost::document_file_format::type format, IDispatch *book_ptr);
+void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch *appl_ptr, IDispatch *book_ptr);
+void save_ms(const boost::filesystem::path &inputPath, IDispatch *book_ptr);
 
 }}}
 #endif

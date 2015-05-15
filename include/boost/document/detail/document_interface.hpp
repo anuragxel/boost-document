@@ -14,6 +14,7 @@ namespace boost {
 	 public:
 		virtual void initialize(const boost::filesystem::path& path) = 0;
 		virtual void open() = 0;
+		virtual void create() = 0;
 		virtual void close() = 0;
 		virtual void save() = 0;
 		virtual void save_as(const boost::filesystem::path& path) = 0;

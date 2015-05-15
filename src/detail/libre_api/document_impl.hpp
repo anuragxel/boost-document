@@ -7,10 +7,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/filesystem.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/libre_api/libre_functions.hpp>
 #include <boost/document/detail/document_interface.hpp>
+
+#include <boost/document/detail/libre_api/libre_functions.hpp>
 
 namespace boost { namespace detail { 
 
@@ -29,6 +31,10 @@ class libre_document: public document_interface {
     		}
     	this->xComponent_ = NULL;
 		this->is_file_opened = false;
+	}
+
+	void create() {
+
 	}
 
 	void open() {

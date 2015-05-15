@@ -39,6 +39,11 @@ namespace boost {
 		~document() {
 			delete pimpl_;
 		}
+		//! \brief creates document using Calc/Excel given in
+		//!        the file path.
+		void create_document() {
+			pimpl_->create();
+		}
 		//! \brief Opens document using Calc/Excel given in
 		//!        the file path.
 		void open_document() {

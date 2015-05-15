@@ -3,6 +3,12 @@
 #ifndef _MS_FUNCTIONS_CPP
 #define _MS_FUNCTIONS_CPP
 
+// Copyright Anurag Ghosh 2015.
+// Use, modification and distribution are subject to the
+// Boost Software License, Version 1.0. (See accompanying file
+// LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -82,21 +88,68 @@ void set_visibility(IDispatch *appl_ptr) {
 	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
 }
 
-void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr) {
+void unset_visibility(IDispatch *appl_ptr) {
+	VARIANT prop;
+	prop.vt = VT_I4;
+	prop.lVal = 0;
+	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
+}
 
+void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr) {
+	// Create a new Workbook. (i.e. Application.Workbooks.Add)
+	// Get the Workbooks collection
+	IDispatch *pXlBooks = NULL;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		AutoWrap(DISPATCH_PROPERTYGET, &result, appl_ptr, L"Workbooks", 0);
+		pXlBooks = result.pdispVal;
+	}
+
+	// Call Workbooks.Add() to get a new workbook
+	{
+		VARIANT result;
+		VariantInit(&result);
+		AutoWrap(DISPATCH_METHOD, &result, pXlBooks, L"Add", 0);
+		*book_ptr = result.pdispVal;
+	}
+}
+void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr,IDispatch **book_ptr) {
+	// Create a new Workbook. (i.e. Application.Workbooks.Add)
+	// Get the Workbooks collection
+	IDispatch *pXlBooks = NULL;
+	{
+		VARIANT result;
+		VariantInit(&result);
+		AutoWrap(DISPATCH_PROPERTYGET, &result, appl_ptr, L"Workbooks", 0);
+		pXlBooks = result.pdispVal;
+	}
+
+	// Call Workbooks.open()
+	{
+		VARIANT result;
+		VariantInit(&result);
+		VARIANT x;
+		x.vt = VT_BSTR;
+		x.bstrVal = ::SysAllocString(path.string().c_str());
+		AutoWrap(DISPATCH_METHOD, &result, pXlBooks, L"Open", 1, x);
+		*book_ptr = result.pdispVal;
+	}
 }
 
 void export_ms(const boost::filesystem::path& inputPath,
 	boost::document_file_format::type format,
-	IDispatch *appl_ptr) {
+	IDispatch *appl_ptr, IDispatch *book_ptr) {
 	
 }
 
-void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch *appl_ptr) {
+void close_ms(const boost::filesystem::path &inputPath, bool save, 
+			IDispatch *appl_ptr, IDispatch *book_ptr) {
 
 }
 
-void save_ms(const boost::filesystem::path &inputPath, IDispatch *appl_ptr) {
+void save_ms(const boost::filesystem::path &inputPath, 
+			IDispatch *appl_ptr, IDispatch *book_ptr) {
 
 }
 
