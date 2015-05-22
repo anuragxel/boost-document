@@ -53,6 +53,20 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
+lib ole32 oleaut32
+    :   # No source files after first `:` means that this is an extern library
+    :
+        # Portable way to specify library search paths
+        <search>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x64"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.0\Lib\\win8\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\Lib\\winv6.3\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\Lib\\winv6.3\\um\\x64"
+		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib"
+		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib\\x64"
+        # Telling bjam that those libraries exist only in shared version
+        <link>shared
+    ;
+
 # All the flags and options for LibreOffice are stored in those variables
 local LIBRE_DEFINES = <define>BOOST_DOCUMENT_HAS_LIBRE ;
 local LIBRE_REQUIREMENTS =
@@ -98,6 +112,11 @@ local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
 local MS_REQUIREMENTS =
         # Defining that we have MS Office
         $(MS_DEFINES)
+        <library>/boost/system//boost_system
+        <library>/boost/filesystem//boost_filesystem
+
+		<target-os>windows:<library>ole32
+        <target-os>windows:<library>oleaut32
     ;
 
 # Specific target to check OO avalability

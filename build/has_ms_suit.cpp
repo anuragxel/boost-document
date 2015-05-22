@@ -3,7 +3,7 @@
 // Boost Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <stdio.h>
+#include <cstdio>
 #include <windows.h>
 #include <ole2.h>
 
@@ -86,7 +86,8 @@ int main() {
         AutoWrap(DISPATCH_PROPERTYGET, &result, pXlApp, L"Workbooks", 0);
         pXlBooks = result.pdispVal;
     }
-    IDispatch *pXlBook = NULL;
+
+	IDispatch *pXlBook = NULL;
     {
         VARIANT result;
         VariantInit(&result);
