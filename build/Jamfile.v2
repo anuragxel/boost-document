@@ -53,14 +53,14 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
-lib ole32 oleaut32
+lib Ole32 OleAut32
     :   # No source files after first `:` means that this is an extern library
     :
         # Portable way to specify library search paths
         <search>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x64"
-		<search>"C:\\Program Files (x86)\\Windows Kits\\8.0\Lib\\win8\\um\\x86"
-		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\Lib\\winv6.3\\um\\x86"
-		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\Lib\\winv6.3\\um\\x64"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x64"
 		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib"
 		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib\\x64"
         # Telling bjam that those libraries exist only in shared version
@@ -115,8 +115,8 @@ local MS_REQUIREMENTS =
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
 
-		<target-os>windows:<library>ole32
-        <target-os>windows:<library>oleaut32
+		<target-os>windows:<library>Ole32
+        <target-os>windows:<library>OleAut32
     ;
 
 # Specific target to check OO avalability
@@ -139,7 +139,8 @@ project boost/document
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
     ;
 
-local SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+#local SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+local SOURCES = detail/ms_api/ms_functions detail/open_instance ;
 
 lib boost_document
     :

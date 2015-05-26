@@ -3,12 +3,6 @@
 #ifndef _MS_FUNCTIONS_CPP
 #define _MS_FUNCTIONS_CPP
 
-// Copyright Anurag Ghosh 2015.
-// Use, modification and distribution are subject to the
-// Boost Software License, Version 1.0. (See accompanying file
-// LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -19,7 +13,7 @@
 #include <boost/throw_exception.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/libre_api/libre_functions.hpp>
+#include <boost/document/detail/ms_api/ms_functions.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
 namespace boost { namespace doc { namespace ms_functions { 
@@ -28,7 +22,7 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
     va_list marker;
     va_start(marker, cArgs);
     if(!pDisp) {
-		boost::throw_exception(document_exception("Error: NULL IDispatch passed to AutoWrap()");
+		boost::throw_exception(document_exception("Error: NULL IDispatch passed to AutoWrap()"));
     }
     DISPPARAMS dp = { NULL, NULL, 0, 0 };
     DISPID dispidNamed = DISPID_PROPERTYPUT;
@@ -40,7 +34,7 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
     hr = pDisp->GetIDsOfNames(IID_NULL, &ptName, 1, LOCALE_USER_DEFAULT, &dispID);
     if(FAILED(hr)) {
 		boost::throw_exception(document_exception(
-			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  std::to_string((int)hr));
+			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  std::to_string((int)hr)));
     }
     VARIANT *pArgs = new VARIANT[cArgs+1];
     for(int i=0; i<cArgs; i++) {
@@ -56,7 +50,7 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
     if(FAILED(hr)) {
 		boost::throw_exception(document_exception(
 			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + "=" + 
-					std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr));
+					std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr)));
     }
     va_end(marker);
     delete [] pArgs;   
