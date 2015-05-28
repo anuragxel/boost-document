@@ -137,7 +137,7 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 
 void export_ms(const boost::filesystem::path& inputPath,
 	boost::document_file_format::type format,
-	IDispatch *appl_ptr, IDispatch *book_ptr) {
+	IDispatch *book_ptr) {
 	
 }
 
@@ -147,7 +147,7 @@ void close_ms(const boost::filesystem::path &inputPath, bool save,
 }
 
 void save_ms(const boost::filesystem::path &inputPath, 
-			IDispatch *appl_ptr, IDispatch *book_ptr) {
+			IDispatch *book_ptr) {
 
 }
 
