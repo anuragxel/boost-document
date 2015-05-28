@@ -23,8 +23,8 @@ void set_visibility(IDispatch *appl_ptr);
 void unset_visibility(IDispatch *appl_ptr);
 
 
-IDispatch *open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
-IDispatch *create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
+void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
+void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch **book_ptr);
 void export_ms(const boost::filesystem::path& inputPath, boost::document_file_format::type format, IDispatch *book_ptr);
 void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch *appl_ptr, IDispatch *book_ptr);
 void save_ms(const boost::filesystem::path &inputPath, IDispatch *book_ptr);
