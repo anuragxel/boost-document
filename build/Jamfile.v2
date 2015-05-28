@@ -53,6 +53,7 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
+# extern libraries, could be found in specified directories
 lib Ole32 OleAut32
     :   # No source files after first `:` means that this is an extern library
     :
@@ -112,14 +113,19 @@ local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
 local MS_REQUIREMENTS =
         # Defining that we have MS Office
         $(MS_DEFINES)
+
+        <include>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um"
+        <include>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Include\\um"
+
+        <library>Ole32
+        <library>OleAut32
+
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
 
-		<target-os>windows:<library>Ole32
-        <target-os>windows:<library>OleAut32
     ;
 
-# Specific target to check OO avalability
+# Specific target to check MS avalability
 exe has_ms_suit : ../build/has_ms_suit.cpp : $(MS_REQUIREMENTS) ;
 # Do not build that target without explicit request
 explicit has_ms_suit ;

@@ -48,7 +48,7 @@ class ms_document: public document_interface {
 
 	void open() {
 		if(!this->is_file_opened) {
-			this->book_ptr_ = boost::doc::ms_functions::open_ms(this->doc_path_, this->appl_ptr_, &this->book_ptr_);
+			boost::doc::ms_functions::open_ms(this->doc_path_, this->appl_ptr_, &this->book_ptr_);
 			this->is_file_opened = true;
 		}
  	}
@@ -90,10 +90,10 @@ class ms_document: public document_interface {
 
  	~ms_document() {
  		if(this->is_file_opened) {
-			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->book_ptr_);
+			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->appl_ptr_, this->book_ptr_);
 			this->is_file_opened = false;
 		}
-		CoUninitialize(NULL);
+		CoUninitialize();
  	}
 
 };
