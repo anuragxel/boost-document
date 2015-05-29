@@ -41,20 +41,22 @@ class ms_document: public document_interface {
 
 	void create() {
 		if (!this->is_file_opened) {
-			boost::doc::ms_functions::create_ms(this->doc_path_, this->appl_ptr_, &this->book_ptr_);
+			boost::doc::ms_functions::create_ms(this->doc_path_, this->appl_ptr_, this->book_ptr_);
 			this->is_file_opened = true;
 		}
 	}
 
 	void open() {
 		if(!this->is_file_opened) {
-			boost::doc::ms_functions::open_ms(this->doc_path_, this->appl_ptr_, &this->book_ptr_);
+			boost::doc::ms_functions::set_visibility(this->appl_ptr_);
+			boost::doc::ms_functions::open_ms(this->doc_path_, this->appl_ptr_, this->book_ptr_);
 			this->is_file_opened = true;
 		}
  	}
 
  	void close() {
  		if(this->is_file_opened) {
+			boost::doc::ms_functions::unset_visibility(this->appl_ptr_);
 			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->appl_ptr_, this->book_ptr_);
 			this->is_file_opened = false;
 		}
@@ -81,10 +83,6 @@ class ms_document: public document_interface {
  	}
  	
  	void export_as(boost::document_file_format::type format) {
- 		if(! this->is_file_opened) {
- 			boost::throw_exception(document_exception(
-            		"Error: Trying to export unopened file."));
- 		}
  		boost::doc::ms_functions::export_ms(this->doc_path_, format, this->book_ptr_);
  	}
 
