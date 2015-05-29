@@ -19,23 +19,36 @@
 
 namespace boost { namespace doc { namespace ms_functions {
 
-// Look here for the codes
+
+// XlFileFormats is an enum whose value needs to be provided to SaveAs
+// for selecting the correct fileformat to save to.
+// Look here for the enum values
 // https://msdn.microsoft.com/en-us/library/bb241279%28v=office.12%29.aspx
+// http://stackoverflow.com/questions/13407744/excel-how-to-find-the-default-file-extension
 int get_filetype_from_file_ext(const std::string extension) {
-	if (extension == ".xlsx" || extension == ".xlsb" ) {
+	if (extension == ".xlsx" ) {
 		return 51;
 	}
+	else if (extension == ".xlsb") {
+		return 50;
+	}
+	else if (extension == ".xlsm") {
+		return 52;
+	}
 	else if (extension == ".xls") {
-		return 46;
+		return 56;
 	}
 	else if (extension == ".ods") {
 		return 60;
 	}
 	else if (extension == ".csv") {
-		return 6;
+		return 23;
+	}
+	else if (extension == ".xml") {
+		return 46;
 	}
 	else {
-		return 0;
+		return 42;
 	}
 }
 
@@ -81,7 +94,7 @@ CLSID get_clsid() {
 	HRESULT hr = CLSIDFromProgID(L"Excel.Application", &clsid);
 	if(FAILED(hr)) {
 		boost::throw_exception(document_exception(
-		   "Error: CLSIDFromProgID() failed\n"));
+		   "Error: CLSIDFromProgID() failed."));
 	}
 	return clsid;
 }
@@ -90,7 +103,7 @@ void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 	HRESULT hr = CoCreateInstance(clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **)&appl_ptr);
 	if (FAILED(hr)) {
 		boost::throw_exception(document_exception(
-			"Error: Excel not registered properly\n"));
+			"Error: Excel is not registered properly."));
 	}
 }
 
@@ -137,8 +150,7 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 	}
 }
 
-void save_ms(const boost::filesystem::path &inputPath,
-	IDispatch*& book_ptr) {
+void save_ms(const boost::filesystem::path &inputPath, IDispatch*& book_ptr) {
 
 	VARIANT vtFileName;
 	vtFileName.vt = VT_BSTR;
@@ -162,21 +174,41 @@ void export_ms(const boost::filesystem::path& fpath,
 	boost::document_file_format::type format,
 	IDispatch*& book_ptr) {
 	if (!boost::filesystem::exists(fpath)) {
-		boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
+		boost::throw_exception(document_exception(
+			"Error: Path is empty or does not exist."));
 	}
 	boost::filesystem::path out_path(fpath);
 
 	if (format == boost::document_file_format::PDF) {
 		out_path.replace_extension(".pdf");
+		
+		VARIANT vtFileName;
+		vtFileName.vt = VT_BSTR;
+		std::string fp = out_path.string();
+		OLECHAR *ole_fp = new OLECHAR[fp.size() + 1];
+		mbstowcs(ole_fp, fp.c_str(), fp.size() + 1);
+		vtFileName.bstrVal = ::SysAllocString(ole_fp);
 
+		VARIANT vtFormat;
+		vtFormat.vt = VT_I4;
+		vtFormat.lVal = 0; // XlFixedFormatType::xlTypePDF
+
+		// Reverse order of params is important.
+		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2, vtFileName, vtFormat);
+
+		delete ole_fp;
 	}
 	else if (format == boost::document_file_format::CSV) {
 		out_path.replace_extension(".csv");
-		save_ms(out_path, book_ptr);
+		save_ms(out_path,book_ptr);
+	}
+	else if (format == boost::document_file_format::XML) {
+		out_path.replace_extension(".xml");
+		save_ms(out_path,book_ptr);
 	}
 }
 
-void close_ms(const boost::filesystem::path &inputPath, bool save, 
+void close_ms(const boost::filesystem::path& inputPath, bool save, 
 			IDispatch* appl_ptr, IDispatch*& book_ptr) {
 	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"Close", 0);
 	if (book_ptr != NULL) {
@@ -184,7 +216,8 @@ void close_ms(const boost::filesystem::path &inputPath, bool save,
 	}
 }
 
-void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr) {
+void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, 
+	IDispatch*& book_ptr) {
 	// Create a new Workbook. (i.e. Application.Workbooks.Add)
 	// Get the Workbooks collection
 	IDispatch *pXlBooks = NULL;
@@ -204,6 +237,10 @@ void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispat
 	save_ms(path, book_ptr);
 }
 
+void close_app(IDispatch*& appl_ptr) {
+	auto_wrap_helper(DISPATCH_METHOD, NULL, appl_ptr, L"Quit", 0);
+	appl_ptr->Release();
+}
 
 }}}
 
