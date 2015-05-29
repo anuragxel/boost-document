@@ -7,10 +7,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/filesystem.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/libre_api/libre_functions.hpp>
 #include <boost/document/detail/document_interface.hpp>
+
+#include <boost/document/detail/libre_api/libre_functions.hpp>
 
 namespace boost { namespace detail { 
 
@@ -22,13 +24,17 @@ class libre_document: public document_interface {
 
 	void initialize(const boost::filesystem::path& fpath) {
 		boost::doc::libre_functions::set_bootstrap_offapi();
-		this->doc_path_ = fpath;
+		this->doc_path_ = boost::filesystem::system_complete(fpath);
 		if(!boost::filesystem::exists(this->doc_path_)) {
         		boost::throw_exception(document_exception(
             		"Error: Path is empty or does not exist."));
     		}
     	this->xComponent_ = NULL;
 		this->is_file_opened = false;
+	}
+
+	void create() {
+
 	}
 
 	void open() {
@@ -63,7 +69,7 @@ class libre_document: public document_interface {
 			boost::throw_exception(document_exception(
             		"Error: Trying to save unopened file."));
 		}
- 		boost::doc::libre_functions::save_libre(fpath, this->xComponent_);
+		boost::doc::libre_functions::save_libre(boost::filesystem::system_complete(fpath), this->xComponent_);
  	}
  	
  	void export_as(boost::document_file_format::type format) {

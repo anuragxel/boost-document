@@ -6,7 +6,11 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#ifdef BOOST_DOCUMENT_HAS_LIBRE
 #include "libre_api/document_impl.hpp"
+#elif defined(BOOST_DOCUMENT_HAS_MS)
+#include "ms_api/document_impl.hpp"
+#endif
 
 namespace boost { namespace detail { 
 

@@ -53,6 +53,21 @@ lib icppuhelper icppu isalhelper isal
         <link>shared
     ;
 
+# extern libraries, could be found in specified directories
+lib Ole32 OleAut32
+    :   # No source files after first `:` means that this is an extern library
+    :
+        # Portable way to specify library search paths
+        <search>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x64"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Lib\\win8\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x86"
+		<search>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Lib\\winv6.3\\um\\x64"
+		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib"
+		<search>"C:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Lib\\x64"
+        # Telling bjam that those libraries exist only in shared version
+        <link>shared
+    ;
+
 # All the flags and options for LibreOffice are stored in those variables
 local LIBRE_DEFINES = <define>BOOST_DOCUMENT_HAS_LIBRE ;
 local LIBRE_REQUIREMENTS =
@@ -98,9 +113,19 @@ local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
 local MS_REQUIREMENTS =
         # Defining that we have MS Office
         $(MS_DEFINES)
+
+        <include>"C:\\Program Files (x86)\\Windows Kits\\8.1\\Include\\um"
+        <include>"C:\\Program Files (x86)\\Windows Kits\\8.0\\Include\\um"
+
+        <library>Ole32
+        <library>OleAut32
+
+        <library>/boost/system//boost_system
+        <library>/boost/filesystem//boost_filesystem
+
     ;
 
-# Specific target to check OO avalability
+# Specific target to check MS avalability
 exe has_ms_suit : ../build/has_ms_suit.cpp : $(MS_REQUIREMENTS) ;
 # Do not build that target without explicit request
 explicit has_ms_suit ;
@@ -120,7 +145,8 @@ project boost/document
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
     ;
 
-local SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+#local SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+local SOURCES = detail/ms_api/ms_functions detail/open_instance ;
 
 lib boost_document
     :
