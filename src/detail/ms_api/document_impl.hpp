@@ -29,7 +29,7 @@ class ms_document: public document_interface {
 
 	void initialize(const boost::filesystem::path& fpath) {
 		CoInitialize(NULL);
-		this->doc_path_ = fpath;
+		this->doc_path_ = boost::filesystem::system_complete(fpath);
 		if(!boost::filesystem::exists(this->doc_path_)) {
         		boost::throw_exception(document_exception(
             		"Error: Path is empty or does not exist."));
@@ -77,7 +77,7 @@ class ms_document: public document_interface {
 			boost::throw_exception(document_exception(
             		"Error: Trying to save unopened file."));
 		}
- 		boost::doc::ms_functions::save_ms(fpath, this->book_ptr_);
+		boost::doc::ms_functions::save_ms(boost::filesystem::system_complete(fpath), this->book_ptr_);
  	}
  	
  	void export_as(boost::document_file_format::type format) {

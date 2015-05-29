@@ -36,25 +36,24 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
 		boost::throw_exception(document_exception(
 			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  std::to_string((int)hr)));
     }
-    VARIANT *pArgs = new VARIANT[cArgs+1];
-    for(int i=0; i<cArgs; i++) {
-        pArgs[i] = va_arg(marker, VARIANT);
-    }
-    dp.cArgs = cArgs;
-    dp.rgvarg = pArgs;
-    if(autoType & DISPATCH_PROPERTYPUT) {
-        dp.cNamedArgs = 1;
-        dp.rgdispidNamedArgs = &dispidNamed;
-    }
-    hr = pDisp->Invoke(dispID, IID_NULL, LOCALE_SYSTEM_DEFAULT, autoType, &dp, pvResult, NULL, NULL);
-    if(FAILED(hr)) {
+	std::vector<VARIANT> pArgs(cArgs + 1);
+	for (int i = 0; i<cArgs; i++) {
+		pArgs[i] = va_arg(marker, VARIANT);
+	}
+	dp.cArgs = cArgs;
+	dp.rgvarg = pArgs.data();
+	if (autoType & DISPATCH_PROPERTYPUT) {
+		dp.cNamedArgs = 1;
+		dp.rgdispidNamedArgs = &dispidNamed;
+	}
+	hr = pDisp->Invoke(dispID, IID_NULL, LOCALE_SYSTEM_DEFAULT, autoType, &dp, pvResult, NULL, NULL);
+	if (FAILED(hr)) {
 		boost::throw_exception(document_exception(
-			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + "=" + 
-					std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr)));
-    }
-    va_end(marker);
-    delete [] pArgs;   
-    return hr;
+			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + "=" +
+			std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr)));
+	}
+	va_end(marker);
+	return hr;
 }
 
 CLSID get_clsid() {
@@ -67,7 +66,7 @@ CLSID get_clsid() {
 	return clsid;
 }
 
-void get_application_pointer(CLSID clsid, IDispatch *appl_ptr) {
+void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 	HRESULT hr = CoCreateInstance(clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **)&appl_ptr);
 	if (FAILED(hr)) {
 		boost::throw_exception(document_exception(
