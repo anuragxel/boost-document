@@ -52,6 +52,18 @@ int get_filetype_from_file_ext(const std::string extension) {
 	}
 }
 
+BSTR string_to_BSTR(const std::string& str)
+{
+	int wslen = ::MultiByteToWideChar(CP_ACP, 0 /* no flags */,
+		str.data(), str.length(),
+		NULL, 0);
+
+	BSTR wsdata = ::SysAllocStringLen(NULL, wslen);
+	::MultiByteToWideChar(CP_ACP, 0 /* no flags */,
+		str.data(), str.length(),
+		wsdata, wslen);
+	return wsdata;
+}
 HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...) {
     va_list marker;
     va_start(marker, cArgs);
@@ -140,39 +152,32 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 		VariantInit(&result);
 		VARIANT x;
 		x.vt = VT_BSTR;
-		std::string fp = fpath.string();
-		OLECHAR *ole_fp = new OLECHAR[fp.size() + 1];
-		mbstowcs(ole_fp, fp.c_str(), fp.size() + 1);
-		x.bstrVal = ::SysAllocString( ole_fp );
+		x.bstrVal = string_to_BSTR(fpath.string());
 		auto_wrap_helper(DISPATCH_METHOD, &result, pXlBooks, L"Open", 1, x);
 		book_ptr = result.pdispVal;
-		delete ole_fp;
 	}
 }
 
-void save_ms(const boost::filesystem::path &inputPath, IDispatch*& book_ptr) {
-
+void save_ms(const boost::filesystem::path &inputPath, 
+	IDispatch*& book_ptr) {
+	
 	VARIANT vtFileName;
 	vtFileName.vt = VT_BSTR;
-	std::string fp = inputPath.string();
-	OLECHAR *ole_fp = new OLECHAR[fp.size() + 1];
-	mbstowcs(ole_fp, fp.c_str(), fp.size() + 1);
-	vtFileName.bstrVal = ::SysAllocString(ole_fp);
+	vtFileName.bstrVal = string_to_BSTR(inputPath.string());
 
 	VARIANT vtFormat;
 	vtFormat.vt = VT_I4;
 	vtFormat.lVal = get_filetype_from_file_ext(inputPath.extension().string());
-	
+
 	// Reverse order of params is important.
 	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2, vtFormat, vtFileName);
-
-	delete ole_fp;
 }
 
 
 void export_ms(const boost::filesystem::path& fpath,
 	boost::document_file_format::type format,
 	IDispatch*& book_ptr) {
+	
 	if (!boost::filesystem::exists(fpath)) {
 		boost::throw_exception(document_exception(
 			"Error: Path is empty or does not exist."));
@@ -183,11 +188,7 @@ void export_ms(const boost::filesystem::path& fpath,
 		out_path.replace_extension(".pdf");
 		
 		VARIANT vtFileName;
-		vtFileName.vt = VT_BSTR;
-		std::string fp = out_path.string();
-		OLECHAR *ole_fp = new OLECHAR[fp.size() + 1];
-		mbstowcs(ole_fp, fp.c_str(), fp.size() + 1);
-		vtFileName.bstrVal = ::SysAllocString(ole_fp);
+		vtFileName.bstrVal = string_to_BSTR(fpath.string());
 
 		VARIANT vtFormat;
 		vtFormat.vt = VT_I4;
@@ -196,7 +197,6 @@ void export_ms(const boost::filesystem::path& fpath,
 		// Reverse order of params is important.
 		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2, vtFileName, vtFormat);
 
-		delete ole_fp;
 	}
 	else if (format == boost::document_file_format::CSV) {
 		out_path.replace_extension(".csv");
@@ -208,8 +208,11 @@ void export_ms(const boost::filesystem::path& fpath,
 	}
 }
 
-void close_ms(const boost::filesystem::path& inputPath, bool save, 
-			IDispatch* appl_ptr, IDispatch*& book_ptr) {
+void close_ms(const boost::filesystem::path& inp_path, bool save, 
+		IDispatch*& book_ptr) {
+	if (save) {
+		save_ms(inp_path, book_ptr);
+	}
 	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"Close", 0);
 	if (book_ptr != NULL) {
 		book_ptr->Release();

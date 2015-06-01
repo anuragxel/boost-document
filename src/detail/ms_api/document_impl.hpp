@@ -57,7 +57,7 @@ class ms_document: public document_interface {
  	void close() {
  		if(this->is_file_opened) {
 			boost::doc::ms_functions::unset_visibility(this->appl_ptr_);
-			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->appl_ptr_, this->book_ptr_);
+			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->book_ptr_);
 			this->is_file_opened = false;
 		}
 		else {
@@ -88,7 +88,7 @@ class ms_document: public document_interface {
 
  	~ms_document() {
  		if(this->is_file_opened) {
-			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->appl_ptr_, this->book_ptr_);
+			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->book_ptr_);
 			this->is_file_opened = false;
 		}
 		boost::doc::ms_functions::close_app(this->appl_ptr_);
