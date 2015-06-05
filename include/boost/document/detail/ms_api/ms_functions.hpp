@@ -23,12 +23,13 @@ void set_visibility(IDispatch *appl_ptr);
 void unset_visibility(IDispatch *appl_ptr);
 void close_app(IDispatch*& appl_ptr);
 int get_filetype_from_file_ext(const std::string extension);
+void supress_warnings(IDispatch *appl_ptr, bool sure);
 
 void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr);
 void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr);
-void export_ms(const boost::filesystem::path& inputPath, boost::document_file_format::type format, IDispatch*& book_ptr);
-void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch*& book_ptr);
-void save_ms(const boost::filesystem::path &inputPath, IDispatch*& book_ptr);
+void export_ms(const boost::filesystem::path& inputPath, boost::document_file_format::type format, IDispatch* appl_ptr, IDispatch*& book_ptr);
+void close_ms(const boost::filesystem::path &inputPath, bool save, IDispatch* appl_ptr, IDispatch*& book_ptr);
+void save_ms(const boost::filesystem::path &inputPath,IDispatch* appl_ptr, IDispatch*& book_ptr);
 
 }}}
 #endif
