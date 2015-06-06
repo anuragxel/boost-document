@@ -13,7 +13,7 @@ namespace boost {
 	//!
 	struct document_file_format {
 		enum type {
-			PDF,CSV,XML
+			PDF,CSV,XML,
 		};
 	};
 } // namespace boost

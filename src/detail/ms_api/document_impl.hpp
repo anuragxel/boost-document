@@ -71,7 +71,7 @@ class ms_document: public document_interface {
 			boost::throw_exception(document_exception(
             		"Error: Trying to save unopened file."));
 		}
- 		boost::doc::ms_functions::save_ms(this->doc_path_, this->book_ptr_);
+		boost::doc::ms_functions::save_ms(this->doc_path_, this->appl_ptr_, this->book_ptr_);
  	}
  	
  	void save_as(const boost::filesystem::path& fpath) {
@@ -79,11 +79,15 @@ class ms_document: public document_interface {
 			boost::throw_exception(document_exception(
             		"Error: Trying to save unopened file."));
 		}
-		boost::doc::ms_functions::save_ms(boost::filesystem::system_complete(fpath), this->book_ptr_);
+		boost::doc::ms_functions::save_ms(boost::filesystem::system_complete(fpath), this->appl_ptr_, this->book_ptr_);
  	}
  	
  	void export_as(boost::document_file_format::type format) {
- 		boost::doc::ms_functions::export_ms(this->doc_path_, format, this->book_ptr_);
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Trying to save unopened file."));
+		}
+		boost::doc::ms_functions::export_ms(this->doc_path_, format, this->appl_ptr_, this->book_ptr_);
  	}
 
  	~ms_document() {

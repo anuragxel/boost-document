@@ -123,8 +123,10 @@ int negative_closing_file_without_permission(boost::document& d) {
 
 int exporting_to_pdf(boost::document& b) {
     try {
+		b.open_document();
         b.export_document(boost::document_file_format::PDF);
-        std::cout << "Test exporting_to_pdf Passed." << std::endl;
+		b.close_document();
+		std::cout << "Test exporting_to_pdf Passed." << std::endl;
         return 0;
     }
     catch(boost::document_exception& e) {
@@ -136,8 +138,10 @@ int exporting_to_pdf(boost::document& b) {
 
 int exporting_to_csv(boost::document& b) {
     try {
+		b.open_document();
         b.export_document(boost::document_file_format::CSV);        
-        std::cout << "Test exporting_to_csv Passed." << std::endl;
+		b.close_document();
+		std::cout << "Test exporting_to_csv Passed." << std::endl;
         return 0;
     }
     catch(boost::document_exception& e) {
@@ -149,29 +153,38 @@ int exporting_to_csv(boost::document& b) {
 
 int main(int argc, char **argv) {
     
-    boost::document b("./Test1.ods");
-    //Create a document. Change to the correct path there to run the tests.
-    boost::document c("./Test2.ods");
-    // Create a document, change the rwx permission to 000. Change to the correct path there to run the test.
-    boost::document d("./Test3.ods");
+	boost::document b("Excel_Test1.xlsx");
+	boost::document d("Excel_Test2.xlsx");
+	boost::document c("Excel_Test3.xlsx");
 
+//	b.open_document();
+//	b.close_document();
+//	return 0;
+	
+	/*
+    //Create a document. Change to the correct path there to run the tests.
+	boost::document c("Test2.ods");
+    // Create a document, change the rwx permission to 000. Change to the correct path there to run the test.
+    boost::document d("Test3.ods");
+	*/
     int rv = 0;
 
     // Sanity Checks
-    rv += negative_try_opening_null();
-    rv += negative_try_exporting_null();
-    rv += negative_try_closing_null();
-    rv += negative_closing_unopened_document(b);
-    rv += negative_absurd_path_opening();
+	rv += negative_try_opening_null();
+	rv += negative_try_exporting_null();
+	rv += negative_try_closing_null();
+	rv += negative_closing_unopened_document(b);
+	rv += negative_absurd_path_opening();
 
     // Permissions related checks
-    rv += negative_opening_file_without_permission(d);
+	rv += negative_opening_file_without_permission(d);
     rv += negative_exporting_file_without_permission(d);
     rv += negative_closing_file_without_permission(d);
     
-    // Positive Checks.
-    rv += exporting_to_pdf(b);
-    rv += exporting_to_csv(c);
+
+    // Positive Checks
+	rv += exporting_to_pdf(b);
+	rv += exporting_to_csv(b);
     rv += working_on_multiple_documents(b,c);
 
     if (rv > 0) {
