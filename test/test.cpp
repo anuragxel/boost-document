@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
     
 	boost::document b("Excel_Test1.xlsx");
 	boost::document d("Excel_Test2.xlsx");
-	//boost::document c("Test1.ods");
+	boost::document c("Excel_Test3.xlsx");
 
 //	b.open_document();
 //	b.close_document();
@@ -184,8 +184,8 @@ int main(int argc, char **argv) {
 
     // Positive Checks
 	rv += exporting_to_pdf(b);
-	//rv += exporting_to_csv(b);
-    //rv += working_on_multiple_documents(b,c);
+	rv += exporting_to_csv(b);
+    rv += working_on_multiple_documents(b,c);
 
     if (rv > 0) {
         std::cout << rv <<" Tests Failed. Look at Log for more information." << std::endl;

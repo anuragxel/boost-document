@@ -131,18 +131,15 @@ void unset_visibility(IDispatch *appl_ptr) {
 }
 
 void supress_warnings(IDispatch *appl_ptr,bool sure) {
+	VARIANT prop;
+	prop.vt = VT_I4;
 	if (sure) {
-		VARIANT prop;
-		prop.vt = VT_I4;
 		prop.lVal = 1;
-		auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"DisplayAlerts", 1, prop);
 	}
 	else {
-		VARIANT prop;
-		prop.vt = VT_I4;
 		prop.lVal = 0;
-		auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"DisplayAlerts", 1, prop);
 	}
+	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"DisplayAlerts", 1, prop);
 }
 
 void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch*& book_ptr) {
@@ -173,6 +170,7 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 
 void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	IDispatch*& book_ptr) {
+	
 	VARIANT vt_file_name;
 	vt_file_name.vt = VT_BSTR;
 	vt_file_name.bstrVal = string_to_BSTR(inputPath.string());
@@ -191,51 +189,36 @@ void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2, vt_format, vt_file_name);
 	
 	supress_warnings(appl_ptr, false);
+	
 	VariantClear(&vt_file_name);
 }
 
 
 void export_ms(const boost::filesystem::path& fpath,
 	boost::document_file_format::type format, IDispatch* appl_ptr,
-	IDispatch*& book_ptr) {
-	
+	IDispatch*& book_ptr) {	
 	if (!boost::filesystem::exists(fpath)) {
 		boost::throw_exception(document_exception(
 			"Error: Path is empty or does not exist."));
 	}
 	boost::filesystem::path out_path(fpath);
-
 	if (format == boost::document_file_format::PDF) {
 		out_path.replace_extension(".pdf");
 		
 		VARIANT vt_file_name;
-		vt_file_name.bstrVal = string_to_BSTR(fpath.string());
+		vt_file_name.vt = VT_BSTR;
+		vt_file_name.bstrVal = string_to_BSTR(out_path.string());
 
 		VARIANT vt_format;
 		vt_format.vt = VT_I4;
 		vt_format.lVal = 0; // XlFixedFormatType::xlTypePDF
 
-		VARIANT vt_quality;
-		vt_quality.vt = VT_I4;
-		vt_quality.lVal = 0; //XlFixedFormatQuality::xlQualityStandard
-
-		VARIANT vt_inc_doc_prop; // To include document details in export ?
-		vt_inc_doc_prop.vt = VT_I4; 
-		vt_inc_doc_prop.lVal = 1; // YES
-
-		VARIANT vt_ig_prnt_areas; // To ignore print areas in export ?
-		vt_ig_prnt_areas.vt = VT_I4;
-		vt_ig_prnt_areas.lVal = 1; // YES
-
 		// Reverse order of params is important.
-		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 5, 
-						vt_ig_prnt_areas, 
-						vt_inc_doc_prop, 
-						vt_quality, 
-						vt_file_name, 
-						vt_format);
+		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2, 
+			vt_file_name,
+			vt_format);
 
-		VariantClear(&vt_file_name);
+	VariantClear(&vt_file_name);
 	}
 	else if (format == boost::document_file_format::CSV) {
 		out_path.replace_extension(".csv");
