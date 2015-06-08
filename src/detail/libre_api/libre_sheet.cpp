@@ -39,7 +39,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/libre_api/libre_functions.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
 using namespace com::sun::star;
@@ -68,7 +67,7 @@ namespace boost { namespace doc { namespace libre_sheet {
 //!     of the spreadsheet.
 //!
 Reference< XSpreadsheets > get_sheets_of_document(
-            Reference < XComponent> xComponent) {
+            Reference < XComponent > xComponent) {
 
     if(xComponent == NULL) {
          boost::throw_exception(document_exception(

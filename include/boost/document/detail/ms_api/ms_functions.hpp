@@ -7,9 +7,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
+#include <iostream>
 #include <cstdlib>
 #include <windows.h>
 #include <ole2.h>
+#include <objbase.h>
 
 #include <boost/filesystem.hpp>
 #include <boost/document/detail/document_file_format.hpp>
@@ -24,6 +26,8 @@ void unset_visibility(IDispatch *appl_ptr);
 void close_app(IDispatch*& appl_ptr);
 int get_filetype_from_file_ext(const std::string extension);
 void supress_warnings(IDispatch *appl_ptr, bool sure);
+BSTR string_to_BSTR(const std::string& str);
+
 
 void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr);
 void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr);
