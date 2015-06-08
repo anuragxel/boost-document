@@ -19,7 +19,9 @@
 
 namespace boost { namespace doc { namespace ms_functions {
 
-
+//! \fn Returns the corresponding enum value given the
+//!     the file extension.
+//!
 // XlFileFormats is an enum whose value needs to be provided to SaveAs
 // for selecting the correct fileformat to save to.
 // Look here for the enum values
@@ -51,15 +53,29 @@ int get_filetype_from_file_ext(const std::string extension) {
 		return 42;
 	}
 }
-
-BSTR string_to_BSTR(const std::string& str)
-{
+//! \fn Reutrns a string of type BSTR to be used 
+//!     in all the COM API calls.
+//!
+//! Important to remember remember to delete the  
+//! BSTR later. (BSTR is a pointer to another MS String type)
+//! Either do delete [] ptr or VariantClear(&variant) as 
+//! appropriate.
+BSTR string_to_BSTR(const std::string& str) {
 	int wslen = ::MultiByteToWideChar(CP_ACP, 0 ,str.c_str(), str.length(), NULL, 0);
 	BSTR wsdata = ::SysAllocStringLen(NULL, wslen);
 	::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), wsdata, wslen);
 	return wsdata;
 }
 
+//! \fn Helper function which makes the actual COM API Call
+//!
+//! int cArgs provides the number of arguments to the method.
+//! All arguments after that of type VARIANT are sent during the method invokation
+//! in ****REVERSE ORDER**** of their specification at the function call.
+//! IDispatch *pDisp is the object pointer
+//! LPOLESTR ptName is the method to be performed
+//! VARIANT *pvResult can be used to obtain the results.
+//! int autoType can be DISPATCH_PROPERTYGET, DISPATCH_PROPERTYPUT, DISPATCH_METHOD
 HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...) {
     va_list marker;
     va_start(marker, cArgs);
@@ -98,6 +114,9 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
 	return hr;
 }
 
+//! \fn Helper Function to get the CLSID of The Excel
+//!     Application to later get a pointer to Application
+//!     object.
 CLSID get_clsid() {
 	CLSID clsid;
 	HRESULT hr = CLSIDFromProgID(L"Excel.Application", &clsid);
@@ -108,6 +127,9 @@ CLSID get_clsid() {
 	return clsid;
 }
 
+//! \fn Gets the application Pointer
+//!     from the clsid obtained.
+//!
 void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 	HRESULT hr = CoCreateInstance(clsid, NULL, CLSCTX_LOCAL_SERVER, IID_IDispatch, (void **)&appl_ptr);
 	if (FAILED(hr)) {
@@ -116,6 +138,9 @@ void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 	}
 }
 
+//! \fn Sets the visibility of the 
+//!     Application GUI.
+//!
 void set_visibility(IDispatch *appl_ptr) {
 	VARIANT prop;
 	prop.vt = VT_I4;
@@ -123,6 +148,9 @@ void set_visibility(IDispatch *appl_ptr) {
 	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
 }
 
+//! \fn Unsets the visibility of the
+//!     Application GUI.
+//!
 void unset_visibility(IDispatch *appl_ptr) {
 	VARIANT prop;
 	prop.vt = VT_I4;
@@ -130,6 +158,10 @@ void unset_visibility(IDispatch *appl_ptr) {
 	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
 }
 
+//! \fn Suppress Warnings that are displayed as user
+//!     dialog while performing certain methods. 
+//!     Takes the default action provided in the
+//!     dialog box.
 void supress_warnings(IDispatch *appl_ptr,bool sure) {
 	VARIANT prop;
 	prop.vt = VT_I4;
@@ -142,6 +174,17 @@ void supress_warnings(IDispatch *appl_ptr,bool sure) {
 	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"DisplayAlerts", 1, prop);
 }
 
+//! \fn Call application to quit
+//!     and release the application 
+//!     pointer.
+void close_app(IDispatch*& appl_ptr) {
+	// Application.Quit()
+	auto_wrap_helper(DISPATCH_METHOD, NULL, appl_ptr, L"Quit", 0);
+	appl_ptr->Release();
+}
+
+//! \fn Opens the file in the file path
+//!     and attaches the book_pointer. 
 void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch*& book_ptr) {
 	if (!boost::filesystem::exists(fpath)) {
 		boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
@@ -168,6 +211,11 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 	}
 }
 
+//! \fn Saves the file in the given file path.
+//!     If there is an existing file, it deletes 
+//!     the file and then saves it.
+//!     Saves in the required format depending on the
+//!     extension of the given file path.
 void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	IDispatch*& book_ptr) {
 	
@@ -193,7 +241,18 @@ void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	VariantClear(&vt_file_name);
 }
 
-
+//! \fn Exports the file in the filepath
+//!     and file format given, replacing 
+//!     the extension as appropriate.
+//!
+//!     Calls ExportAsFixedFormat for PDF, normal
+//!     save for the CSV and XML formats.
+//!     XlFixedFormatType is an enum having
+//!     XPS and PDF types.
+//!		Also, XPS isn't supported, however
+//!     XlFixedFormatType::xlTypeXPS = 1
+//!     and can be changed in VARIANT vt_format
+//!     appropriately.
 void export_ms(const boost::filesystem::path& fpath,
 	boost::document_file_format::type format, IDispatch* appl_ptr,
 	IDispatch*& book_ptr) {	
@@ -218,7 +277,7 @@ void export_ms(const boost::filesystem::path& fpath,
 			vt_file_name,
 			vt_format);
 
-	VariantClear(&vt_file_name);
+		VariantClear(&vt_file_name);
 	}
 	else if (format == boost::document_file_format::CSV) {
 		out_path.replace_extension(".csv");
@@ -230,6 +289,9 @@ void export_ms(const boost::filesystem::path& fpath,
 	}
 }
 
+//! \fn Closes the specific document   
+//!     being accessed and releases 
+//!     the book_ptr.
 void close_ms(const boost::filesystem::path& inp_path, bool save, 
 		IDispatch* appl_ptr, IDispatch*& book_ptr) {
 	if (save) {
@@ -241,6 +303,8 @@ void close_ms(const boost::filesystem::path& inp_path, bool save,
 	}
 }
 
+//! \fn Creates a new Document at the 
+//!     file path given.
 void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, 
 	IDispatch*& book_ptr) {
 	// Create a new Workbook. (i.e. Application.Workbooks.Add)
@@ -260,11 +324,6 @@ void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr,
 		book_ptr = result.pdispVal;
 	}
 	save_ms(path, appl_ptr, book_ptr);
-}
-
-void close_app(IDispatch*& appl_ptr) {
-	auto_wrap_helper(DISPATCH_METHOD, NULL, appl_ptr, L"Quit", 0);
-	appl_ptr->Release();
 }
 
 }}}
