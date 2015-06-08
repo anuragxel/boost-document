@@ -3,6 +3,11 @@
 #ifndef _MS_SHEET_CPP
 #define _MS_SHEET_CPP
 
+//          Copyright Anurag Ghosh 2015.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -61,6 +66,16 @@ void get_sheet_by_index(IDispatch *sheets_ptr, int sheet_index, IDispatch*& shee
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"Sheets", 1,
 		vt_sheet
 		);
+	sheet_ptr = result.pdispVal;
+}
+
+//! \fn
+//!
+//!
+void get_active_sheet(IDispatch *sheets_ptr, IDispatch*& sheet_ptr) {
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"ActiveSheet", 0);
 	sheet_ptr = result.pdispVal;
 }
 
