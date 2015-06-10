@@ -7,10 +7,12 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/filesystem.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_interface.hpp>
 
+#include <boost/document/sheet.hpp>
 
 namespace boost {
 
@@ -71,6 +73,18 @@ namespace boost {
 		//!        format is PDF.
 		void export_document(boost::document_file_format::type format = document_file_format::PDF) {
 			pimpl_->export_as(format);
+		}
+
+		//! \brief Gets a sheet instance of name str
+		//!        which can be manipulated as needed.
+		boost::sheet get_sheet_by_name(const std::string& str) {
+			return pimpl_->get_sheet_by_name(str);
+		}
+
+		//! \brief Gets a sheet instance of that index
+		//!        which can be manipulated as needed.
+		boost::sheet get_sheet_by_index(int index) {
+			return pimpl_->get_sheet_by_index(index);
 		}
 		
 	};

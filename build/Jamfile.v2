@@ -150,11 +150,11 @@ local SOURCES ;
 
 if  ( $(LIBRE_REQUIREMENTS) )
 {
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance detail/open_sheet_instance ;
 }
 else if ( $(MS_REQUIREMENTS) )
 {
-   SOURCES = detail/ms_api/ms_functions detail/open_instance detail/ms_api/ms_sheet ;
+   SOURCES = detail/ms_api/ms_functions detail/ms_api/ms_sheet detail/open_instance detail/open_sheet_instance ;
 }
 
 lib boost_document

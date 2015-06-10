@@ -6,13 +6,17 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <string>
+
 #include <boost/filesystem.hpp>
 
+#include <boost/document/sheet.hpp>
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_interface.hpp>
 
 #include <boost/document/detail/libre_api/libre_functions.hpp>
+#include <boost/document/detail/libre_api/libre_sheet.hpp>
 
 namespace boost { namespace detail { 
 
@@ -81,6 +85,14 @@ class libre_document: public document_interface {
 			boost::doc::libre_functions::close_libre(this->doc_path_, false, this->xComponent_);
 			this->is_file_opened = false;
 		}
+ 	}
+
+ 	boost::sheet get_sheet_by_name(const std::string& str) {
+ 		return boost::sheet();
+ 	}
+
+ 	boost::sheet get_sheet_by_index(int index) {
+ 		return boost::sheet();
  	}
 
 };
