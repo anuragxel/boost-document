@@ -45,11 +45,6 @@ namespace boost {
 	 	void remame_sheet(const std::string& str) {
 	 		pimpl_->remame_sheet(str);
 	 	}
-
-		//! \brief Deletes the sheet
-	 	void delete_sheet() {
-	 		pimpl_->delete_sheet();
-	 	}
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {

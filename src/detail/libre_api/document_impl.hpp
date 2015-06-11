@@ -24,8 +24,12 @@ class libre_document: public document_interface {
 	
 	boost::filesystem::path doc_path_;
 	bool is_file_opened;	
+	
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent_;
-
+	
+	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets_;
+	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > xSheetDoc_;
+	
 	void initialize(const boost::filesystem::path& fpath) {
 		boost::doc::libre_functions::set_bootstrap_offapi();
 		this->doc_path_ = boost::filesystem::system_complete(fpath);
@@ -33,7 +37,8 @@ class libre_document: public document_interface {
         		boost::throw_exception(document_exception(
             		"Error: Path is empty or does not exist."));
     		}
-    	this->xComponent_ = NULL;
+		this->xComponent_ = NULL;
+		this->xSheets_ = NULL;
 		this->is_file_opened = false;
 	}
 
@@ -80,19 +85,33 @@ class libre_document: public document_interface {
  		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
  	}
 
+ 	boost::sheet get_sheet_by_name(const std::string& str) {
+		if(this->xSheets_ == NULL) {
+			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet::get_sheets_of_document(this->xSheetDoc_);
+		}
+		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet::get_sheet_by_name(this->xSheets_,str);
+		return boost::sheet(); //what to do here ???? arrghhh
+ 	}
+
+ 	boost::sheet get_sheet_by_index(int index) {
+ 		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet::get_sheets_of_document(this->xSheetDoc_);
+		}
+		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet::get_sheet_by_index(this->xSheets_,index);
+		return boost::sheet();
+ 	}
+
  	~libre_document() {
  		if(this->is_file_opened) {
 			boost::doc::libre_functions::close_libre(this->doc_path_, false, this->xComponent_);
 			this->is_file_opened = false;
 		}
- 	}
-
- 	boost::sheet get_sheet_by_name(const std::string& str) {
- 		return boost::sheet();
- 	}
-
- 	boost::sheet get_sheet_by_index(int index) {
- 		return boost::sheet();
  	}
 
 };

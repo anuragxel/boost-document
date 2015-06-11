@@ -17,7 +17,9 @@ namespace boost { namespace detail {
 
 class libre_sheet: public sheet_interface {
 	
-	
+	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
+	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > XSpreadsheet_;
+
 	std::string get_sheet_name() {
 		return "sheet";
 	}
@@ -28,10 +30,6 @@ class libre_sheet: public sheet_interface {
 
 	void remame_sheet(const std::string& str) {
 	 	
-	}
-
-	void delete_sheet() {
-		
 	}
 
  	~libre_sheet() {

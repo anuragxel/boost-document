@@ -37,9 +37,11 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_exception.hpp>
+
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -62,18 +64,28 @@ using ::rtl::OUStringToOString;
 
 namespace boost { namespace doc { namespace libre_sheet {
 
+Reference< XSpreadsheetDocument > get_xSheetDoc(
+        Reference<XComponent> xComponent) {
+    if(xComponent == NULL) {
+         boost::throw_exception(document_exception(
+            "Error: The Document is not open."));
+    }
+    try {
+        Reference< XSpreadsheetDocument > xSheetDoc (xComponent, UNO_QUERY);
+        return xSheetDoc;
+    }
+    catch( Exception &e ){
+      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+      boost::throw_exception(document_exception(o.pData->buffer));
+    }
+} 
 
 //! \fn Internal Function which returns all the sheets 
 //!     of the spreadsheet.
 //!
 Reference< XSpreadsheets > get_sheets_of_document(
-            Reference < XComponent > xComponent) {
+            Reference < XSpreadsheetDocument > xSheetDoc) {
 
-    if(xComponent == NULL) {
-         boost::throw_exception(document_exception(
-            "Error: The Document is not open."));
-    }
-    Reference< XSpreadsheetDocument > xSheetDoc (xComponent, UNO_QUERY);
     try  {
         Reference< XSpreadsheets > xSheets = xSheetDoc->getSheets();
         return xSheets;
@@ -120,6 +132,23 @@ Reference < XSpreadsheet > get_sheet_by_index(
       boost::throw_exception(document_exception(o.pData->buffer));
    }
 }
+
+
+//! \fn
+//!
+//!
+void rename_sheet(Reference< XSpreadsheet > xSheet,std::string sheetName) {
+    try {
+        Reference< XNamed > xName(xSheet, UNO_QUERY);
+        xName->setName(OUString::createFromAscii(sheetName.c_str()));
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+
 
 
 }}}
