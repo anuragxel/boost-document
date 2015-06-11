@@ -6,6 +6,8 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <memory>
+
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
 #include "libre_api/document_impl.hpp"
 #elif defined(BOOST_DOCUMENT_HAS_MS)
@@ -14,7 +16,7 @@
 
 namespace boost { namespace detail { 
 
-document_interface* open_instance() {
+boost::shared_ptr<document_interface> open_instance() {
 
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
     return open_libre_instance();

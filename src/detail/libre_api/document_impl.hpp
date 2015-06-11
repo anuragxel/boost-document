@@ -7,6 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
+#include <memory>
 
 #include <boost/filesystem.hpp>
 
@@ -85,7 +86,7 @@ class libre_document: public document_interface {
  		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
  	}
 
- 	boost::sheet get_sheet_by_name(const std::string& str) {
+ 	boost::sheet get_sheet(const std::string& str) {
 		if(this->xSheets_ == NULL) {
 			if(this->xSheetDoc_ == NULL) {
 				this->xSheetDoc_ = boost::doc::libre_sheet::get_xSheetDoc(this->xComponent_);
@@ -93,10 +94,10 @@ class libre_document: public document_interface {
 			this->xSheets_ = boost::doc::libre_sheet::get_sheets_of_document(this->xSheetDoc_);
 		}
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet::get_sheet_by_name(this->xSheets_,str);
-		return boost::sheet(); //what to do here ???? arrghhh
+		return std::make_shared<libre_sheet>(this->xComponent_,new_sheet,str); // smart pointers to the rescue :D
  	}
 
- 	boost::sheet get_sheet_by_index(int index) {
+ 	boost::sheet get_sheet(int index) {
  		if(this->xSheets_ == NULL) {
  			if(this->xSheetDoc_ == NULL) {
 				this->xSheetDoc_ = boost::doc::libre_sheet::get_xSheetDoc(this->xComponent_);
@@ -104,8 +105,9 @@ class libre_document: public document_interface {
 			this->xSheets_ = boost::doc::libre_sheet::get_sheets_of_document(this->xSheetDoc_);
 		}
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet::get_sheet_by_index(this->xSheets_,index);
-		return boost::sheet();
+		return std::make_shared<libre_sheet>(this->xComponent_,new_sheet,index);
  	}
+
 
  	~libre_document() {
  		if(this->is_file_opened) {
@@ -116,7 +118,7 @@ class libre_document: public document_interface {
 
 };
 
-document_interface* open_libre_instance() {
+boost::shared_ptr<document_interface> open_libre_instance() {
 	return new libre_document();
 }
 

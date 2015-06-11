@@ -168,9 +168,8 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets, const std::string&
 std::string get_sheet_name(Reference< XSpreadsheet > xSheet) {
     try {
         Reference< XNamed > xName(xSheet, UNO_QUERY);
-        OUstring str = xName->getName();
-        OString o = OUStringToOString( s, RTL_TEXTENCODING_ASCII_US );
-        return std::string(s.pData->buffer);
+        OString o = OUStringToOString( xName->getName(), RTL_TEXTENCODING_ASCII_US );
+        return std::string(o.pData->buffer);
     }
     catch( Exception &e ){
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );

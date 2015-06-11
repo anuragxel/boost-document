@@ -12,8 +12,8 @@ namespace boost {
 
 	class sheet_interface {
 	 public:
-	 	virtual std::string get_sheet_name() = 0;
-	 	virtual int get_sheet_index() = 0;
+	 	virtual std::string sheet_name() = 0;
+	 	virtual int sheet_index() = 0;
 	 	virtual void remame_sheet(const std::string& str) = 0;
 		virtual ~sheet_interface() {}
 	};	

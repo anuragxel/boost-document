@@ -6,7 +6,9 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <memory>
 #include <boost/filesystem.hpp>
+
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
@@ -14,32 +16,26 @@
 
 #include <boost/document/sheet.hpp>
 
+
 namespace boost {
 
 	 namespace detail {
-		document_interface* open_instance();
+		std::shared_ptr<document_interface> open_instance();
 	}
-    	//! \brief This is the main class interface to be 
-    	//!        exposed to the library user.
-    	//!
+    //! \brief This is the main class interface to be 
+    //!        exposed to the library user.
+    //!
 	class document {
 	private:
-		document_interface* pimpl_;
-		document_interface* init() {
+		std::shared_ptr<document_interface> pimpl_;
+		std::shared_ptr<document_interface> init() {
  	   		return boost::detail::open_instance();
 		}
-		document(const document&);
-		document& operator=(const document&);
 	public:
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
 		document(const boost::filesystem::path& path) : pimpl_(init()) {
 			pimpl_->initialize(path);
-		}
-		//! \brief Destructor
-		//!        Closes Unsaved Documents.
-		~document() {
-			delete pimpl_;
 		}
 		//! \brief creates document using Calc/Excel given in
 		//!        the file path.
@@ -77,14 +73,17 @@ namespace boost {
 
 		//! \brief Gets a sheet instance of name str
 		//!        which can be manipulated as needed.
-		boost::sheet get_sheet_by_name(const std::string& str) {
-			return pimpl_->get_sheet_by_name(str);
+		boost::sheet get_sheet(const std::string& str) {
+			return pimpl_->get_sheet(str);
 		}
-
 		//! \brief Gets a sheet instance of that index
 		//!        which can be manipulated as needed.
-		boost::sheet get_sheet_by_index(int index) {
-			return pimpl_->get_sheet_by_index(index);
+		boost::sheet get_sheet(int index) {
+			return pimpl_->get_sheet(index);
+		}
+		//! \brief Destructor
+		//!        Closes Unsaved Documents.
+		~document() {
 		}
 		
 	};

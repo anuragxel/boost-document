@@ -7,37 +7,32 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/document/detail/sheet_interface.hpp>
-
+#include <memory>
 
 namespace boost {
-
-	 namespace detail {
-		sheet_interface* open_sheet_instance();
-	}
     //! \brief This is the main class interface to be 
     //!        exposed to the library user.
     //!
 	class sheet {
 	private:
-		sheet_interface* pimpl_;
-		sheet_interface* init() {
- 	   		return boost::detail::open_sheet_instance();
-		}
+		std::shared_ptr<sheet_interface> pimpl_;
+		//boost::shared_ptr<sheet_interface> init() {
+ 	   	//	return boost::detail::open_sheet_instance();
+		//}
 	public:
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
-		sheet() : pimpl_(init()) {
-		}
+		explicit sheet(std::shared_ptr<sheet_interface> impl) : pimpl_(impl) { }
 		//! \brief Gets the sheet name
 		//!        which is being accessed.
-		std::string get_sheet_name() {
-			return pimpl_->get_sheet_name();
+		std::string sheet_name() {
+			return pimpl_->sheet_name();
 		}
 
 		//! \brief Gets the sheet index
 		//!        which is being accessed.
-	 	int get_sheet_index() {
-	 		return pimpl_->get_sheet_index();
+	 	int sheet_index() {
+	 		return pimpl_->sheet_index();
 	 	}
 
 		//! \brief Renames the sheet to str
@@ -48,7 +43,6 @@ namespace boost {
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {
-			delete pimpl_;
 		}
 	};
 } // namespace boost
