@@ -148,6 +148,63 @@ void rename_sheet(Reference< XSpreadsheet > xSheet,std::string sheetName) {
     }
 }
 
+//! \fn
+//!
+//!
+void delete_sheet_by_name(Reference< XSpreadsheets > xSheets, const std::string& str) {
+    try {
+        xSheets->removeByName(OUString::createFromAscii(str.c_str()));
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+
+//! \fn
+//!
+//!
+std::string get_sheet_name(Reference< XSpreadsheet > xSheet) {
+    try {
+        Reference< XNamed > xName(xSheet, UNO_QUERY);
+        OUstring str = xName->getName();
+        OString o = OUStringToOString( s, RTL_TEXTENCODING_ASCII_US );
+        return std::string(s.pData->buffer);
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+/*
+//! \fn
+//!
+//!
+int get_sheet_index(Reference< XSpreadsheet > xSheet) {
+    try {
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+*/
+
+//! \fn
+//!
+//!
+int get_sheet_count(Reference< XSpreadsheets > xSheets) {
+    try {
+        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
+        return xSheetsByIndex->getCount(); 
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
 
 
 
