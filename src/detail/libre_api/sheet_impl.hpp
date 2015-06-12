@@ -15,27 +15,27 @@
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/sheet_interface.hpp>
 
-#include <boost/document/detail/libre_api/libre_sheet.hpp>
+#include <boost/document/detail/libre_api/libre_sheet_func.hpp>
 
 namespace boost { namespace detail { 
 
 class libre_sheet: public sheet_interface {
-	
+	private:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > XSpreadsheet_;
 	int index;
 	std::string name;
-
-	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent,
-		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > XSpreadsheet, int index) {
+	public:
+	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
+		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& XSpreadsheet, int& index) {
 		this->xComponent_ = xComponent;
 		this->XSpreadsheet_ = XSpreadsheet;
 		this->index = index;
 		this->name = this->sheet_name();
 	}
 
-	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent,
-		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > XSpreadsheet, std::string str) {
+	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
+		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& XSpreadsheet, std::string& str) {
 		this->xComponent_ = xComponent;
 		this->XSpreadsheet_ = XSpreadsheet;
 		this->index = this->sheet_index();

@@ -6,6 +6,8 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
+#include <memory>
+
 #include <boost/filesystem.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 
@@ -22,8 +24,8 @@ namespace boost {
 		virtual void save() = 0;
 		virtual void save_as(const boost::filesystem::path& path) = 0;
 		virtual void export_as(boost::document_file_format::type format) = 0;
-		virtual boost::sheet get_sheet(const std::string& sheet_name) = 0;
-		virtual boost::sheet get_sheet(int index) = 0;	
+		virtual std::shared_ptr<sheet_interface> get_sheet(const std::string& sheet_name) = 0;
+		virtual std::shared_ptr<sheet_interface> get_sheet(int index) = 0;	
 		virtual ~document_interface() {}
 	};	
 } // namespace boost

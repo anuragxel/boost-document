@@ -45,7 +45,7 @@
 #include <boost/document/detail/document_exception.hpp>
 
 
-namespace boost { namespace doc { namespace libre_sheet {
+namespace boost { namespace doc { namespace libre_sheet_func {
 
 ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheets > get_sheets_of_document(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheetDocument > xSheetDoc);
 ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > get_sheet_by_name(com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets, std::string sheetName);

@@ -83,10 +83,12 @@ local LIBRE_REQUIREMENTS =
 
         # Linux specific defines for OpenOffice
         <target-os>linux:<define>UNX <define>GCC <define>LINUX <define>CPPU_ENV=gcc3 <define>HAVE_GCC_VISIBILITY_FEATURE
-
+        
         # Disabling some of the GCC warnings that occur in OpenOffice/LibreOffice headers
         <toolset>gcc:<cxxflags>"-Wno-long-long -Wno-variadic-macros -Wno-pedantic"
 
+        <toolset>gcc:<cxxflags>-std=c++11
+        
         # This makes boost/document depend and link with boost_system and boost_filesystem
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
@@ -150,7 +152,7 @@ local SOURCES ;
 
 if  ( $(LIBRE_REQUIREMENTS) )
 {
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet detail/open_instance ;
+   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/open_instance ;
 }
 else if ( $(MS_REQUIREMENTS) )
 {

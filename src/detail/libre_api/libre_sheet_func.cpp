@@ -1,7 +1,7 @@
 //! \file
 //! \brief Libre Office Sheet Related Internal Functions
-#ifndef _LIBRE_SHEET_CPP
-#define _LIBRE_SHEET_CPP
+#ifndef _LIBRE_SHEET_FUNC_CPP
+#define _LIBRE_SHEET_FUNC_CPP
 
 #include <string>
 #include <iostream>
@@ -62,7 +62,7 @@ using ::rtl::OString;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 
-namespace boost { namespace doc { namespace libre_sheet {
+namespace boost { namespace doc { namespace libre_sheet_func {
 
 Reference< XSpreadsheetDocument > get_xSheetDoc(
         Reference<XComponent> xComponent) {
