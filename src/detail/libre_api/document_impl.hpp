@@ -121,7 +121,7 @@ class libre_document: public document_interface {
 
 };
 
-boost::shared_ptr<document_interface> open_libre_instance() {
+std::shared_ptr<document_interface> open_libre_instance() {
 	return std::dynamic_pointer_cast<document_interface>(std::make_shared<boost::detail::libre_document>());
 }
 

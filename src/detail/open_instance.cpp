@@ -16,7 +16,7 @@
 
 namespace boost { namespace detail { 
 
-boost::shared_ptr<document_interface> open_instance() {
+std::shared_ptr<document_interface> open_instance() {
 
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
     return open_libre_instance();
