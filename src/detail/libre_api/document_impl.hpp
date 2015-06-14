@@ -12,8 +12,10 @@
 #include <boost/filesystem.hpp>
 
 #include <boost/document/sheet.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
+
 #include <boost/document/detail/document_interface.hpp>
 #include <boost/document/detail/sheet_interface.hpp>
 
