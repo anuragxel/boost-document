@@ -32,10 +32,8 @@ namespace boost { namespace doc { namespace ms_sheet {
 void get_sheets_of_document(IDispatch*& sheets_ptr, IDispatch* book_ptr) {
 	VARIANT result;
 	VariantInit(&result);
-	VARIANT x;
-	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, book_ptr, L"Sheets", 1, x);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, book_ptr, L"Sheets", 0);
 	sheets_ptr = result.pdispVal;
-	VariantClear(&x);
 }
 
 //! \fn

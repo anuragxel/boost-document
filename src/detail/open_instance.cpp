@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include <boost/document/detail/document_interface.hpp>
+
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
 #include "libre_api/document_impl.hpp"
 #elif defined(BOOST_DOCUMENT_HAS_MS)

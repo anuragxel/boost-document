@@ -25,17 +25,19 @@
 #include <boost/document/detail/ms_api/ms_functions.hpp>
 #include <boost/document/detail/ms_api/ms_sheet.hpp>
 
+#include "sheet_impl.hpp"
+
 namespace boost { namespace detail { 
 
 class ms_document: public document_interface {
-	
+protected:
 	boost::filesystem::path doc_path_;
 	bool is_file_opened;	
 	CLSID clsid_;
 	IDispatch *appl_ptr_;
 	IDispatch *book_ptr_;
 	IDispatch *sheets_ptr_;
-
+public:
 	void initialize(const boost::filesystem::path& fpath) {
 		CoInitialize(NULL);
 		this->doc_path_ = boost::filesystem::system_complete(fpath);
@@ -101,7 +103,7 @@ class ms_document: public document_interface {
 
 	boost::sheet get_sheet(const std::string& str) {
 		if (!this->sheets_ptr_) {
-			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_,this->book_ptr_)
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::get_sheet_by_name(this->sheets_ptr_, str, sheet_ptr);
@@ -111,7 +113,7 @@ class ms_document: public document_interface {
 
 	boost::sheet get_sheet(int index) {
 		if (!this->sheets_ptr_) {
-			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_)
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		IDispatch* sheet_ptr; 
 		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index, sheet_ptr);
@@ -144,8 +146,8 @@ class ms_document: public document_interface {
 
 };
 
-document_interface* open_ms_instance() {
-	return new ms_document();
+std::shared_ptr<document_interface> open_ms_instance() {
+	return std::dynamic_pointer_cast<document_interface>(std::make_shared<boost::detail::ms_document>());
 }
 
 }} // namespace boost::detail

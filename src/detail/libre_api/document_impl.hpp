@@ -27,7 +27,7 @@
 namespace boost { namespace detail { 
 
 class libre_document: public document_interface {
-	private:	
+	protected:	
 	boost::filesystem::path doc_path_;
 	bool is_file_opened;
 	
