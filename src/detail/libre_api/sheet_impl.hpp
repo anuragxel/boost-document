@@ -20,7 +20,7 @@
 namespace boost { namespace detail { 
 
 class libre_sheet: public sheet_interface {
-	private:
+	protected:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > XSpreadsheet_;
 	int index;

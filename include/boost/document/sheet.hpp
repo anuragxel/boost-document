@@ -22,7 +22,9 @@ namespace boost {
 	public:
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
-		explicit sheet(const std::shared_ptr<sheet_interface> impl) : pimpl_(impl) { }
+		explicit sheet(const std::shared_ptr<sheet_interface> impl) : pimpl_(impl) {
+
+		}
 		//! \brief Gets the sheet name
 		//!        which is being accessed.
 		std::string sheet_name() {

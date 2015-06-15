@@ -8,7 +8,9 @@
 
 #include <iostream>
 #include <boost/filesystem.hpp>
+
 #include <boost/document/document.hpp>
+#include <boost/document/sheet.hpp>
 
 int negative_try_opening_null() {
     try {
@@ -121,6 +123,33 @@ int negative_closing_file_without_permission(boost::document& d) {
     }
 }
 
+int negative_absurd_get_sheet_string(boost::document& d) {
+    try {
+        d.open_document();
+	boost::sheet s = d.get_sheet("AbsurdSheetName");
+	d.close_document();
+        return 1;
+    }
+    catch(boost::document_exception& e) {
+        std::cout << "Test negative_get_sheet_string Passed. Expected -- " << e.what() << std::endl;
+        d.close_document();
+	return 0;
+    }
+}
+
+int negative_absurd_get_sheet_index(boost::document& d) {
+    try{
+	d.open_document();
+	boost::sheet s = d.get_sheet(5232);
+	d.close_document();
+    }
+    catch(boost::document_exception& e) {
+   	std::cout << "Test negative_get_sheet_index Passed. Expected -- " << e.what() << std::endl;
+	d.close_document();
+	return 0;
+   }
+}
+
 int exporting_to_pdf(boost::document& b) {
     try {
 		b.open_document();
@@ -151,24 +180,26 @@ int exporting_to_csv(boost::document& b) {
     }
 }
 
+
 int main(int argc, char **argv) {
     
+    /*
 	boost::document b("Excel_Test1.xlsx");
 	boost::document d("Excel_Test2.xlsx");
 	boost::document c("Excel_Test3.xlsx");
+    */
 
 //	b.open_document();
 //	b.close_document();
 //	return 0;
 	
-	/*
+    boost::document b("Test1.ods");
     //Create a document. Change to the correct path there to run the tests.
-	boost::document c("Test2.ods");
+    boost::document c("Test2.ods");
     // Create a document, change the rwx permission to 000. Change to the correct path there to run the test.
     boost::document d("Test3.ods");
-	*/
+	
     int rv = 0;
-
     // Sanity Checks
 	rv += negative_try_opening_null();
 	rv += negative_try_exporting_null();
@@ -180,8 +211,8 @@ int main(int argc, char **argv) {
 	rv += negative_opening_file_without_permission(d);
     rv += negative_exporting_file_without_permission(d);
     rv += negative_closing_file_without_permission(d);
-    
-
+    rv += negative_absurd_get_sheet_string(b);
+    rv += negative_absurd_get_sheet_index(b);
     // Positive Checks
 	rv += exporting_to_pdf(b);
 	rv += exporting_to_csv(b);
@@ -190,7 +221,7 @@ int main(int argc, char **argv) {
     if (rv > 0) {
         std::cout << rv <<" Tests Failed. Look at Log for more information." << std::endl;
     }
-
+   
     return rv;
 }
 
