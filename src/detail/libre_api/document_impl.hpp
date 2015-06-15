@@ -27,7 +27,7 @@ namespace boost { namespace detail {
 class libre_document: public document_interface {
 	private:	
 	boost::filesystem::path doc_path_;
-	bool is_file_opened;	
+	bool is_file_opened;
 	
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent_;
 	
@@ -43,6 +43,7 @@ class libre_document: public document_interface {
     		}
 		this->xComponent_ = NULL;
 		this->xSheets_ = NULL;
+		this->xSheetDoc_ = NULL;
 		this->is_file_opened = false;
 	}
 
@@ -91,7 +92,7 @@ class libre_document: public document_interface {
 
  	boost::sheet get_sheet(const std::string& str) {
 		if(this->xSheets_ == NULL) {
-			if(this->xSheetDoc_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
 				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
 			}
 			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
@@ -112,6 +113,30 @@ class libre_document: public document_interface {
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
  	}
 
+ 	int sheet_count() {
+ 		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
+		}
+		return boost::doc::libre_sheet_func::get_sheet_count(this->xSheets_);
+ 	}
+
+ 	void delete_sheet(const std::string& str) {
+ 		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
+		}
+		boost::doc::libre_sheet_func::delete_sheet_by_name(this->xSheets_,str);
+ 	}
+
+ 	void delete_sheet(int index) {
+ 		boost::throw_exception(document_exception(
+            		"Function Un-implemented. :("));
+ 	}
 
  	~libre_document() {
  		if(this->is_file_opened) {

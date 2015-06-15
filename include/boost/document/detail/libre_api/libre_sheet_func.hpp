@@ -51,6 +51,11 @@ namespace boost { namespace doc { namespace libre_sheet_func {
 ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > get_sheet_by_name(com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets, std::string sheetName);
 ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > get_sheet_by_index(com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets, int index);
 ::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > get_xSheetDoc(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent> xComponent);
+void rename_sheet(::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet,const std::string& sheetName);
+void delete_sheet_by_name(::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets, const std::string& str);
+std::string get_sheet_name(::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet);
+int get_sheet_count(::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets);
+int get_sheet_index(::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet);
 
 }}}
 #endif

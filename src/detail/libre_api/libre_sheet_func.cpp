@@ -137,7 +137,7 @@ Reference < XSpreadsheet > get_sheet_by_index(
 //! \fn
 //!
 //!
-void rename_sheet(Reference< XSpreadsheet > xSheet,std::string sheetName) {
+void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName) {
     try {
         Reference< XNamed > xName(xSheet, UNO_QUERY);
         xName->setName(OUString::createFromAscii(sheetName.c_str()));
@@ -177,19 +177,20 @@ std::string get_sheet_name(Reference< XSpreadsheet > xSheet) {
     }
 }
 
-/*
+
 //! \fn
 //!
 //!
 int get_sheet_index(Reference< XSpreadsheet > xSheet) {
     try {
+        return -1;
     }
     catch( Exception &e ){
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
         boost::throw_exception(document_exception(o.pData->buffer));
     }
 }
-*/
+
 
 //! \fn
 //!

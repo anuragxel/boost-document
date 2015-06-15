@@ -76,10 +76,25 @@ namespace boost {
 		boost::sheet get_sheet(const std::string& str) {
 			return pimpl_->get_sheet(str);
 		}
+		
 		//! \brief Gets a sheet instance of that index
 		//!        which can be manipulated as needed.
 		boost::sheet get_sheet(int index) {
 			return pimpl_->get_sheet(index);
+		}
+
+		//! \brief Deletes the sheet of name str
+		void delete_sheet(const std::string& str) {
+			pimpl_->delete_sheet(str);
+		}
+
+		//! \brief Deletes the sheet of name str
+		void delete_sheet(int index) {
+			pimpl_->delete_sheet(index);
+		}
+
+		int sheet_count() {
+			return pimple->sheet_count();
 		}
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.
