@@ -102,6 +102,10 @@ public:
 
 
 	boost::sheet get_sheet(const std::string& str) {
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
@@ -112,27 +116,49 @@ public:
 	}
 
 	boost::sheet get_sheet(int index) {
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		IDispatch* sheet_ptr; 
-		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index, sheet_ptr);
+		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index + 1, sheet_ptr);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
 	int sheet_count() {
-		boost::throw_exception(document_exception(
-			"Function Un-implemented. :("));
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		return boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr);
 	}
 
 	void delete_sheet(const std::string& str) {
-		boost::throw_exception(document_exception(
-			"Function Un-implemented. :("));
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		boost::doc::ms_sheet::delete_sheet_by_name(this->sheets_ptr_,str);
 	}
 
 	void delete_sheet(int index) {
-		boost::throw_exception(document_exception(
-			"Function Un-implemented. :("));
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		boost::doc::ms_sheet::delete_sheet_by_index(this->sheets_ptr_,index+1); // Excel Sheets are 1-indexed. Boost.Document sheets are zero-indexed.
 	}
 
  	~ms_document() {

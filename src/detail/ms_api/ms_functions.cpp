@@ -53,7 +53,7 @@ int get_filetype_from_file_ext(const std::string extension) {
 		return 42;
 	}
 }
-//! \fn Reutrns a string of type BSTR to be used 
+//! \fn Returns a string of type BSTR to be used 
 //!     in all the COM API calls.
 //!
 //! Important to remember remember to delete the  
@@ -65,6 +65,21 @@ BSTR string_to_BSTR(const std::string& str) {
 	BSTR wsdata = ::SysAllocStringLen(NULL, wslen);
 	::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), wsdata, wslen);
 	return wsdata;
+}
+
+//! \fn Returns a string of type std::string
+//!     given a BSTR used in all the COM API calls.
+//!
+//! Important to remember remember to delete the  
+//! BSTR later. (BSTR is a pointer to another MS String type)
+//! Either do delete [] ptr or VariantClear(&variant) as 
+//! appropriate.
+std::string BSTR_to_string(const BSTR bstr) {
+	int wslen = ::SysStringLen(bstr);
+	int len = ::WideCharToMultiByte(CP_ACP, 0, (wchar_t*)bstr, wslen, NULL, 0, NULL, NULL);
+	std::string str(len, '\0');
+	len = ::WideCharToMultiByte(CP_ACP, 0, (wchar_t*)bstr, wslen, &str[0], len, NULL, NULL);
+	return str;
 }
 
 //! \fn Helper function which makes the actual COM API Call

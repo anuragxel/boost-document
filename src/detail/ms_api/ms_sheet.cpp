@@ -67,6 +67,25 @@ void get_sheet_by_index(IDispatch *sheets_ptr, int sheet_index, IDispatch*& shee
 	sheet_ptr = result.pdispVal;
 }
 
+
+//! \fn
+//!
+//!
+void delete_sheet_by_name(IDispatch *sheets_ptr, const std::string& str) {
+	IDispatch *sheet_ptr;
+	get_sheet_by_name(sheets_ptr, str, sheet_ptr);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, NULL, sheet_ptr, L"Delete", 0);
+}
+
+//! \fn
+//!
+//!
+void delete_sheet_by_index(IDispatch *sheets_ptr, int index) {
+	IDispatch *sheet_ptr;
+	get_sheet_by_index(sheets_ptr, index, sheet_ptr);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, NULL, sheet_ptr, L"Delete", 0);
+}
+
 //! \fn
 //!
 //!
@@ -80,9 +99,42 @@ void get_active_sheet(IDispatch *sheets_ptr, IDispatch*& sheet_ptr) {
 //! \fn
 //!
 //!
-void activate_sheet(IDispatch* sheet_ptr) {
+void activate_sheet(IDispatch *sheet_ptr) {
 	ms_func::auto_wrap_helper(DISPATCH_METHOD, NULL, sheet_ptr, L"Activate", 0);
 }
-	
+
+//! \fn
+//!
+//!
+int get_sheet_count(IDispatch *sheets_ptr) {
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"Count", 0);
+	return result.intVal;
+}
+
+//! \fn
+//!
+//!
+std::string get_sheet_name(IDispatch *sheet_ptr) {
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheet_ptr, L"Name", 0);
+	std::string str = boost::doc::ms_functions::BSTR_to_string(result.bstrVal);
+	VariantClear(&result);
+	return str;
+}
+
+//! \fn
+//!
+//!
+int get_sheet_index(IDispatch *sheet_ptr) {
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheet_ptr, L"Index", 0);
+	return result.intVal;
+}
+
 }}}
+
 #endif

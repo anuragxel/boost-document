@@ -30,12 +30,16 @@ namespace boost {
 		public:
 			ms_sheet(IDispatch* sheet_ptr, int index) {
 				this->sheet_ptr_ = sheet_ptr;
-				this->index = index;
+				this->index = index + 1;
+				this->name = boost::doc::ms_sheet::get_sheet_name(this->sheet_ptr_);
+				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_);
 			}
 
 			ms_sheet(IDispatch* sheet_ptr, std::string& str) {
 				this->sheet_ptr_ = sheet_ptr;
 				this->name = str;
+				this->index = boost::doc::ms_sheet::get_sheet_index(this->sheet_ptr_);
+				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_);
 			}
 
 			std::string sheet_name() {

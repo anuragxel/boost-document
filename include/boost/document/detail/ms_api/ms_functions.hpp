@@ -24,9 +24,13 @@ void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr);
 void set_visibility(IDispatch *appl_ptr);
 void unset_visibility(IDispatch *appl_ptr);
 void close_app(IDispatch*& appl_ptr);
+
 int get_filetype_from_file_ext(const std::string extension);
+
 void supress_warnings(IDispatch *appl_ptr, bool sure);
+
 BSTR string_to_BSTR(const std::string& str);
+std::string BSTR_to_string(const BSTR bstr);
 
 
 void open_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, IDispatch*& book_ptr);
