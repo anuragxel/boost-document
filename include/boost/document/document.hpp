@@ -94,7 +94,7 @@ namespace boost {
 		}
 
 		int sheet_count() {
-			return pimple->sheet_count();
+			return pimpl_->sheet_count();
 		}
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.

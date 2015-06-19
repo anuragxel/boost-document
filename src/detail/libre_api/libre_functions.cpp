@@ -101,6 +101,30 @@ std::string convert_extension_to_pdf_filter(const std::string extension) {
     }
 }
 
+OUString get_new_doc_url_from_ext(const std::string extension) {
+    if( extension == ".doc"  ||
+        extension == ".docx" ||
+        extension == ".txt"  ||
+        extension == ".rtf"  ||
+        extension == ".html" ||
+        extension == ".htm"  ||
+        extension == ".xml"  ||
+        extension == ".odt"  ||
+        extension == ".wps"  ||
+        extension == ".wpd" ) {
+            return OUString::createFromAscii("private:factory/swriter");
+    }
+    else if( extension == ".xls"  || extension == ".xlsb" || extension == ".ods" ) {
+            return OUString::createFromAscii("private:factory/scalc");
+    }
+    else if (extension == ".ppt"  || extension == ".pptx" || extension == ".odp" ) {
+            return OUString::createFromAscii("private:factory/simpress");
+    }
+    else {
+        return OUString::createFromAscii("");
+    }
+}
+
 //! \fn Helper which returns the OfficeServiceManager
 //!        if connection is established.
 //!
@@ -400,6 +424,51 @@ void save_libre(const boost::filesystem::path &inputPath,
         }
     }
 }
+
+//! \fn Creates document given in
+//!        the file path.
+Reference< xComponent > create_libre(
+        const boost::filesystem::path &inputPath) {
+
+    Reference< XMultiServiceFactory > rOfficeServiceManager;
+    rOfficeServiceManager = connect_to_libre_server();
+
+    if(!rOfficeServiceManager.is()) {
+        boost::throw_exception(document_exception(
+              "Error: LibreOffice Server is not running.\n"));
+    }
+    //get the desktop service using createInstance returns an XInterface type
+    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
+        OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
+    
+    //query for the XComponentLoader interface
+    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
+    Reference< XComponent > xComponent;
+
+    //get an instance of the spreadsheet
+    try {
+        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
+        frameProperties[0].Name = OUString::createFromAscii("Hidden");
+        frameProperties[0].Value <<= (sal_Bool)true;
+        xComponent = rComponentLoader->loadComponentFromURL(
+            get_new_doc_url_from_ext(inputPath.extension().string()),
+            OUString::createFromAscii("_default"),
+            0,
+            frameProperties
+        );
+        if( !rComponentLoader.is() ){
+            boost::throw_exception(document_exception(
+                "Error: XComponentloader not successfully instantiated"));
+        }
+        save_libre(inputPath,xComponent);
+    }
+    catch( Exception &e ){
+        //boost::throw_exception(document_exception(
+        //    "Error: Unable to Load File. Check Permissions."));
+    }
+    return xComponent;
+}
+
 
 }}} // namespace boost::doc::libre_functions
 

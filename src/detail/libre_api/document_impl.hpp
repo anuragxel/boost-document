@@ -50,7 +50,10 @@ class libre_document: public document_interface {
 	}
 
 	void create() {
-
+		if(! this->is_file_opened) {
+			this->xComponent_ =  boost::doc::libre_functions::create_libre(this->doc_path_);
+			this->is_file_opened = true;
+		}
 	}
 
 	void open() {
