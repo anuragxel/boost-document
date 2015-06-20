@@ -233,12 +233,13 @@ int get_valid_sheet_count(boost::document& b) {
 
 int insert_new_sheet(boost::document& b) {
     try {
-        b.insert_sheet("Vatika");
+        boost::sheet s1 = b.insert_sheet("Vatika");
         BOOST_REQUIRE(b.sheet_count() == 3); // This has three sheets now. :)
+        std::cerr << "Test insert_new_sheet Passed." << std::endl;
         return 0;
     }
     catch(boost::document_exception& e) {
-        std::cerr << "Test get_valid_sheet_count Failed." << std::endl;
+        std::cerr << "Test insert_new_sheet Failed." << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
     }
@@ -247,11 +248,12 @@ int insert_new_sheet(boost::document& b) {
 int delete_new_sheet(boost::document& b) {
     try {
         b.delete_sheet("Vatika");
-        BOOST_REQUIRE(b.sheet_count() == 2); // This has three sheets now. :)
+        BOOST_REQUIRE(b.sheet_count() == 2); // Again 2. :)
+        std::cerr << "Test delete_new_sheet Passed." << std::endl;
         return 0;
     }
     catch(boost::document_exception& e) {
-        std::cerr << "Test get_valid_sheet_count Failed." << std::endl;
+        std::cerr << "Test delete_new_sheet Failed." << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
     }

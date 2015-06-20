@@ -173,13 +173,14 @@ int get_sheet_count(Reference< XSpreadsheets > xSheets) {
 //! \fn
 //!
 //!
-void insert_sheet_by_name(Reference< XSpreadsheets> xSheets,std::string sheetName) {
+Reference < XSpreadsheet >  insert_sheet_by_name(Reference< XSpreadsheets> xSheets,std::string sheetName) {
     if(sheetName.empty() or sheetName == "") {
         boost::throw_exception(document_exception(
             "Error: Sheet Name Not Specified.."));
     }
     try {
         xSheets->insertNewByName(OUString::createFromAscii(sheetName.c_str()), (short)0);
+        return get_sheet_by_name(xSheets, sheetName);
     }
     catch( Exception &e ){
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
