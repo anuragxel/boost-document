@@ -308,11 +308,6 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
 void export_libre(const boost::filesystem::path& inputPath, 
                                         boost::document_file_format::type format,
                                         Reference < XComponent > xComponent) {
-    bool is_opened = true;
-    if(xComponent == NULL) {
-        xComponent = get_xComponent_from_path(inputPath);
-        is_opened = false;
-    }
     if( !xComponent.is() ) {
         boost::throw_exception(document_exception(
             "Error: Unable to load Document for exporting. Check Permissions."));
@@ -365,9 +360,6 @@ void export_libre(const boost::filesystem::path& inputPath,
                 "Error: Unable to export Document. Check Permissions."));
         }
     }
-    if(!is_opened) {
-        close_libre(inputPath,false,xComponent);
-    }
 }
 
 
@@ -397,11 +389,13 @@ void close_libre(
                 xCloseable->close((sal_Bool)true);
             }
             catch (Exception &e) {
-                boost::throw_exception(document_exception("Error: Close XCloseable object failed."));
+                //boost::throw_exception(document_exception("Error: Close XCloseable object failed."));
             }
         }
         else { // No xClosable. Use dispose to handle this.
                 // Unreachable Condition. Hopefully. :)
+        //Reference < XComponent > xDisposeable(xModel, UNO_QUERY);  
+            xComponent->dispose(); 
         }
     }
 }

@@ -38,6 +38,10 @@ class libre_document: public document_interface {
 	public:
 	void initialize(const boost::filesystem::path& fpath) {
 		boost::doc::libre_functions::set_bootstrap_offapi();
+		if(fpath.empty() or fpath == "") {
+			boost::throw_exception(document_exception(
+            		"Error: No path given."));	
+		}
 		this->doc_path_ = boost::filesystem::system_complete(fpath);
 		this->xComponent_ = NULL;
 		this->xSheets_ = NULL;
@@ -64,6 +68,7 @@ class libre_document: public document_interface {
  	void close() {
  		if(this->is_file_opened) {
 			boost::doc::libre_functions::close_libre(this->doc_path_, false, this->xComponent_);
+			this->xComponent_ = NULL;
 			this->is_file_opened = false;
 		}
 		else {
@@ -90,6 +95,18 @@ class libre_document: public document_interface {
  	
  	void export_as(boost::document_file_format::type format) {
  		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
+ 	}
+
+ 	boost::sheet insert_sheet(const std::string& str) {
+		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
+		}
+		std::string new_str(str);
+		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::insert_sheet_by_name(this->xSheets_,new_str);
+		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet(const std::string& str) {

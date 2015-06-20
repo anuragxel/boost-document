@@ -23,7 +23,7 @@ class libre_sheet: public sheet_interface {
 
 	protected:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
-	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;
+	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;	
 	int index;
 	std::string name;
 
@@ -52,7 +52,7 @@ class libre_sheet: public sheet_interface {
 		return boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);
 	}
 
-	void remame_sheet(const std::string& str) {
+	void rename_sheet(const std::string& str) {
 		if(str.empty()) {
 			boost::throw_exception(document_exception("Error: String Passed is Empty."));
    		}

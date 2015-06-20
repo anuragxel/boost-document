@@ -39,8 +39,8 @@ namespace boost {
 
 		//! \brief Renames the sheet to str
 		//!        which is being accessed.
-	 	void remame_sheet(const std::string& str) {
-	 		pimpl_->remame_sheet(str);
+	 	void rename_sheet(const std::string& str) {
+	 		pimpl_->rename_sheet(str);
 	 	}
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.

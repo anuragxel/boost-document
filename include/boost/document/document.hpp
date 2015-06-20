@@ -70,6 +70,11 @@ namespace boost {
 		void export_document(boost::document_file_format::type format = boost::document_file_format::PDF) {
 			pimpl_->export_as(format);
 		}
+		//! \brief Gets a sheet instance of name str
+		//!        which can be manipulated as needed.
+		boost::sheet insert_sheet(const std::string& str) {
+			return pimpl_->insert_sheet(str);
+		}
 
 		//! \brief Gets a sheet instance of name str
 		//!        which can be manipulated as needed.

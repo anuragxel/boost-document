@@ -85,7 +85,6 @@ Reference< XSpreadsheetDocument > get_xSheetDoc(
 //!
 Reference< XSpreadsheets > get_sheets_of_document(
             Reference < XSpreadsheetDocument > xSheetDoc) {
-
     try  {
         Reference< XSpreadsheets > xSheets = xSheetDoc->getSheets();
         return xSheets;
@@ -102,10 +101,14 @@ Reference< XSpreadsheets > get_sheets_of_document(
 //!
 Reference < XSpreadsheet > get_sheet_by_name(
             Reference< XSpreadsheets > xSheets,
-                std::string sheetName) {
+                const std::string& sheetName) {
+    if(sheetName.empty() or sheetName == "") {
+        boost::throw_exception(document_exception(
+            "Error: Sheet Name Not Specified.."));
+    }
     try { 
         Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str())); 
-        Reference < XSpreadsheet > xSheet (xSheetAny, UNO_QUERY);
+        Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
         return xSheet;
     }
     catch( Exception &e ){
@@ -124,7 +127,7 @@ Reference < XSpreadsheet > get_sheet_by_index(
     try {
         Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
         Any xSheetAny = xSheetsByIndex->getByIndex( (short)index ); 
-        Reference < XSpreadsheet > xSheet (xSheetAny, UNO_QUERY);
+        Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
         return xSheet;
     }
     catch( Exception &e ){
@@ -138,6 +141,10 @@ Reference < XSpreadsheet > get_sheet_by_index(
 //!
 //!
 void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName) {
+    if(sheetName.empty() or sheetName == "") {
+        boost::throw_exception(document_exception(
+            "Error: Sheet Name Not Specified.."));
+    }
     try {
         Reference< XNamed > xName(xSheet, UNO_QUERY);
         xName->setName(OUString::createFromAscii(sheetName.c_str()));
@@ -151,7 +158,43 @@ void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName)
 //! \fn
 //!
 //!
-void delete_sheet_by_name(Reference< XSpreadsheets > xSheets, const std::string& str) {
+int get_sheet_count(Reference< XSpreadsheets > xSheets) {
+    try {
+        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
+        return xSheetsByIndex->getCount();
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+
+//! \fn
+//!
+//!
+void insert_sheet_by_name(Reference< XSpreadsheets> xSheets,std::string sheetName) {
+    if(sheetName.empty() or sheetName == "") {
+        boost::throw_exception(document_exception(
+            "Error: Sheet Name Not Specified.."));
+    }
+    try {
+        xSheets->insertNewByName(OUString::createFromAscii(sheetName.c_str()), (short)0);
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+//! \fn
+//!
+//!
+void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
+    if(str.empty() or str == "") {
+        boost::throw_exception(document_exception(
+            "Error: Sheet Name Not Specified.."));
+    }
     try {
         xSheets->removeByName(OUString::createFromAscii(str.c_str()));
     }
@@ -191,20 +234,6 @@ int get_sheet_index(Reference< XSpreadsheet > xSheet) {
     }
 }
 
-
-//! \fn
-//!
-//!
-int get_sheet_count(Reference< XSpreadsheets > xSheets) {
-    try {
-        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
-        return xSheetsByIndex->getCount(); 
-    }
-    catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
-    }
-}
 
 
 
