@@ -114,6 +114,7 @@ int negative_closing_file_without_permission(boost::document& d) {
 
 
 
+
 // Sheet Related Tests.
 int negative_absurd_get_sheet_string(boost::document& d) {
     try {

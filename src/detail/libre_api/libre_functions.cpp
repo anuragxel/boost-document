@@ -379,7 +379,7 @@ void close_libre(
     if(xModel != NULL) { 
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-        if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified() && save == true) {
+        if(xStorable != NULL && xModifiable != NULL && save == true) {
             xStorable->storeToURL(get_url_from_path(inputPath), 
                 Sequence < ::com::sun::star::beans::PropertyValue >());
         }
