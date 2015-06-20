@@ -280,11 +280,14 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
              xComponentContext ), UNO_QUERY );     
 
     try {
+        Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
+        frameProperties[0].Name = OUString::createFromAscii("Hidden");
+        frameProperties[0].Value <<= (sal_Bool)true;
         Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
             get_url_from_path(path), 
             OUString::createFromAscii("_default"), 
             0,
-            Sequence < ::com::sun::star::beans::PropertyValue >() 
+            frameProperties
         );
         Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
         if( !xComponentLoader.is() ){
@@ -406,14 +409,14 @@ void close_libre(
 
 //! \fn saves document using Calc/Excel given in
 //!        the file path.
-void save_libre(const boost::filesystem::path &inputPath, 
+void save_libre(const boost::filesystem::path& inputPath, 
                                             Reference < XComponent > xComponent) {
     Reference < XModel > xModel(xComponent, UNO_QUERY);
     if(xModel != NULL) { 
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         try {
-            if(xStorable != NULL && xModifiable != NULL && xModifiable->isModified()) {
+            if(xStorable != NULL && xModifiable != NULL) {
                 xStorable->storeToURL(get_url_from_path(inputPath), 
                     Sequence < ::com::sun::star::beans::PropertyValue >());
             }
@@ -427,8 +430,8 @@ void save_libre(const boost::filesystem::path &inputPath,
 
 //! \fn Creates document given in
 //!        the file path.
-Reference< xComponent > create_libre(
-        const boost::filesystem::path &inputPath) {
+Reference< XComponent > create_libre(
+        const boost::filesystem::path& inputPath) {
 
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = connect_to_libre_server();
@@ -460,7 +463,6 @@ Reference< xComponent > create_libre(
             boost::throw_exception(document_exception(
                 "Error: XComponentloader not successfully instantiated"));
         }
-        save_libre(inputPath,xComponent);
     }
     catch( Exception &e ){
         //boost::throw_exception(document_exception(

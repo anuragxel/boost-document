@@ -67,7 +67,7 @@ namespace boost {
 		//! \brief Exports document using Calc/Excel given in
 		//!        the file path and the file format. Default
 		//!        format is PDF.
-		void export_document(boost::document_file_format::type format = document_file_format::PDF) {
+		void export_document(boost::document_file_format::type format = boost::document_file_format::PDF) {
 			pimpl_->export_as(format);
 		}
 
