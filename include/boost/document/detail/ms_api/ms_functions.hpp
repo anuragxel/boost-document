@@ -18,7 +18,7 @@
 
 namespace boost { namespace doc { namespace ms_functions {
 
-HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...);
+void auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...);
 CLSID get_clsid();
 void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr);
 void set_visibility(IDispatch *appl_ptr);

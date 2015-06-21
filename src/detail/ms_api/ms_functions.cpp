@@ -3,6 +3,11 @@
 #ifndef _MS_FUNCTIONS_CPP
 #define _MS_FUNCTIONS_CPP
 
+//          Copyright Anurag Ghosh 2015.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -16,6 +21,7 @@
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/ms_api/ms_functions.hpp>
 #include <boost/document/detail/document_exception.hpp>
+#include <boost/document/detail/ms_api/com_variant.hpp>
 
 namespace boost { namespace doc { namespace ms_functions {
 
@@ -91,7 +97,7 @@ std::string BSTR_to_string(const BSTR bstr) {
 //! LPOLESTR ptName is the method to be performed
 //! VARIANT *pvResult can be used to obtain the results.
 //! int autoType can be DISPATCH_PROPERTYGET, DISPATCH_PROPERTYPUT, DISPATCH_METHOD
-HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...) {
+void auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLESTR ptName, int cArgs...) {
     va_list marker;
     va_start(marker, cArgs);
     if(!pDisp) {
@@ -126,7 +132,6 @@ HRESULT auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOL
 			std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr)));
 	}
 	va_end(marker);
-	return hr;
 }
 
 //! \fn Helper Function to get the CLSID of The Excel
@@ -157,20 +162,16 @@ void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 //!     Application GUI.
 //!
 void set_visibility(IDispatch *appl_ptr) {
-	VARIANT prop;
-	prop.vt = VT_I4;
-	prop.lVal = 1;
-	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
+	boost::detail::com_variant prop(1);
+	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop.native());
 }
 
 //! \fn Unsets the visibility of the
 //!     Application GUI.
 //!
 void unset_visibility(IDispatch *appl_ptr) {
-	VARIANT prop;
-	prop.vt = VT_I4;
-	prop.lVal = 0;
-	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop);
+	boost::detail::com_variant prop(0);
+	auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, appl_ptr, L"Visible", 1, prop.native());
 }
 
 //! \fn Suppress Warnings that are displayed as user
@@ -217,12 +218,9 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 	{
 		VARIANT result;
 		VariantInit(&result);
-		VARIANT x;
-		x.vt = VT_BSTR;
-		x.bstrVal = string_to_BSTR(fpath.string());
-		auto_wrap_helper(DISPATCH_METHOD, &result, pXlBooks, L"Open", 1, x);
+		boost::detail::com_variant x(fpath);
+		auto_wrap_helper(DISPATCH_METHOD, &result, pXlBooks, L"Open", 1, x.native());
 		book_ptr = result.pdispVal;
-		VariantClear(&x);
 	}
 }
 
@@ -234,13 +232,9 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	IDispatch*& book_ptr) {
 	
-	VARIANT vt_file_name;
-	vt_file_name.vt = VT_BSTR;
-	vt_file_name.bstrVal = string_to_BSTR(inputPath.string());
-
-	VARIANT vt_format;
-	vt_format.vt = VT_I4;
-	vt_format.lVal = get_filetype_from_file_ext(inputPath.extension().string());
+	boost::detail::com_variant vt_file_name(inputPath);
+	
+	boost::detail::com_variant vt_format(get_filetype_from_file_ext(inputPath.extension().string()));
 	
 	supress_warnings(appl_ptr, true);
 
@@ -249,11 +243,13 @@ void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	}
 
 	// Reverse order of params is important.
-	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2, vt_format, vt_file_name);
+	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2, 
+		vt_format.native(),
+		vt_file_name.native()
+		);
 	
 	supress_warnings(appl_ptr, false);
 	
-	VariantClear(&vt_file_name);
 }
 
 //! \fn Exports the file in the filepath
@@ -279,20 +275,14 @@ void export_ms(const boost::filesystem::path& fpath,
 	if (format == boost::document_file_format::PDF) {
 		out_path.replace_extension(".pdf");
 		
-		VARIANT vt_file_name;
-		vt_file_name.vt = VT_BSTR;
-		vt_file_name.bstrVal = string_to_BSTR(out_path.string());
-
-		VARIANT vt_format;
-		vt_format.vt = VT_I4;
-		vt_format.lVal = 0; // XlFixedFormatType::xlTypePDF
-
+		boost::detail::com_variant vt_file_name(out_path);
+		
+		boost::detail::com_variant vt_format(0);
+		
 		// Reverse order of params is important.
 		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2, 
-			vt_file_name,
-			vt_format);
-
-		VariantClear(&vt_file_name);
+			vt_file_name.native(),
+			vt_format.native());
 	}
 	else if (format == boost::document_file_format::CSV) {
 		out_path.replace_extension(".csv");

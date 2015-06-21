@@ -100,6 +100,19 @@ public:
 		boost::doc::ms_functions::export_ms(this->doc_path_, format, this->appl_ptr_, this->book_ptr_);
  	}
 
+	boost::sheet insert_sheet(const std::string& str) {
+		if (!this->is_file_opened) {
+			boost::throw_exception(document_exception(
+				"Error: Document Not Open."));
+		}
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		IDispatch* sheet_ptr;
+		boost::doc::ms_sheet::insert_new_sheet(this->sheets_ptr_, str, sheet_ptr);
+		std::string new_str(str);
+		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr, new_str)));
+	}
 
 	boost::sheet get_sheet(const std::string& str) {
 		if (!this->is_file_opened) {
@@ -136,7 +149,7 @@ public:
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		return boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr);
+		return boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr_);
 	}
 
 	void delete_sheet(const std::string& str) {

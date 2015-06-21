@@ -23,6 +23,10 @@ namespace boost { namespace doc { namespace ms_sheet {
 
 void get_sheets_of_document(IDispatch*& sheets_ptr, IDispatch* book_ptr);
 
+void rename_sheet(IDispatch* sheet_ptr, const std::string& str);
+
+void insert_new_sheet(IDispatch *sheets_ptr, const std::string& sheet_name, IDispatch*& sheet_ptr);
+
 void get_sheet_by_name(IDispatch *sheets_ptr, const std::string& sheet_name, IDispatch*& sheet_ptr);
 void get_sheet_by_index(IDispatch *sheets_ptr, int sheet_index, IDispatch*& sheet_ptr);
 

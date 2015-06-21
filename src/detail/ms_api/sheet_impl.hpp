@@ -30,7 +30,7 @@ namespace boost {
 		public:
 			ms_sheet(IDispatch* sheet_ptr, int index) {
 				this->sheet_ptr_ = sheet_ptr;
-				this->index = index + 1;
+				this->index = index + 1; // we store index as per implementation needs
 				this->name = boost::doc::ms_sheet::get_sheet_name(this->sheet_ptr_);
 				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_);
 			}
@@ -39,7 +39,7 @@ namespace boost {
 				this->sheet_ptr_ = sheet_ptr;
 				this->name = str;
 				this->index = boost::doc::ms_sheet::get_sheet_index(this->sheet_ptr_);
-				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_);
+				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_); 
 			}
 
 			std::string sheet_name() {
@@ -47,13 +47,15 @@ namespace boost {
 			}
 
 			int sheet_index() {
-				return this->index;
+				return this->index - 1; // we return index as we represent it as.
 			}
 
-			void remame_sheet(const std::string& str) {
-				if (str.empty()) {
+			void rename_sheet(const std::string& str) {
+				if (str.empty() || str == "") {
 					boost::throw_exception(document_exception("Error: String Passed is Empty."));
 				}
+				boost::doc::ms_sheet::rename_sheet(this->sheet_ptr_, str);
+				this->name = str;
 			}
 
 			~ms_sheet() {

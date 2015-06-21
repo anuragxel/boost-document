@@ -150,14 +150,14 @@ project boost/document
 local SOURCES ;
 
 
-if  ( $(LIBRE_DEFINES) )
-{
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/open_instance ;
-}
-else if ( $(MS_DEFINES) )
-{
+#if  ( $(LIBRE_DEFINES) )
+#{
+#   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/open_instance ;
+#}
+#else if ( $(MS_DEFINES) )
+#{
    SOURCES = detail/ms_api/ms_functions detail/ms_api/ms_sheet detail/open_instance ;
-}
+#}
 
 lib boost_document
     :

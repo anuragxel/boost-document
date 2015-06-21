@@ -22,6 +22,8 @@
 #include <boost/document/detail/ms_api/ms_functions.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
+#include <boost/document/detail/ms_api/com_variant.hpp>
+
 namespace ms_func = boost::doc::ms_functions;
 
 namespace boost { namespace doc { namespace ms_sheet {
@@ -41,15 +43,12 @@ void get_sheets_of_document(IDispatch*& sheets_ptr, IDispatch* book_ptr) {
 //!
 void get_sheet_by_name(IDispatch *sheets_ptr, const std::string& sheet_name, IDispatch*& sheet_ptr) {
 	VARIANT result;
-	VARIANT vt_sheet;
+	boost::detail::com_variant vt_sheet(sheet_name);
 	VariantInit(&result);
-	vt_sheet.vt = VT_BSTR;
-	vt_sheet.bstrVal = ms_func::string_to_BSTR(sheet_name);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"Sheets", 1,
-		vt_sheet
+		vt_sheet.native()
 		);
 	sheet_ptr = result.pdispVal;
-	VariantClear(&vt_sheet);
 }
 
 //! \fn
@@ -57,12 +56,10 @@ void get_sheet_by_name(IDispatch *sheets_ptr, const std::string& sheet_name, IDi
 //!
 void get_sheet_by_index(IDispatch *sheets_ptr, int sheet_index, IDispatch*& sheet_ptr) {
 	VARIANT result;
-	VARIANT vt_sheet;
+	boost::detail::com_variant vt_sheet(sheet_index);
 	VariantInit(&result);
-	vt_sheet.vt = VT_I4;
-	vt_sheet.lVal = sheet_index;
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"Sheets", 1,
-		vt_sheet
+		vt_sheet.native()
 		);
 	sheet_ptr = result.pdispVal;
 }
@@ -110,7 +107,7 @@ int get_sheet_count(IDispatch *sheets_ptr) {
 	VARIANT result;
 	VariantInit(&result);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheets_ptr, L"Count", 0);
-	return result.intVal;
+	return result.lVal;
 }
 
 //! \fn
@@ -132,8 +129,32 @@ int get_sheet_index(IDispatch *sheet_ptr) {
 	VARIANT result;
 	VariantInit(&result);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheet_ptr, L"Index", 0);
-	return result.intVal;
+	return result.lVal;
 }
+
+//! \fn
+//!
+//!
+void rename_sheet(IDispatch* sheet_ptr, const std::string& sheet_name) {
+	boost::detail::com_variant vt_sheet_name(sheet_name);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, sheet_ptr, L"Name", 1,
+		vt_sheet_name.native()
+		);
+
+}
+
+
+//! \fn
+//!
+//!
+void insert_new_sheet(IDispatch *sheets_ptr, const std::string& sheet_name, IDispatch*& sheet_ptr) {
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_METHOD, &result, sheets_ptr, L"Add", 0);
+	sheet_ptr = result.pdispVal;
+	rename_sheet(sheet_ptr, sheet_name);
+}
+
 
 }}}
 

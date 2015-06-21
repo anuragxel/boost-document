@@ -1,4 +1,10 @@
+#include <string>
+#include <windows.h>
+#include <ole2.h>
+#include <objbase.h>
+
 #include <boost/noncopyable.hpp>
+#include <boost/filesystem.hpp>
 
 namespace boost { namespace detail {
 
@@ -7,11 +13,11 @@ class com_variant : boost::noncopyable {
 
     static VARIANT make_empty() {
         VARIANT v;
-        InitVariant(&v);
+        VariantInit(&v);
         return v;
     }
 
-    static VARIANT make_bstr(const std::string& str) {
+    VARIANT make_bstr(const std::string& str) {
         VARIANT v;
         const int wslen = ::MultiByteToWideChar(CP_ACP, 0 ,str.c_str(), str.length(), NULL, 0);
         v.vt = VT_BSTR;
