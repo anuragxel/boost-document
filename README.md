@@ -1,4 +1,4 @@
-boost-generic-document-library
+document-library
 ------------------------------
 
 This is not a source for an official boost library and is
@@ -8,7 +8,12 @@ a final library to formal review for inclusion.
 
 Documentation will be updated at the following link
 
-http://anuragxel.github.io/boost-generic-document-library/
+http://anuragxel.github.io/boost-document/
+
+For Libre Office Users
+======================
+
+Compilers tested on - MSVC 12.0 and GCC 4.9
 
 To install this library, you need to perform the following steps -
 
@@ -67,3 +72,21 @@ On Windows
 	`cd document\build`
 
 8. Run Commands nearly same as linux. :) However, you might need to start the soffice server manually. 
+
+
+For Micrsoft Office Users ** ONLY SUPPORTED IN WINDOWS **
+==========================================================
+
+You would need to have MSVC 12.0 (or higher) on your Windows Installation. (Untested on GCC or Clang).
+
+1. Open a Git Bash instance and clone
+	
+	`git clone https://github.com/anuragxel/boost-generic-document-library.git document` at `$lib_path\libs`
+
+2. In the bash instance, 
+	
+	`cd $lib_path/libs/document/build`
+
+3. run '../../../b2'
+
+4. You may run the tests in `test` folder now using the same command as above.

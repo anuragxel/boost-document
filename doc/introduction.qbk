@@ -15,4 +15,40 @@ Boost.Document library is meant to simplify tasks related to manipulation of Off
 
 [section:introduction Brief Overview]
 
+The library uses either Libre Office API or Microsoft Office API as the underlaying API to provide an easy interface to manipulate Spreadsheets. For example we can open a spreasheet document and export it to PDF format like this. Currently Exporting to PDF, XML and CSV are supported.
+
+```
+	boost::document d("file_path");
+	d.open_document();
+	d.export_document(boost::document_file_format::PDF);
+	d.close_document();
+```
+
+We can perform other generic operations like Saving the spreadsheet etc.
+
+A document needs to be opened first to manipulate it. It may or may not be closed as the destruction automatically triggers a close if it is open. However, closing and reopening causes buggy behaviour right now and thus should be avoided. The interface is designed to accomodate all the differences between the API's and thus uniform behaviour can be expected irregardless of the base.
+
+Simple Sheet Operations such as inserting sheets, deleting sheets, counting the number of sheets, getting sheets by indices are currently supported. A simple example can be seen as follows. 
+
+```
+
+	boost::document d("file_path");
+	d.open_document();
+	
+	boost::sheet s = d.get_sheet("Anurag");
+	s.rename_sheet("Vatika");
+
+	d.delete_sheet(0);
+
+	d.close_document();
+
+	for(int i = 0;i < sheet_count(); i++) {
+		sheet sx = d.getSheet(i);
+		sx.rename_sheet("AnuragSheet" + std::to_string(i)); 
+	}
+
+```
+[warning Sheets are zero indexed irrespective of the underlaying API!]
+
+
 [endsect]
