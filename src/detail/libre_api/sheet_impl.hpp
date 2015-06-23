@@ -40,7 +40,7 @@ class libre_sheet: public sheet_interface {
 		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::string& str) {
 		this->xComponent_ = xComponent;
 		this->xSheet_ = xSheet;
-		this->index = return boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);
+		this->index = boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);
 		this->name = str;
 	}
 
