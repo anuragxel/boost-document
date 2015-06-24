@@ -1,5 +1,5 @@
-#ifndef _SHEET_INTERFACE_HPP
-#define _SHEET_INTERFACE_HPP
+#ifndef _CELL_INTERFACE_HPP
+#define _CELL_INTERFACE_HPP
 
 //          Copyright Anurag Ghosh 2015.
 // Distributed under the Boost Software License, Version 1.0.
@@ -10,13 +10,11 @@
 
 namespace boost {
 
-	class sheet_interface {
+	class cell_interface {
 	 public:
-	 	virtual std::string sheet_name() = 0;
-	 	virtual int sheet_index() = 0;
-	 	virtual void rename_sheet(const std::string& str) = 0;
-	 	virtual boost::cell get_cell(int i, int j) = 0;
-		virtual ~sheet_interface() {}
+	 	virtual void set_cell_value(const std::string& str) = 0;
+    	virtual void set_cell_value(int i) = 0;
+   		virtual ~cell_interface() {}
 	};	
 } // namespace boost
 

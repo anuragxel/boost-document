@@ -9,6 +9,8 @@
 #include <boost/document/detail/sheet_interface.hpp>
 #include <memory>
 
+#include <boost/document/cell.hpp>
+
 namespace boost {
     //! \brief This is the main class interface to be 
     //!        exposed to the library user.

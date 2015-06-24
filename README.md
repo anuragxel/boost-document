@@ -1,5 +1,5 @@
 document-library
-------------------------------
+=================
 
 This is not a source for an official boost library and is
 not reviewed, however meant as a prototype to be exhibit 
@@ -74,8 +74,10 @@ On Windows
 8. Run Commands nearly same as linux. :) However, you might need to start the soffice server manually. 
 
 
-For Micrsoft Office Users ** ONLY SUPPORTED IN WINDOWS **
-==========================================================
+For Micrsoft Office Users 
+=========================
+
+**ONLY SUPPORTED IN WINDOWS**
 
 You would need to have MSVC 12.0 (or higher) on your Windows Installation. (Untested on GCC or Clang).
 
