@@ -7,32 +7,25 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <memory>
-#include <boost/filesystem.hpp>
-
-
-#include <boost/document/detail/document_exception.hpp>
-#include <boost/document/detail/document_file_format.hpp>
-#include <boost/document/detail/document_interface.hpp>
-
-
+#include <boost/document/detail/cell_interface.hpp>
 
 namespace boost {
 
 	class cell {
 	private:
-		std::shared_ptr<sheet_interface> pimpl_;
+		std::shared_ptr<cell_interface> pimpl_;
 	public:
 
-	explicit cell(const std::shared_ptr<sheet_interface> impl) : pimpl_(impl) {
+	explicit cell(const std::shared_ptr<cell_interface> impl) : pimpl_(impl) {
 		
 	}
-
+	
     cell& operator=(const std::string& str) {
     	pimpl_->set_cell_value(str);
     	return *this;
     }
 
-    cell& operator=(int i) {
+    cell& operator=(float i) {
     	pimpl_->set_cell_value(i);
        return *this;
     }

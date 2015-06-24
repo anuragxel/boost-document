@@ -7,6 +7,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
+#include <boost/document/cell.hpp>
 
 namespace boost {
 

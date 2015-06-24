@@ -152,7 +152,7 @@ local SOURCES ;
 
 #if  ( $(LIBRE_DEFINES) )
 #{
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/open_instance ;
+   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/libre_api/libre_cell_func detail/open_instance ;
 #}
 #else if ( $(MS_DEFINES) )
 #{

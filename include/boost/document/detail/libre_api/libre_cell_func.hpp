@@ -1,0 +1,25 @@
+#ifndef _LIBRE_CELL_HPP
+#define _LIBRE_CELL_HPP
+
+//          Copyright Anurag Ghosh 2015.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
+#include <string>
+
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
+
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/table/XCell.hpp>
+
+
+namespace boost { namespace doc { namespace libre_cell_func {
+
+::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > get_cell(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet,int i, int j);
+void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, const std::string& str);
+void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, float x);
+
+}}}
+#endif

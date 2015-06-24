@@ -44,6 +44,13 @@ namespace boost {
 	 	void rename_sheet(const std::string& str) {
 	 		pimpl_->rename_sheet(str);
 	 	}
+
+	 	//!
+	 	//!
+	 	boost::cell get_cell(int i, int j) {
+	 		return pimpl_->get_cell(i,j);
+	 	}
+	 	
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {

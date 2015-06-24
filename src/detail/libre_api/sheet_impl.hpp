@@ -13,9 +13,15 @@
 
 
 #include <boost/document/detail/document_exception.hpp>
+
 #include <boost/document/detail/sheet_interface.hpp>
+#include <boost/document/detail/cell_interface.hpp>
+
 
 #include <boost/document/detail/libre_api/libre_sheet_func.hpp>
+#include <boost/document/detail/libre_api/libre_cell_func.hpp>
+
+#include "cell_impl.hpp"
 
 namespace boost { namespace detail { 
 
@@ -58,6 +64,11 @@ class libre_sheet: public sheet_interface {
    		}
 	 	boost::doc::libre_sheet_func::rename_sheet(this->xSheet_,str);
 		this->name = str;
+	}
+
+	boost::cell get_cell(int i, int j) {
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,i,j);
+		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
 	}
 
  	~libre_sheet() {

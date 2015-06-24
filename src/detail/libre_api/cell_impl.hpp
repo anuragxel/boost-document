@@ -1,5 +1,5 @@
-#ifndef _LIBRE_SHEET_IMPL_HPP
-#define _LIBRE_SHEET_IMPL_HPP
+#ifndef _LIBRE_CELL_IMPL_HPP
+#define _LIBRE_CELL_IMPL_HPP
 
 //          Copyright Anurag Ghosh 2015.
 // Distributed under the Boost Software License, Version 1.0.
@@ -8,9 +8,6 @@
 
 #include <string>
 #include <memory>
-
-#include <boost/filesystem.hpp>
-
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>
@@ -23,24 +20,23 @@ class libre_cell: public cell_interface {
 
 	protected:
 	int row, column;
-	Reference < XCell > xCell;
+	::com::sun::star::uno::Reference < com::sun::star::table::XCell > xCell_;
 	public:
-	libre_cell(int row, int column, Reference < XCell > xCell) {
-		this->xCell = xCell;
+	libre_cell(::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, int& row, int& column) {
+		this->xCell_ = xCell;
 		this->row = row;
 		this->column = column;
 	}
 
 	void set_cell_value(const std::string& str) {
-
+ 		boost::doc::libre_cell_func::set_cell_value(this->xCell_, str);
 	}
 
-	void set_cell_value(int i) {
-
+	void set_cell_value(float x) {
+		boost::doc::libre_cell_func::set_cell_value(this->xCell_, x);
 	}
 
  	~libre_cell() {
- 		
  	}
 
 };
