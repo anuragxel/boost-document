@@ -67,10 +67,13 @@ class libre_sheet: public sheet_interface {
 	}
 
 	boost::cell get_cell(int i, int j) {
+		if( i < 0 || j < 0) {
+			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
+		}
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,i,j);
 		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
 	}
-
+	
  	~libre_sheet() {
  		
  	}
