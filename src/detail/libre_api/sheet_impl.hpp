@@ -23,17 +23,18 @@
 
 #include "cell_impl.hpp"
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
+
 
 class libre_sheet: public sheet_interface {
 
-	protected:
+protected:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;	
 	int index;
 	std::string name;
 
-	public:
+public:
 	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
 		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, int& index) {
 		this->xComponent_ = xComponent;
@@ -65,7 +66,7 @@ class libre_sheet: public sheet_interface {
 	 	boost::doc::libre_sheet_func::rename_sheet(this->xSheet_,str);
 		this->name = str;
 	}
-
+ 
 	boost::cell get_cell(int i, int j) {
 		if( i < 0 || j < 0) {
 			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
@@ -73,7 +74,12 @@ class libre_sheet: public sheet_interface {
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,i,j);
 		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
 	}
-	
+
+	boost::cell get_cell_unchecked(int i, int j) {
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition(i, j);
+		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
+	}
+
  	~libre_sheet() {
  		
  	}

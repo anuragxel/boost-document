@@ -18,6 +18,8 @@
 namespace boost { namespace doc { namespace libre_cell_func {
 
 ::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > get_cell(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet,int i, int j);
+::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > get_cell_unchecked(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet,int i, int j);
+
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, const std::string& str);
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, float x);
 

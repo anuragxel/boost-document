@@ -45,11 +45,33 @@ namespace boost {
 	 		pimpl_->rename_sheet(str);
 	 	}
 
-	 	//!
-	 	//!
+	 	//! Gets the cell instance
+	 	//! which can be manipulated.
 	 	boost::cell get_cell(int i, int j) {
 	 		return pimpl_->get_cell(i,j);
 	 	}
+
+
+	 	class cell_proxy {
+			protected:
+			sheet* obj_;
+			int row_;
+			public:
+			cell_proxy(sheet* obj, int row) {
+				obj_ = obj;
+				row_ = row;
+			}
+			boost::cell operator[](int column) {
+				return obj_->pimpl_->get_cell_unchecked(row_,column);
+			}
+		};
+
+		//! Gets the cell instance
+	 	//! which can be manipulated.
+	 	//! No Exception Handling.
+		cell_proxy operator[](int i) {
+			return cell_proxy(this,i);
+		}
 	 	
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.

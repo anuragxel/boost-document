@@ -117,6 +117,18 @@ Reference < XSpreadsheet > get_sheet_by_name(
     }
 }
 
+//! \fn
+//!
+//!
+Reference < XSpreadsheet > get_sheet_by_name_unchecked(
+            Reference< XSpreadsheets > xSheets,
+                const std::string& sheetName) {
+    Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str())); 
+    Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
+    return xSheet;
+}
+
+
 
 //! \fn
 //!
@@ -136,6 +148,18 @@ Reference < XSpreadsheet > get_sheet_by_index(
    }
 }
 
+
+//! \fn
+//!
+//!
+Reference < XSpreadsheet > get_sheet_by_index_unchecked(
+            Reference< XSpreadsheets > xSheets,
+            int index) {
+    Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
+    Any xSheetAny = xSheetsByIndex->getByIndex( (short)index ); 
+    Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
+    return xSheet;
+}
 
 //! \fn
 //!

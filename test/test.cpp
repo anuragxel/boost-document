@@ -121,7 +121,7 @@ int negative_absurd_get_sheet_string(boost::document& d) {
         return 1;
     }
     catch(boost::document_exception& e) {
-        std::cout << "Test negative_get_sheet_string Passed. Expected -- " << e.what() << std::endl;
+    std::cout << "Test negative_get_sheet_string Passed. Expected -- " << e.what() << std::endl;
     return 0;
     }
 }
@@ -293,6 +293,15 @@ int get_valid_cell_and_set_values(boost::document& b) {
     }
 }
 
+// No Exception Handling.
+int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
+    boost::sheet s1 = b[0];
+    boost::sheet s2 = c["Anurag"];
+    boost::cell cl = s2[0][0];
+    s2[0][1] = "Vatika";
+    s2[1][1] = "Anurag";
+    return 0;
+}
 
 int test_main(int argc, char *argv[]) {
 
@@ -326,8 +335,8 @@ int test_main(int argc, char *argv[]) {
     b.open_document();
     c.open_document();
 
-    rv += negative_absurd_get_sheet_string(b);
-    rv += negative_absurd_get_sheet_index(b);
+    //rv += negative_absurd_get_sheet_string(b);
+    //rv += negative_absurd_get_sheet_index(b);
     rv += negative_get_invalid_cell(b); 
 
     // Positive Checks
@@ -340,6 +349,7 @@ int test_main(int argc, char *argv[]) {
     rv += insert_new_sheet(c);
     rv += delete_new_sheet(c);
     rv += get_valid_cell_and_set_values(b);
+    rv += sheet_and_cell_syntatic_sugar(b,c);
 
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;

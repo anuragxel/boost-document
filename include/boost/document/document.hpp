@@ -81,11 +81,19 @@ namespace boost {
 		boost::sheet get_sheet(const std::string& str) {
 			return pimpl_->get_sheet(str);
 		}
+
+		boost::sheet operator[](const std::string& str) {
+			return pimpl_->get_sheet_unchecked(str);
+		}
 		
 		//! \brief Gets a sheet instance of that index
 		//!        which can be manipulated as needed.
 		boost::sheet get_sheet(int index) {
 			return pimpl_->get_sheet(index);
+		}
+
+		boost::sheet operator[](int index) {
+			return pimpl_->get_sheet_unchecked(index);
 		}
 
 		//! \brief Deletes the sheet of name str
