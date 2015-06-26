@@ -38,9 +38,12 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_exception.hpp>
+
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 
 
 using namespace com::sun::star;
@@ -229,6 +232,19 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
     }
 }
 
+//! \fn
+//!
+//!
+void delete_sheet_by_index(Reference< XSpreadsheets > xSheets,int index) {
+    try {
+        Reference < XIndexContainer > xIndexContainer(xSheets, UNO_QUERY);
+        xIndexContainer->removeByIndex(index);
+    }
+    catch( Exception &e ){
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
 
 //! \fn
 //!
@@ -251,7 +267,9 @@ std::string get_sheet_name(Reference< XSpreadsheet > xSheet) {
 //!
 int get_sheet_index(Reference< XSpreadsheet > xSheet) {
     try {
-        return -1;
+        Reference < XCellRangeAddressable > xRangeAddr(xSheet, UNO_QUERY);
+        ::com::sun::star::table::CellRangeAddress r = xRangeAddr->getRangeAddress();
+        return r.Sheet;
     }
     catch( Exception &e ){
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );

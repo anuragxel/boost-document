@@ -176,8 +176,13 @@ class libre_document: public document_interface {
  	}
 
  	void delete_sheet(int index) {
- 		boost::throw_exception(document_exception(
-            		"Function Un-implemented. :("));
+ 		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
+		}
+		boost::doc::libre_sheet_func::delete_sheet_by_index(this->xSheets_,index);
  	}
 
  	~libre_document() {
