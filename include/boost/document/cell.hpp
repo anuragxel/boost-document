@@ -26,10 +26,23 @@ namespace boost {
     	return *this;
     }
 
-    cell& operator=(double i) {
-    	pimpl_->set_cell_value(i);
-       return *this;
+    cell& operator=(double x) {
+    	pimpl_->set_cell_value(x);
+        return *this;
     }
+
+    void set_formula(const std::string& s) {
+		pimpl_->set_cell_value(s);
+	}
+
+
+	void set_string(const std::string& str) {
+		pimpl_->set_cell_value(str);
+	}
+
+	void set_value(double x) {
+		pimpl_->set_cell_value(x);
+	}
 
 	std::string get_formula() {
 		return pimpl_->get_formula();
