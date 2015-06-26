@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <boost/document/detail/cell_interface.hpp>
+#include <boost/document/detail/cell_content_type.hpp>
 
 namespace boost {
 
@@ -30,6 +31,14 @@ namespace boost {
        return *this;
     }
     
+    bool empty() {
+    	return pimpl_->empty();
+    }
+
+    boost::cell_content_type::type get_content_type() {
+    	return pimpl_->get_content_type();
+    }
+
 	~cell() {
 	}
 

@@ -14,6 +14,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XCell.hpp>
 
+#include <boost/document/detail/cell_content_type.hpp>
+
 
 namespace boost { namespace doc { namespace libre_cell_func {
 
@@ -22,6 +24,7 @@ namespace boost { namespace doc { namespace libre_cell_func {
 
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, const std::string& str);
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, float x);
+boost::cell_content_type::type get_content_type(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell);
 
 }}}
 #endif

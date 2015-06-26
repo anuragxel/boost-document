@@ -47,30 +47,51 @@ namespace boost {
 
 	 	//! Gets the cell instance
 	 	//! which can be manipulated.
-	 	boost::cell get_cell(int i, int j) {
-	 		return pimpl_->get_cell(i,j);
+	 	boost::cell get_cell(int row, int column) {
+	 		return pimpl_->get_cell(row,column);
 	 	}
 
 
-	 	class cell_proxy {
+	 	class row {
 			protected:
 			sheet* obj_;
 			int row_;
 			public:
-			cell_proxy(sheet* obj, int row) {
+			row(sheet* obj, int row) {
 				obj_ = obj;
 				row_ = row;
+			}
+			boost::cell get_cell(int column) {
+				return obj_->pimpl_->get_cell(row_,column);
 			}
 			boost::cell operator[](int column) {
 				return obj_->pimpl_->get_cell_unchecked(row_,column);
 			}
 		};
 
+
+	 	class column {
+			protected:
+			sheet* obj_;
+			int column_;
+			public:
+			column(sheet* obj, int column) {
+				obj_ = obj;
+				column_ = column;
+			}
+			boost::cell get_cell(int row) {
+				return obj_->pimpl_->get_cell(row,column_);
+			}
+			boost::cell operator[](int row) {
+				return obj_->pimpl_->get_cell_unchecked(row,column_);
+			}
+		};
+
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
-		cell_proxy operator[](int i) {
-			return cell_proxy(this,i);
+		row operator[](int i) {
+			return row(this,i);
 		}
 	 	
 	 	//! \brief Destructor
