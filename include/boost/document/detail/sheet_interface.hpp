@@ -18,6 +18,8 @@ namespace boost {
 	 	virtual void rename_sheet(const std::string& str) = 0;
 	 	virtual boost::cell get_cell(int i, int j) = 0;
 		virtual boost::cell get_cell_unchecked(int i, int j) = 0;
+		virtual std::size_t max_row() = 0;
+		virtual std::size_t max_column() = 0;
 		virtual ~sheet_interface() {}
 	};	
 } // namespace boost

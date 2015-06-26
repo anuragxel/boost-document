@@ -66,18 +66,27 @@ public:
 	 	boost::doc::libre_sheet_func::rename_sheet(this->xSheet_,str);
 		this->name = str;
 	}
- 
-	boost::cell get_cell(int i, int j) {
-		if( i < 0 || j < 0) {
-			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
-		}
-		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,i,j);
-		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
+
+	//Refer to https://simple.wikipedia.org/wiki/OpenOffice_Calc
+	std::size_t max_row() {
+		return 1048576;
 	}
 
-	boost::cell get_cell_unchecked(int i, int j) {
-		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition(i, j);
-		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,i,j)));
+	std::size_t max_column() {
+		return 1024;
+	}
+ 
+	boost::cell get_cell(int row, int column) {
+		if( column < 0 || row < 0 || row > max_row() || column > max_column() ) {
+			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
+		}
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,row,column);
+		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
+	}
+
+	boost::cell get_cell_unchecked(int row, int column) {
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition(row, column);
+		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
  	~libre_sheet() {

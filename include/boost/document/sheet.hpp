@@ -52,12 +52,12 @@ namespace boost {
 	 	}
 
 
-	 	class row {
+	 	class column {
 			protected:
 			sheet* obj_;
 			int row_;
 			public:
-			row(sheet* obj, int row) {
+			column(sheet* obj, int row) {
 				obj_ = obj;
 				row_ = row;
 			}
@@ -70,12 +70,12 @@ namespace boost {
 		};
 
 
-	 	class column {
+	 	class row {
 			protected:
 			sheet* obj_;
 			int column_;
 			public:
-			column(sheet* obj, int column) {
+			row(sheet* obj, int column) {
 				obj_ = obj;
 				column_ = column;
 			}
@@ -87,6 +87,14 @@ namespace boost {
 			}
 		};
 
+		row get_row(int i) {
+			return row(this,i);
+		}
+
+		column get_column(int i) {
+			return column(this,i);
+		}
+
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
@@ -94,6 +102,14 @@ namespace boost {
 			return row(this,i);
 		}
 	 	
+	 	std::size_t max_row() {
+	 		return pimpl_->max_row();
+	 	}
+
+	 	std::size_t max_column() {
+	 		return pimpl_->max_column();
+	 	}
+
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {

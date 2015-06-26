@@ -276,6 +276,10 @@ int delete_new_sheet(boost::document& b) {
     }
 }
 
+
+
+
+
 int get_valid_cell_and_set_values(boost::document& b) {
     try {
         boost::sheet s = b.get_sheet(0);
@@ -293,6 +297,7 @@ int get_valid_cell_and_set_values(boost::document& b) {
     }
 }
 
+
 // No Exception Handling.
 int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
     boost::sheet s1 = b[0];
@@ -303,8 +308,63 @@ int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
     return 0;
 }
 
-int test_main(int argc, char *argv[]) {
+int cell_type_check(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        s1[1][1] = "Vatika";
+        BOOST_REQUIRE(s1[1][1].get_content_type() == boost::cell_content_type::STRING);
+        s1[1][2] = 3.14;
+        BOOST_REQUIRE(s1[1][2].get_content_type() == boost::cell_content_type::VALUE);
+        BOOST_REQUIRE(s1[3][4].empty() == true);
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test cell_type_check Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
 
+int cell_getters_check(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        s1[1][1] = "Vatika";
+        BOOST_REQUIRE(s1[1][1].get_string() == "Vatika");
+        s1[1][2] = 3.14;
+        BOOST_REQUIRE(s1[1][2].get_value() < 3.15 and s1[1][2].get_value() > 3.13);
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test cell_getters_check Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }   
+}
+
+int check_row_and_column_class(boost::document& c) {
+    try {
+
+        boost::sheet s1 = c["Anurag"];
+        
+        boost::sheet::row r = s1.get_row(3);
+        r[4] = "Anurag";
+        BOOST_REQUIRE(s1[3][4].get_string() == "Anurag");
+
+        boost::sheet::column l = s1.get_column(9);
+        l[2] = "Vatika";
+        BOOST_REQUIRE(s1[2][9].get_string() == "Vatika");
+
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test check_row_and_column_class Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
+
+int test_main(int argc, char *argv[]) {
    
 //#ifdef BOOST_DOCUMENT_HAS_MS
 //    boost::document b("Excel_Test1.xlsx");  
@@ -316,7 +376,6 @@ int test_main(int argc, char *argv[]) {
     boost::document d("Test3.ods");
 //#else
 //#endif
-
 
     int rv = 0;
     
@@ -335,8 +394,9 @@ int test_main(int argc, char *argv[]) {
     b.open_document();
     c.open_document();
 
-    //rv += negative_absurd_get_sheet_string(b);
-    //rv += negative_absurd_get_sheet_index(b);
+    rv += negative_absurd_get_sheet_string(b);
+    rv += negative_absurd_get_sheet_index(b);
+    
     rv += negative_get_invalid_cell(b); 
 
     // Positive Checks
@@ -348,8 +408,13 @@ int test_main(int argc, char *argv[]) {
     rv += get_valid_sheet_count(c);
     rv += insert_new_sheet(c);
     rv += delete_new_sheet(c);
+
+    // Cell related checks
     rv += get_valid_cell_and_set_values(b);
     rv += sheet_and_cell_syntatic_sugar(b,c);
+    rv += cell_type_check(c);
+    rv += cell_getters_check(c);
+    rv += check_row_and_column_class(c);
 
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
