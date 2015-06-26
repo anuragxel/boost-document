@@ -11,6 +11,7 @@
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>
+#include <boost/document/detail/cell_content_type.hpp>
 
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
@@ -32,8 +33,32 @@ class libre_cell: public cell_interface {
  		boost::doc::libre_cell_func::set_cell_value(this->xCell_, str);
 	}
 
-	void set_cell_value(float x) {
+	void set_cell_value(double x) {
 		boost::doc::libre_cell_func::set_cell_value(this->xCell_, x);
+	}
+
+	boost::cell_content_type::type get_content_type() {
+		return boost::doc::libre_cell_func::get_content_type(this->xCell_);
+	}
+
+	std::string get_string() {
+		return boost::doc::libre_cell_func::get_string(this->xCell_);
+	}
+
+
+	std::string get_formula() {
+		return boost::doc::libre_cell_func::get_formula(this->xCell_);
+	}
+
+	double get_value() {
+		return boost::doc::libre_cell_func::get_value(this->xCell_);
+	}
+ 
+	bool empty() {
+		if(boost::doc::libre_cell_func::get_content_type(this->xCell_) == boost::cell_content_type::type::EMPTY) {
+			return true;
+		}
+		return false;
 	}
 
  	~libre_cell() {
