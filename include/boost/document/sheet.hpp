@@ -97,14 +97,14 @@ namespace boost {
 				    boost::random_access_traversal_tag
 				> base_t;
 
-				row_iterator(row* r, std::size_t num) : r_(r), cell_no_(num),current_cell_(r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_)) {
-				}
+				row_iterator(row* r, std::size_t num) : r_(r), cell_no_(num),current_cell_(r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_)) 
+				{}
 
-				void increment() { ++cell_no_; }
+				void increment() { ++this->cell_no_; }
 
-				void decrement() { --cell_no_; }
+				void decrement() { --this->cell_no_; }
 				
-				void advance(int n) { cell_no_ += (std::size_t)n; }
+				void advance(int n) { this->cell_no_ += (std::size_t)n; }
 				 
 				bool equal(row_iterator const& other) const {
         			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
@@ -119,8 +119,8 @@ namespace boost {
     				return (std::size_t)(s>0?s:-s);
     			}
 
-				boost::cell& dereference() { 
-					current_cell_ = r_->obj_->get_cell(r_->row_, cell_no_);
+				base_t::reference dereference() { 
+					current_cell_ = this->r_->obj_->get_cell(r_->row_, cell_no_);
 					return current_cell_;
 				}
 			};
