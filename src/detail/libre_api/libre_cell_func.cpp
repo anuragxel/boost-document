@@ -96,7 +96,9 @@ boost::cell_content_type::type get_content_type(Reference < XCell > xCell) {
         case CellContentType_VALUE : return boost::cell_content_type::VALUE;
         case CellContentType_TEXT : return boost::cell_content_type::STRING;
         case CellContentType_FORMULA : return boost::cell_content_type::FORMULA;
+        case CellContentType_MAKE_FIXED_SIZE: return boost::cell_content_type::ERROR;
     }
+    return boost::cell_content_type::ERROR;
 }
 
 //! \fn

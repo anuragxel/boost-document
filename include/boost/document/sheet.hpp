@@ -86,6 +86,7 @@ namespace boost {
 				    boost::random_access_traversal_tag
 				> {
 				public:
+				friend class boost::iterator_core_access;
 				row* r_;
 				std::size_t cell_no_;
 				boost::cell current_cell_;
@@ -118,8 +119,8 @@ namespace boost {
     				return (std::size_t)(s>0?s:-s);
     			}
 
-				base_t::reference dereference() { 
-					current_cell_ = r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_);
+				boost::cell& dereference() { 
+					current_cell_ = r_->obj_->get_cell(r_->row_, cell_no_);
 					return current_cell_;
 				}
 			};

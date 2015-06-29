@@ -77,7 +77,7 @@ public:
 	}
  
 	boost::cell get_cell(int row, int column) {
-		if( column < 0 || row < 0 || row > max_row() || column > max_column() ) {
+		if( column < 0 || row < 0 || (std::size_t)row > max_row() || (std::size_t)column > max_column() ) {
 			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
 		}
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,row,column);

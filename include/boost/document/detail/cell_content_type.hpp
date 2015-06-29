@@ -13,7 +13,7 @@ namespace boost {
 	//!
 	struct cell_content_type {
 		enum type {
-			EMPTY,STRING,VALUE,FORMULA
+			EMPTY,STRING,VALUE,FORMULA,ERROR
 		};
 	};
 } // namespace boost

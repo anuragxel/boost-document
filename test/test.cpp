@@ -364,6 +364,28 @@ int check_row_and_column_class(boost::document& c) {
 }
 
 
+int use_row_iterator(boost::document& c) {
+    try {
+
+        boost::sheet s1 = c["Anurag"];
+        
+        boost::sheet::row r = s1.get_row(3);
+        
+        for(boost::cell& k : r) {
+          k = 1;
+        }
+
+        c.save_as_document("It.ods");
+
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test use_row_iterator Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }   
+}
+
 int test_main(int argc, char *argv[]) {
    
 //#ifdef BOOST_DOCUMENT_HAS_MS
@@ -416,6 +438,9 @@ int test_main(int argc, char *argv[]) {
     rv += cell_getters_check(c);
     rv += check_row_and_column_class(c);
 
+    // row iterator checks 
+    rv += use_row_iterator(c);
+    
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
     } 
