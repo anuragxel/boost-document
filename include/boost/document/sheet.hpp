@@ -6,12 +6,17 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/document/detail/sheet_interface.hpp>
 #include <memory>
 
 #include <boost/document/cell.hpp>
+#include <boost/document/detail/sheet_interface.hpp>
+
+#include <boost/document/detail/document_exception.hpp>
+
+#include <boost/iterator/iterator_facade.hpp>
 
 namespace boost {
+    
     //! \brief This is the main class interface to be 
     //!        exposed to the library user.
     //!
@@ -45,19 +50,27 @@ namespace boost {
 	 		pimpl_->rename_sheet(str);
 	 	}
 
+
+	 	std::size_t max_row() {
+	 		return pimpl_->max_row();
+	 	}
+
+	 	std::size_t max_column() {
+	 		return pimpl_->max_column();
+	 	}
+
 	 	//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	boost::cell get_cell(int row, int column) {
 	 		return pimpl_->get_cell(row,column);
 	 	}
 
-
-	 	class column {
+	 	class row {
 			protected:
 			sheet* obj_;
 			int row_;
 			public:
-			column(sheet* obj, int row) {
+			row(sheet* obj, int row) {
 				obj_ = obj;
 				row_ = row;
 			}
@@ -67,15 +80,60 @@ namespace boost {
 			boost::cell operator[](int column) {
 				return obj_->pimpl_->get_cell_unchecked(row_,column);
 			}
+			class row_iterator: public boost::iterator_facade<
+				    row_iterator, 
+				    boost::cell, 
+				    boost::random_access_traversal_tag
+				> {
+				public:
+				row* r_;
+				std::size_t cell_no_;
+				boost::cell current_cell_;
+
+				typedef boost::iterator_facade<
+				    row_iterator, 
+				    cell,
+				    boost::random_access_traversal_tag
+				> base_t;
+
+				row_iterator(row* r, std::size_t num) : r_(r), cell_no_(num),current_cell_(r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_)) {
+				}
+
+				void increment() { ++cell_no_; }
+
+				void decrement() { --cell_no_; }
+				
+				void advance(int n) { cell_no_ += (std::size_t)n; }
+				 
+				bool equal(row_iterator const& other) const {
+        			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
+    			}
+
+    			std::size_t distance_to(row_iterator const& other) const {
+    				if(this->r_ != other.r_) {
+    					boost::throw_exception(document_exception(
+            			"Error: Both the iterators are not equal"));	
+    				}
+    				std::size_t s =(int)this->cell_no_ - (int)other.cell_no_;
+    				return (std::size_t)(s>0?s:-s);
+    			}
+
+				base_t::reference dereference() { 
+					current_cell_ = r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_);
+					return current_cell_;
+				}
+			};
+			row_iterator begin() { return row_iterator(this, (std::size_t)0); }
+			row_iterator end() { return row_iterator(this, obj_->pimpl_->max_column()); }
 		};
 
 
-	 	class row {
+	 	class column {
 			protected:
 			sheet* obj_;
 			int column_;
 			public:
-			row(sheet* obj, int column) {
+			column(sheet* obj, int column) {
 				obj_ = obj;
 				column_ = column;
 			}
@@ -86,6 +144,7 @@ namespace boost {
 				return obj_->pimpl_->get_cell_unchecked(row,column_);
 			}
 		};
+		
 
 		row get_row(int i) {
 			return row(this,i);
@@ -102,13 +161,6 @@ namespace boost {
 			return row(this,i);
 		}
 	 	
-	 	std::size_t max_row() {
-	 		return pimpl_->max_row();
-	 	}
-
-	 	std::size_t max_column() {
-	 		return pimpl_->max_column();
-	 	}
 
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
