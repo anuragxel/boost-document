@@ -141,6 +141,25 @@ public:
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
+	boost::sheet get_sheet_unchecked(const std::string& str) {
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		IDispatch* sheet_ptr;
+		boost::doc::ms_sheet::get_sheet_by_name(this->sheets_ptr_, str, sheet_ptr);
+		std::string new_str(str);
+		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
+	}
+
+	boost::sheet get_sheet_unchecked(int index) {
+		if (!this->sheets_ptr_) {
+			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+		}
+		IDispatch* sheet_ptr; 
+		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index + 1, sheet_ptr);
+		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
+	}
+
 	int sheet_count() {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(

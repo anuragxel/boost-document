@@ -17,7 +17,7 @@
 
 namespace boost { namespace detail { 
 
-class libre_cell: public cell_interface {
+class libre_cell : public cell_interface {
 
 	protected:
 	int row, column;

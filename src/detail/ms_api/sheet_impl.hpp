@@ -14,8 +14,12 @@
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/sheet_interface.hpp>
+#include <boost/document/detail/cell_interface.hpp>
 
 #include <boost/document/detail/ms_api/ms_sheet.hpp>
+
+
+#include "cell_impl.hpp"
 
 namespace boost {
 	namespace detail {
@@ -56,6 +60,25 @@ namespace boost {
 				}
 				boost::doc::ms_sheet::rename_sheet(this->sheet_ptr_, str);
 				this->name = str;
+			}
+
+			boost::cell get_cell(int row, int column) {
+				if( column < 0 || row < 0 || (std::size_t)row > max_row() || (std::size_t)column > max_column() ) {
+					boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
+				}
+				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
+			}
+
+			boost::cell get_cell_unchecked(int row, int column) {
+				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
+			}
+
+			std::size_t max_row() {
+				return 1024;
+			}
+			
+			std::size_t max_column() {
+				return 1024;
 			}
 
 			~ms_sheet() {
