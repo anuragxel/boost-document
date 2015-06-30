@@ -80,6 +80,7 @@ namespace boost {
 			boost::cell operator[](std::size_t column) {
 				return obj_->get_cell_unchecked(row_,column);
 			}
+			/*
 			class row_iterator: public boost::iterator_facade<
 				    row_iterator, 
 				    boost::cell, 
@@ -123,10 +124,10 @@ namespace boost {
 					current_cell_ = this->r_->obj_->get_cell(r_->row_, cell_no_);
 					return current_cell_;
 				}
-
 			};
 			row_iterator begin() { return row_iterator(this, (std::size_t)0); }
 			row_iterator end() { return row_iterator(this, obj_->max_column()); }
+			*/
 		};
 
 

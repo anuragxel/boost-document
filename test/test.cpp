@@ -363,6 +363,29 @@ int check_row_and_column_class(boost::document& c) {
     }
 }
 
+int check_for_sheet_and_row_scope(boost::document& c) {
+    try {
+        boost::sheet s = c["Anurag"];
+        boost::sheet::row r = s.get_row(10);
+        r[20] = "Hello world";
+        boost::sheet::column k = s.get_column(20);
+        
+        s = c[0]; // ... new sheet is used instead of the old one
+        // s is now out of scope.
+        // if r and c had raw pointers of s,
+        // then seg fault can occur.
+        BOOST_REQUIRE(r[20].get_string() == k[10].get_string());
+        BOOST_REQUIRE(k[10].get_string() == "Hello world");
+
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test check_for_sheet_and_row_scope Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }   
+}
+
 /*
 int use_row_iterator(boost::document& c) {
     try {
@@ -439,7 +462,8 @@ int test_main(int argc, char *argv[]) {
     rv += cell_getters_check(c);
     rv += check_row_and_column_class(c);
 
-    // row iterator checks
+    //  iterator checks
+    rv += check_for_sheet_and_row_scope(c);
     //rv += use_row_iterator(c);
     
     if (rv > 0) {
