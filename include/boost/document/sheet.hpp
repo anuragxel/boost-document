@@ -67,18 +67,18 @@ namespace boost {
 
 	 	class row {
 			protected:
-			sheet* obj_;
+			std::shared_ptr<sheet_interface> obj_;
 			std::size_t row_;
 			public:
-			row(sheet* obj, std::size_t row) {
+			row(std::shared_ptr<sheet_interface> obj, std::size_t row) {
 				obj_ = obj;
 				row_ = row;
 			}
 			boost::cell get_cell(std::size_t column) {
-				return obj_->pimpl_->get_cell(row_,column);
+				return obj_->get_cell(row_,column);
 			}
 			boost::cell operator[](std::size_t column) {
-				return obj_->pimpl_->get_cell_unchecked(row_,column);
+				return obj_->get_cell_unchecked(row_,column);
 			}
 			class row_iterator: public boost::iterator_facade<
 				    row_iterator, 
@@ -97,7 +97,7 @@ namespace boost {
 				    boost::random_access_traversal_tag
 				> base_t;
 
-				row_iterator(row* r, std::size_t num) : r_(r), cell_no_(num),current_cell_(r_->obj_->pimpl_->get_cell_unchecked(r_->row_, cell_no_)) 
+				row_iterator(row* r, std::size_t num) : r_(r), cell_no_(num),current_cell_(r_->obj_->get_cell_unchecked(r_->row_, cell_no_)) 
 				{}
 
 				void increment() { ++this->cell_no_; }
@@ -126,40 +126,40 @@ namespace boost {
 
 			};
 			row_iterator begin() { return row_iterator(this, (std::size_t)0); }
-			row_iterator end() { return row_iterator(this, obj_->pimpl_->max_column()); }
+			row_iterator end() { return row_iterator(this, obj_->max_column()); }
 		};
 
 
 	 	class column {
 			protected:
-			sheet* obj_;
+			std::shared_ptr<sheet_interface> obj_;
 			std::size_t column_;
 			public:
-			column(sheet* obj, std::size_t column) {
+			column(std::shared_ptr<sheet_interface> obj, std::size_t column) {
 				obj_ = obj;
 				column_ = column;
 			}
 			boost::cell get_cell(std::size_t row) {
-				return obj_->pimpl_->get_cell(row,column_);
+				return obj_->get_cell(row,column_);
 			}
 			boost::cell operator[](std::size_t row) {
-				return obj_->pimpl_->get_cell_unchecked(row,column_);
+				return obj_->get_cell_unchecked(row,column_);
 			}
 		};
 
 		row get_row(std::size_t i) {
-			return row(this,i);
+			return row(pimpl_,i);
 		}
 
 		column get_column(std::size_t i) {
-			return column(this,i);
+			return column(pimpl_,i);
 		}
 
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
 		row operator[](std::size_t i) {
-			return row(this,i);
+			return row(pimpl_,i);
 		}
 	 	
 	 	//! \brief Destructor

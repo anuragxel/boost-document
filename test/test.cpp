@@ -363,7 +363,7 @@ int check_row_and_column_class(boost::document& c) {
     }
 }
 
-
+/*
 int use_row_iterator(boost::document& c) {
     try {
 
@@ -385,6 +385,7 @@ int use_row_iterator(boost::document& c) {
         return 1;
     }   
 }
+*/
 
 int test_main(int argc, char *argv[]) {
    
@@ -438,8 +439,8 @@ int test_main(int argc, char *argv[]) {
     rv += cell_getters_check(c);
     rv += check_row_and_column_class(c);
 
-    // row iterator checks 
-    rv += use_row_iterator(c);
+    // row iterator checks
+    //rv += use_row_iterator(c);
     
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
