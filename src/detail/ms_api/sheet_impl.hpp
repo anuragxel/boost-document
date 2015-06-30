@@ -28,11 +28,11 @@ namespace boost {
 
 		protected:
 			IDispatch* sheet_ptr_;
-			int index;
+			std::size_t index;
 			std::string name;
 
 		public:
-			ms_sheet(IDispatch* sheet_ptr, int index) {
+			ms_sheet(IDispatch* sheet_ptr, std::size_t index) {
 				this->sheet_ptr_ = sheet_ptr;
 				this->index = index + 1; // we store index as per implementation needs
 				this->name = boost::doc::ms_sheet::get_sheet_name(this->sheet_ptr_);
@@ -42,7 +42,7 @@ namespace boost {
 			ms_sheet(IDispatch* sheet_ptr, std::string& str) {
 				this->sheet_ptr_ = sheet_ptr;
 				this->name = str;
-				this->index = boost::doc::ms_sheet::get_sheet_index(this->sheet_ptr_);
+				this->index = (std::size_t)boost::doc::ms_sheet::get_sheet_index(this->sheet_ptr_);
 				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_); 
 			}
 
@@ -50,8 +50,8 @@ namespace boost {
 				return this->name;
 			}
 
-			int sheet_index() {
-				return this->index - 1; // we return index as we represent it as.
+			std::size_t sheet_index() {
+				return (std::size_t)this->index - 1; // we return index as we represent it as.
 			}
 
 			void rename_sheet(const std::string& str) {
@@ -62,14 +62,14 @@ namespace boost {
 				this->name = str;
 			}
 
-			boost::cell get_cell(int row, int column) {
-				if( column < 0 || row < 0 || (std::size_t)row > max_row() || (std::size_t)column > max_column() ) {
+			boost::cell get_cell(std::size_t row, std::size_t column) {
+				if( row > max_row() || column > max_column() ) {
 					boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
 				}
 				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
 			}
 
-			boost::cell get_cell_unchecked(int row, int column) {
+			boost::cell get_cell_unchecked(std::size_t row,std::size_t column) {
 				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
 			}
 

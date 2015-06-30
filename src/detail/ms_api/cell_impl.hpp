@@ -18,7 +18,7 @@ namespace boost { namespace detail {
 class ms_cell : public cell_interface {
 
 	protected:
-	int row, column;
+	std::size_t row, column;
 	public:
 	ms_cell() {
 	}

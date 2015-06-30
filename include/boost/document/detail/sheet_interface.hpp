@@ -14,10 +14,10 @@ namespace boost {
 	class sheet_interface {
 	 public:
 	 	virtual std::string sheet_name() = 0;
-	 	virtual int sheet_index() = 0;
+	 	virtual std::size_t sheet_index() = 0;
 	 	virtual void rename_sheet(const std::string& str) = 0;
-	 	virtual boost::cell get_cell(int i, int j) = 0;
-		virtual boost::cell get_cell_unchecked(int i, int j) = 0;
+	 	virtual boost::cell get_cell(std::size_t i, std::size_t j) = 0;
+		virtual boost::cell get_cell_unchecked(std::size_t i, std::size_t j) = 0;
 		virtual std::size_t max_row() = 0;
 		virtual std::size_t max_column() = 0;
 		virtual ~sheet_interface() {}

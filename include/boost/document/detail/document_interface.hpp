@@ -26,12 +26,12 @@ namespace boost {
 		virtual void export_as(boost::document_file_format::type format) = 0;
 		virtual boost::sheet get_sheet(const std::string& sheet_name) = 0;
 		virtual boost::sheet get_sheet_unchecked(const std::string& sheet_name) = 0;
-		virtual boost::sheet get_sheet(int index) = 0;
-		virtual boost::sheet get_sheet_unchecked(int index) = 0;
+		virtual boost::sheet get_sheet(std::size_t index) = 0;
+		virtual boost::sheet get_sheet_unchecked(std::size_t index) = 0;
 		virtual boost::sheet insert_sheet(const std::string& sheet_name) = 0;
 		virtual void delete_sheet(const std::string& sheet_name) = 0;
-		virtual void delete_sheet(int index) = 0;
-		virtual int sheet_count() = 0;
+		virtual void delete_sheet(std::size_t index) = 0;
+		virtual std::size_t sheet_count() = 0;
 		virtual ~document_interface() {}
 	};	
 } // namespace boost

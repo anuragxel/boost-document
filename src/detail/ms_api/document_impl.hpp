@@ -128,7 +128,7 @@ public:
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
 	}
 
-	boost::sheet get_sheet(int index) {
+	boost::sheet get_sheet(std::size_t index) {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
 				"Error: Document Not Open."));
@@ -137,7 +137,7 @@ public:
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		IDispatch* sheet_ptr; 
-		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index + 1, sheet_ptr);
+		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, (int)index + 1, sheet_ptr);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
@@ -151,16 +151,16 @@ public:
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
 	}
 
-	boost::sheet get_sheet_unchecked(int index) {
+	boost::sheet get_sheet_unchecked(std::size_t index) {
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		IDispatch* sheet_ptr; 
-		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, index + 1, sheet_ptr);
+		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, (int)index + 1, sheet_ptr);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
-	int sheet_count() {
+	std::size_t sheet_count() {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
 				"Error: Document Not Open."));
@@ -168,7 +168,7 @@ public:
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		return boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr_);
+		return (std::size_t)boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr_);
 	}
 
 	void delete_sheet(const std::string& str) {
@@ -182,7 +182,7 @@ public:
 		boost::doc::ms_sheet::delete_sheet_by_name(this->sheets_ptr_,str);
 	}
 
-	void delete_sheet(int index) {
+	void delete_sheet(std::size_t index) {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
 				"Error: Document Not Open."));
@@ -190,7 +190,7 @@ public:
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		boost::doc::ms_sheet::delete_sheet_by_index(this->sheets_ptr_,index+1); // Excel Sheets are 1-indexed. Boost.Document sheets are zero-indexed.
+		boost::doc::ms_sheet::delete_sheet_by_index(this->sheets_ptr_,(int)index+1); // Excel Sheets are 1-indexed. Boost.Document sheets are zero-indexed.
 	}
 
  	~ms_document() {

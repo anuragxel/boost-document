@@ -20,10 +20,10 @@ namespace boost { namespace detail {
 class libre_cell : public cell_interface {
 
 	protected:
-	int row, column;
+	std::size_t row, column;
 	::com::sun::star::uno::Reference < com::sun::star::table::XCell > xCell_;
 	public:
-	libre_cell(::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, int& row, int& column) {
+	libre_cell(::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, std::size_t& row, std::size_t& column) {
 		this->xCell_ = xCell;
 		this->row = row;
 		this->column = column;

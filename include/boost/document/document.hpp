@@ -88,11 +88,11 @@ namespace boost {
 		
 		//! \brief Gets a sheet instance of that index
 		//!        which can be manipulated as needed.
-		boost::sheet get_sheet(int index) {
+		boost::sheet get_sheet(std::size_t index) {
 			return pimpl_->get_sheet(index);
 		}
 
-		boost::sheet operator[](int index) {
+		boost::sheet operator[](std::size_t index) {
 			return pimpl_->get_sheet_unchecked(index);
 		}
 
@@ -102,7 +102,7 @@ namespace boost {
 		}
 
 		//! \brief Deletes the sheet of name str
-		void delete_sheet(int index) {
+		void delete_sheet(std::size_t index) {
 			pimpl_->delete_sheet(index);
 		}
 

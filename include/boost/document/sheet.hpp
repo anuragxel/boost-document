@@ -40,7 +40,7 @@ namespace boost {
 
 		//! \brief Gets the sheet index
 		//!        which is being accessed.
-	 	int sheet_index() {
+	 	std::size_t sheet_index() {
 	 		return pimpl_->sheet_index();
 	 	}
 
@@ -61,23 +61,23 @@ namespace boost {
 
 	 	//! Gets the cell instance
 	 	//! which can be manipulated.
-	 	boost::cell get_cell(int row, int column) {
+	 	boost::cell get_cell(std::size_t row, std::size_t column) {
 	 		return pimpl_->get_cell(row,column);
 	 	}
 
 	 	class row {
 			protected:
 			sheet* obj_;
-			int row_;
+			std::size_t row_;
 			public:
-			row(sheet* obj, int row) {
+			row(sheet* obj, std::size_t row) {
 				obj_ = obj;
 				row_ = row;
 			}
-			boost::cell get_cell(int column) {
+			boost::cell get_cell(std::size_t column) {
 				return obj_->pimpl_->get_cell(row_,column);
 			}
-			boost::cell operator[](int column) {
+			boost::cell operator[](std::size_t column) {
 				return obj_->pimpl_->get_cell_unchecked(row_,column);
 			}
 			class row_iterator: public boost::iterator_facade<
@@ -104,7 +104,7 @@ namespace boost {
 
 				void decrement() { --this->cell_no_; }
 				
-				void advance(int n) { this->cell_no_ += (std::size_t)n; }
+				void advance(std::size_t n) { this->cell_no_ += n; }
 				 
 				bool equal(row_iterator const& other) const {
         			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
@@ -115,7 +115,7 @@ namespace boost {
     					boost::throw_exception(document_exception(
             			"Error: Both the iterators are not equal"));	
     				}
-    				std::size_t s =(int)this->cell_no_ - (int)other.cell_no_;
+    				int s = (int)this->cell_no_ - (int)other.cell_no_;
     				return (std::size_t)(s>0?s:-s);
     			}
 
@@ -123,6 +123,7 @@ namespace boost {
 					current_cell_ = this->r_->obj_->get_cell(r_->row_, cell_no_);
 					return current_cell_;
 				}
+
 			};
 			row_iterator begin() { return row_iterator(this, (std::size_t)0); }
 			row_iterator end() { return row_iterator(this, obj_->pimpl_->max_column()); }
@@ -132,37 +133,35 @@ namespace boost {
 	 	class column {
 			protected:
 			sheet* obj_;
-			int column_;
+			std::size_t column_;
 			public:
-			column(sheet* obj, int column) {
+			column(sheet* obj, std::size_t column) {
 				obj_ = obj;
 				column_ = column;
 			}
-			boost::cell get_cell(int row) {
+			boost::cell get_cell(std::size_t row) {
 				return obj_->pimpl_->get_cell(row,column_);
 			}
-			boost::cell operator[](int row) {
+			boost::cell operator[](std::size_t row) {
 				return obj_->pimpl_->get_cell_unchecked(row,column_);
 			}
 		};
-		
 
-		row get_row(int i) {
+		row get_row(std::size_t i) {
 			return row(this,i);
 		}
 
-		column get_column(int i) {
+		column get_column(std::size_t i) {
 			return column(this,i);
 		}
 
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
-		row operator[](int i) {
+		row operator[](std::size_t i) {
 			return row(this,i);
 		}
 	 	
-
 	 	//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {

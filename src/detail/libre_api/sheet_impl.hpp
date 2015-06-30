@@ -31,12 +31,12 @@ class libre_sheet: public sheet_interface {
 protected:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;	
-	int index;
+	std::size_t index;
 	std::string name;
 
 public:
 	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
-		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, int& index) {
+		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::size_t& index) {
 		this->xComponent_ = xComponent;
 		this->xSheet_ = xSheet;
 		this->index = index;
@@ -47,7 +47,7 @@ public:
 		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::string& str) {
 		this->xComponent_ = xComponent;
 		this->xSheet_ = xSheet;
-		this->index = boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);
+		this->index = (std::size_t)boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);
 		this->name = str;
 	}
 
@@ -55,7 +55,7 @@ public:
 		return this->name;
 	}
 
-	int sheet_index() {
+	std::size_t sheet_index() {
 		return this->index;
 	}
 
@@ -76,21 +76,20 @@ public:
 		return 1024;
 	}
  
-	boost::cell get_cell(int row, int column) {
-		if( column < 0 || row < 0 || (std::size_t)row > max_row() || (std::size_t)column > max_column() ) {
+	boost::cell get_cell(std::size_t row, std::size_t column) {
+		if( row > max_row() || column > max_column() ) {
 			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
 		}
-		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,row,column);
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,(int)row,(int)column);
 		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
-	boost::cell get_cell_unchecked(int row, int column) {
-		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition(row, column);
+	boost::cell get_cell_unchecked(std::size_t row, std::size_t column) {
+		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition((int)row, (int)column);
 		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
  	~libre_sheet() {
- 		
  	}
 
 };
