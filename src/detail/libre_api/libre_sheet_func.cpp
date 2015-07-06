@@ -67,6 +67,9 @@ using ::rtl::OUStringToOString;
 
 namespace boost { namespace doc { namespace libre_sheet_func {
 
+//! \fn Returns the XSpreadsheetDocument interface
+//!     which will be later used to find the XSpreadsheets
+//!     interface.
 Reference< XSpreadsheetDocument > get_xSheetDoc(
         Reference<XComponent> xComponent) {
     if(xComponent == NULL) {
@@ -83,9 +86,9 @@ Reference< XSpreadsheetDocument > get_xSheetDoc(
     }
 } 
 
-//! \fn Internal Function which returns all the sheets 
-//!     of the spreadsheet.
-//!
+//! \fn Internal Function which returns all 
+//!     the sheets of the spreadsheet.Uses 
+//!     XSpreadsheets interface to do so.
 Reference< XSpreadsheets > get_sheets_of_document(
             Reference < XSpreadsheetDocument > xSheetDoc) {
     try  {
@@ -99,9 +102,9 @@ Reference< XSpreadsheets > get_sheets_of_document(
 }
 
 
-//! \fn
-//!
-//!
+//! \fn Gets the sheet Reference by name of the sheet
+//!     provided. Raises an exception otherwise. Uses 
+//!     XSpreadsheets interface to do so.
 Reference < XSpreadsheet > get_sheet_by_name(
             Reference< XSpreadsheets > xSheets,
                 const std::string& sheetName) {
@@ -120,9 +123,9 @@ Reference < XSpreadsheet > get_sheet_by_name(
     }
 }
 
-//! \fn
-//!
-//!
+//! \fn Gets the sheet Reference by name of the sheet
+//!     provided, no exception handling. Uses 
+//!     XSpreadsheets interface to do so.
 Reference < XSpreadsheet > get_sheet_by_name_unchecked(
             Reference< XSpreadsheets > xSheets,
                 const std::string& sheetName) {
@@ -133,9 +136,10 @@ Reference < XSpreadsheet > get_sheet_by_name_unchecked(
 
 
 
-//! \fn
-//!
-//!
+//! \fn Gets the sheet Reference by name of the sheet
+//!     provided. Raises an exception otherwise. 
+//!     Uses XIndexAccess Interface to do so 
+//!     which acts as the indexing gateway.
 Reference < XSpreadsheet > get_sheet_by_index(
             Reference< XSpreadsheets > xSheets,
             int index) {
@@ -152,9 +156,10 @@ Reference < XSpreadsheet > get_sheet_by_index(
 }
 
 
-//! \fn
-//!
-//!
+//! \fn Returns the sheet Reference by providing the index
+//!     of the sheet, no exception handling. 
+//!     Uses XIndexAccess Interface to do so 
+//!     which acts as the indexing gateway.
 Reference < XSpreadsheet > get_sheet_by_index_unchecked(
             Reference< XSpreadsheets > xSheets,
             int index) {
@@ -164,9 +169,9 @@ Reference < XSpreadsheet > get_sheet_by_index_unchecked(
     return xSheet;
 }
 
-//! \fn
-//!
-//!
+
+//! \fn Renames the sheet instance through the sheet name
+//!     Raises an exception if there is some kind of conflict.
 void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName) {
     if(sheetName.empty() or sheetName == "") {
         boost::throw_exception(document_exception(
@@ -182,9 +187,10 @@ void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName)
     }
 }
 
-//! \fn
-//!
-//!
+//! \fn Gets the sheet count of the document
+//!     as an integer. Uses XIndexAccess Interface to do so 
+//!     which acts as the indexing gateway and
+//!     hence provides the count. 
 int get_sheet_count(Reference< XSpreadsheets > xSheets) {
     try {
         Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
@@ -197,9 +203,9 @@ int get_sheet_count(Reference< XSpreadsheets > xSheets) {
 }
 
 
-//! \fn
-//!
-//!
+//! \fn Returns the sheet Reference after inserting 
+//!     it at 1st pos with name sheetName.
+//!     Uses XSpreadsheets Interface to do so.
 Reference < XSpreadsheet >  insert_sheet_by_name(Reference< XSpreadsheets> xSheets,std::string sheetName) {
     if(sheetName.empty() or sheetName == "") {
         boost::throw_exception(document_exception(
@@ -215,9 +221,8 @@ Reference < XSpreadsheet >  insert_sheet_by_name(Reference< XSpreadsheets> xShee
     }
 }
 
-//! \fn
-//!
-//!
+//! \fn Deletes the sheet by name.
+//!     Uses XSpreadsheets Interface to do so.
 void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
     if(str.empty() or str == "") {
         boost::throw_exception(document_exception(
@@ -232,9 +237,8 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
     }
 }
 
-//! \fn
-//!
-//!
+//! \fn Deletes the sheet by index.
+//!     Uses XIndexContainer Interface to do so.
 void delete_sheet_by_index(Reference< XSpreadsheets > xSheets,int index) {
     try {
         Reference < XIndexContainer > xIndexContainer(xSheets, UNO_QUERY);

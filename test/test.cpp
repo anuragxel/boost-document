@@ -121,8 +121,8 @@ int negative_absurd_get_sheet_string(boost::document& d) {
         return 1;
     }
     catch(boost::document_exception& e) {
-    std::cout << "Test negative_get_sheet_string Passed. Expected -- " << e.what() << std::endl;
-    return 0;
+        std::cout << "Test negative_get_sheet_string Passed. Expected -- " << e.what() << std::endl;
+        return 0;
     }
 }
 
@@ -341,6 +341,25 @@ int cell_getters_check(boost::document& c) {
     }   
 }
 
+
+int cell_formula_check(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        s1[2][2] = 14.6;
+        s1[2][3] = 3.14;
+        s1[2][4] = "=C3+C4";
+        BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
+        BOOST_REQUIRE(s1[2][4].get_value() < 17.75 and s1[2][4].get_value() > 17.73);
+        BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test cell_formula_check Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
 int check_row_and_column_class(boost::document& c) {
     try {
 
@@ -406,7 +425,7 @@ int use_row_iterator(boost::document& c) {
         std::cerr << "Test use_row_iterator Failed." << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
-    }   
+    }
 }
 */
 
@@ -460,6 +479,7 @@ int test_main(int argc, char *argv[]) {
     rv += sheet_and_cell_syntatic_sugar(b,c);
     rv += cell_type_check(c);
     rv += cell_getters_check(c);
+    rv += cell_formula_check(c);
     rv += check_row_and_column_class(c);
 
     //  iterator checks

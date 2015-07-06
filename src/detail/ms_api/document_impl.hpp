@@ -44,7 +44,7 @@ public:
 		if(!boost::filesystem::exists(this->doc_path_)) {
         		boost::throw_exception(document_exception(
             		"Error: Path is empty or does not exist."));
-    		}
+    	}
 		this->clsid_ = boost::doc::ms_functions::get_clsid();
 		boost::doc::ms_functions::get_application_pointer(clsid_,this->appl_ptr_);
 		this->sheets_ptr_ = NULL;

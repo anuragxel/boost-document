@@ -47,8 +47,8 @@ using ::rtl::OUStringToOString;
 
 namespace boost { namespace doc { namespace libre_cell_func {
 
-//! \fn
-//!
+//! \fn Returns an XCell Reference by the position
+//!     with Exception Handling.
 //!
 Reference < XCell > get_cell(Reference <XSpreadsheet> xSheet,int i, int j) {
     try {
@@ -60,9 +60,9 @@ Reference < XCell > get_cell(Reference <XSpreadsheet> xSheet,int i, int j) {
         boost::throw_exception(document_exception(o.pData->buffer));
     }
 }
-
-//! \fn
-//!
+ 
+//! \fn Sets Cell value as string str. the enum value of the cell
+//!     changes to CellContentType_STRING
 //!
 void set_cell_value(Reference< XCell > xCell, const std::string& str) {
     try {
@@ -74,8 +74,8 @@ void set_cell_value(Reference< XCell > xCell, const std::string& str) {
     }
 }
 
-//! \fn
-//!
+//! \fnSets Cell value as float x. the enum value of the cell
+//!     changes to CellContentType_VALUE
 //!
 void set_cell_value(Reference< XCell > xCell, float x) {
     try {
@@ -87,8 +87,8 @@ void set_cell_value(Reference< XCell > xCell, float x) {
     }
 }
 
-//! \fn
-//!
+//! \fn Gets the cell content type of the cell. Returns the boost enum value 
+//!     depending upon the Internal OO enum.
 //!
 boost::cell_content_type::type get_content_type(Reference < XCell > xCell) {
     switch (xCell->getType()){
@@ -101,8 +101,8 @@ boost::cell_content_type::type get_content_type(Reference < XCell > xCell) {
     return boost::cell_content_type::ERROR;
 }
 
-//! \fn
-//!
+//! \fn Gets the string value of the Cell
+//!     if it is present.
 //!
 std::string get_string(Reference < XCell > xCell) {
  try {
@@ -115,8 +115,8 @@ std::string get_string(Reference < XCell > xCell) {
     }
 }
 
-//! \fn
-//!
+//! \fn Gets the formula value of the cell
+//!     if it is present.
 //!
 std::string get_formula(Reference < XCell > xCell) {
  try {
@@ -130,8 +130,8 @@ std::string get_formula(Reference < XCell > xCell) {
 }
 
 
-//! \fn
-//!
+//! \fn Gets the float value of the cell if 
+//!     it is present.
 //!
 double get_value(Reference < XCell > xCell) {
  try {

@@ -50,11 +50,14 @@ namespace boost {
 	 		pimpl_->rename_sheet(str);
 	 	}
 
-
+		//! Returns the maximum 
+		//! number of rows
 	 	std::size_t max_row() {
 	 		return pimpl_->max_row();
 	 	}
 
+		//! Returns the maximum 
+		//! number of columns
 	 	std::size_t max_column() {
 	 		return pimpl_->max_column();
 	 	}
@@ -148,10 +151,17 @@ namespace boost {
 			}
 		};
 
+		//! Gets a row instance
+		//!	which can be iterated
+		//! over
 		row get_row(std::size_t i) {
 			return row(pimpl_,i);
 		}
 
+
+		//! Gets a column instance
+		//!	which can be iterated
+		//! over
 		column get_column(std::size_t i) {
 			return column(pimpl_,i);
 		}
