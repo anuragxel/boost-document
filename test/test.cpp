@@ -11,6 +11,7 @@
 
 #include <boost/document/document.hpp>
 #include <boost/document/sheet.hpp>
+#include <boost/document/column.hpp>
 
 #include <boost/test/minimal.hpp>
 
@@ -365,11 +366,11 @@ int check_row_and_column_class(boost::document& c) {
 
         boost::sheet s1 = c["Anurag"];
         
-        boost::sheet::row r = s1.get_row(3);
+        boost::row r = s1.get_row(3);
         r[4] = "Anurag";
         BOOST_REQUIRE(s1[3][4].get_string() == "Anurag");
 
-        boost::sheet::column l = s1.get_column(9);
+        boost::column l = s1.get_column(9);
         l[2] = "Vatika";
         BOOST_REQUIRE(s1[2][9].get_string() == "Vatika");
 
@@ -385,9 +386,9 @@ int check_row_and_column_class(boost::document& c) {
 int check_for_sheet_and_row_scope(boost::document& c) {
     try {
         boost::sheet s = c["Anurag"];
-        boost::sheet::row r = s.get_row(10);
+        boost::row r = s.get_row(10);
         r[20] = "Hello world";
-        boost::sheet::column k = s.get_column(20);
+        boost::column k = s.get_column(20);
         
         s = c[0]; // ... new sheet is used instead of the old one
         // s is now out of scope.

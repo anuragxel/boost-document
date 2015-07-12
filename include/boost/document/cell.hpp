@@ -13,14 +13,13 @@
 namespace boost {
 
 	class cell {
-	private:
-		std::shared_ptr<cell_interface> pimpl_;
-	public:
 
+	public:
+	std::shared_ptr<cell_interface> pimpl_;
 	explicit cell(const std::shared_ptr<cell_interface> impl) : pimpl_(impl) {
 		
 	}
-	
+
     cell& operator=(const std::string& str) {
     	pimpl_->set_cell_value(str);
     	return *this;
@@ -29,6 +28,11 @@ namespace boost {
     cell& operator=(double x) {
     	pimpl_->set_cell_value(x);
         return *this;
+    }
+
+    cell& operator=(cell c) {
+    	pimpl_ = c.pimpl_;
+    	return *this;
     }
 
     void set_formula(const std::string& s) {
@@ -44,20 +48,20 @@ namespace boost {
 		pimpl_->set_cell_value(x);
 	}
 
-	std::string get_formula() {
+	std::string get_formula() const {
 		return pimpl_->get_formula();
 	}
 
 
-	std::string get_string() {
+	std::string get_string() const {
 		return pimpl_->get_string();
 	}
 
-	double get_value() {
+	double get_value() const {
 		return pimpl_->get_value();
 	}
     
-    bool empty() {
+    bool empty() const {
     	return pimpl_->empty();
     }
 

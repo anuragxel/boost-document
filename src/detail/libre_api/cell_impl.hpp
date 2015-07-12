@@ -37,24 +37,24 @@ class libre_cell : public cell_interface {
 		boost::doc::libre_cell_func::set_cell_value(this->xCell_, x);
 	}
 
-	boost::cell_content_type::type get_content_type() {
+	boost::cell_content_type::type get_content_type() const {
 		return boost::doc::libre_cell_func::get_content_type(this->xCell_);
 	}
 
-	std::string get_string() {
+	std::string get_string() const {
 		return boost::doc::libre_cell_func::get_string(this->xCell_);
 	}
 
 
-	std::string get_formula() {
+	std::string get_formula() const {
 		return boost::doc::libre_cell_func::get_formula(this->xCell_);
 	}
 
-	double get_value() {
+	double get_value() const {
 		return boost::doc::libre_cell_func::get_value(this->xCell_);
 	}
  
-	bool empty() {
+	bool empty() const {
 		if(boost::doc::libre_cell_func::get_content_type(this->xCell_) == boost::cell_content_type::type::EMPTY) {
 			return true;
 		}
