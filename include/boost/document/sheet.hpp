@@ -17,8 +17,6 @@
 
 #include <boost/document/detail/document_exception.hpp>
 
-#include <boost/iterator/iterator_facade.hpp>
-
 namespace boost {
 
 	class row;
@@ -79,8 +77,8 @@ namespace boost {
 		//! Gets a row instance
 		//!	which can be iterated
 		//! over
-		row get_row(std::size_t i) {
-			return row(pimpl_,i);
+		boost::row get_row(std::size_t i) {
+			return boost::row(pimpl_,i);
 		}
 
 
@@ -94,8 +92,8 @@ namespace boost {
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
-		row operator[](std::size_t i) {
-			return row(pimpl_,i);
+		boost::row operator[](std::size_t i) {
+			return boost::row(pimpl_,i);
 		}
 	 	
 	 	//! \brief Destructor

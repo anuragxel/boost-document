@@ -30,11 +30,6 @@ namespace boost {
         return *this;
     }
 
-    cell& operator=(cell c) {
-    	pimpl_ = c.pimpl_;
-    	return *this;
-    }
-
     void set_formula(const std::string& s) {
 		pimpl_->set_cell_value(s);
 	}
