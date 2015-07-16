@@ -20,29 +20,6 @@
 #include <cctype>
 
 namespace boost {
-
-	namespace detail {
-		std::pair<std::size_t,std::size_t> get_indices_from_address(const std::string& str) {
-		    std::size_t row = 0;
-		    std::size_t column = 0;
-		    for(auto &c : str) {
-		        if(!isdigit(c) && isupper(c)) {
-		            row = row*26 + (c - 'A' + 1);
-		        }
-		        else if(!isdigit(c) && islower(c)) {
-		            row = row*26 + (c - 'a'+ 1);
-		        }
-		        else {
-		                column = column*10 + (c - '0');
-		        }
-		    }
-		    // zero-indexed
-		    row -= 1;
-		    column -= 1;
-		    return std::make_pair(row,column);
-		}
-	}
-
     //! \brief This is the main class interface to be 
     //!        exposed to the library user.
     //!
@@ -121,8 +98,23 @@ namespace boost {
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
 		boost::cell operator[](const std::string& str) {
-			auto p = boost::detail::get_indices_from_address(str);
-			return pimpl_->get_cell_unchecked(p.first,p.second);
+			std::size_t row = 0;
+		    std::size_t column = 0;
+		    for(auto &c : str) {
+		        if(!isdigit(c) && isupper(c)) {
+		            row = row*26 + (c - 'A' + 1);
+		        }
+		        else if(!isdigit(c) && islower(c)) {
+		            row = row*26 + (c - 'a'+ 1);
+		        }
+		        else {
+		                column = column*10 + (c - '0');
+		        }
+		    }
+		    // zero-indexed
+		    row -= 1;
+		    column -= 1;
+			return pimpl_->get_cell_unchecked(row,column);
 		}
 	 	
 	 	//! \brief Destructor

@@ -306,6 +306,7 @@ int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
     boost::cell cl = s2[0][0];
     s2[0][1] = "Vatika";
     s2[1][1] = "Anurag";
+    BOOST_REQUIRE(s2["A2"].get_string() == "Vatika");
     return 0;
 }
 
