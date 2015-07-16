@@ -350,7 +350,7 @@ int cell_formula_check(boost::document& c) {
         s1[2][3] = 3.14;
         s1[2][4] = "=C3+C4";
         BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
-        BOOST_REQUIRE(s1[2][4].get_value() < 17.75 and s1[2][4].get_value() > 17.73);
+        BOOST_REQUIRE(s1[2][4].get_value() < 17.75 && s1[2][4].get_value() > 17.73);
         BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
         return 0;
     }
@@ -368,11 +368,11 @@ int check_row_and_column_class(boost::document& c) {
         
         boost::row r = s1.get_row(3);
         r[4] = "Anurag";
-        BOOST_REQUIRE(s1[3][4].get_string() == "Anurag");
+        BOOST_REQUIRE(s1[4][3].get_string() == "Anurag");
 
         boost::column l = s1.get_column(9);
         l[2] = "Vatika";
-        BOOST_REQUIRE(s1[2][9].get_string() == "Vatika");
+        BOOST_REQUIRE(s1[9][2].get_string() == "Vatika");
 
         return 0;
     }
@@ -406,13 +406,13 @@ int check_for_sheet_and_row_scope(boost::document& c) {
     }   
 }
 
-/*
+
 int use_row_iterator(boost::document& c) {
     try {
 
         boost::sheet s1 = c["Anurag"];
         
-        boost::sheet::row r = s1.get_row(3);
+        boost::row r = s1.get_row(3);
         
         for(boost::cell& k : r) {
           k = 1;
@@ -428,7 +428,7 @@ int use_row_iterator(boost::document& c) {
         return 1;
     }
 }
-*/
+
 
 int test_main(int argc, char *argv[]) {
    
@@ -485,7 +485,7 @@ int test_main(int argc, char *argv[]) {
 
     //  iterator checks
     rv += check_for_sheet_and_row_scope(c);
-    //rv += use_row_iterator(c);
+    rv += use_row_iterator(c);
     
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;

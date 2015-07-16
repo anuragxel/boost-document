@@ -92,8 +92,8 @@ namespace boost {
 		//! Gets the cell instance
 	 	//! which can be manipulated.
 	 	//! No Exception Handling.
-		boost::row operator[](std::size_t i) {
-			return boost::row(pimpl_,i);
+		boost::column operator[](std::size_t i) {
+			return boost::column(pimpl_,i);
 		}
 	 	
 	 	//! \brief Destructor
