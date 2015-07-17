@@ -410,17 +410,31 @@ int check_for_sheet_and_row_scope(boost::document& c) {
 
 int use_row_iterator(boost::document& c) {
     try {
-
-        boost::sheet s1 = c["Anurag"];
-        
-        boost::row r = s1.get_row(3);
-        
-        for(boost::cell& k : r) {
-          k = 1;
+        boost::sheet s1 = c["Anurag"];     
+        boost::row r = s1.get_row(3);   
+        for(auto k = r.begin(); k != r.begin() + 20; k++) {
+          *k = 1;
         }
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test use_row_iterator Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
 
-        c.save_as_document("It.ods");
-
+int row_stl_functionality(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        boost::row r = s1.get_row(3);
+        std::fill(r.begin(), r.begin() + 50, 1);
+        double sum = 0;
+        const boost::row::row_iterator end(r.begin() + 50);
+        for (auto it = r.begin(); it != end; ++it) {
+            sum += (*it).get_value();
+        }
+        BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
         return 0;
     }
     catch(boost::document_exception& e) {
@@ -487,6 +501,7 @@ int test_main(int argc, char *argv[]) {
     //  iterator checks
     rv += check_for_sheet_and_row_scope(c);
     rv += use_row_iterator(c);
+    rv += row_stl_functionality(c);
     
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
