@@ -362,6 +362,24 @@ int cell_formula_check(boost::document& c) {
     }
 }
 
+int cell_reset_check(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        s1[2][2] = 14.6;
+        s1[2][2].reset();
+        BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::EMPTY);
+        s1[2][4] = "=C3+C4";
+        s1[2][3].reset();
+        BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::EMPTY);
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test cell_formula_check Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
 int check_row_and_column_class(boost::document& c) {
     try {
 
@@ -444,6 +462,26 @@ int row_stl_functionality(boost::document& c) {
     }
 }
 
+int row_iterator_scoping(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        boost::row r = s1.get_row(3);
+        std::fill(r.begin(), r.begin() + 50, 1);
+        double sum = 0;
+        const boost::row::row_iterator end(r.begin() + 50);
+        for (auto it = r.begin(); it != end; ++it) {
+            sum += (*it).get_value();
+        }
+        BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test use_row_iterator Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
 
 int test_main(int argc, char *argv[]) {
    
@@ -496,9 +534,10 @@ int test_main(int argc, char *argv[]) {
     rv += cell_type_check(c);
     rv += cell_getters_check(c);
     rv += cell_formula_check(c);
-    rv += check_row_and_column_class(c);
+    //rv += cell_reset_check(c);
 
     //  iterator checks
+    rv += check_row_and_column_class(c);
     rv += check_for_sheet_and_row_scope(c);
     rv += use_row_iterator(c);
     rv += row_stl_functionality(c);

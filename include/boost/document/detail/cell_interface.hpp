@@ -17,8 +17,11 @@ namespace boost {
     	virtual void set_cell_value(double i) = 0;
     	virtual boost::cell_content_type::type get_content_type() const = 0;
     	virtual bool empty() const = 0;
+    	virtual void reset() = 0;
 		virtual std::string get_formula() const = 0;
 		virtual std::string get_string() const = 0;
+		virtual std::size_t get_row_index() const = 0;
+		virtual std::size_t get_column_index() const = 0;	
 		virtual double get_value() const = 0;
    		virtual ~cell_interface() {}
 	};	

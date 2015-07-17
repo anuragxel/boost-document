@@ -61,6 +61,18 @@ class libre_cell : public cell_interface {
 		return false;
 	}
 
+	void reset() {
+		boost::doc::libre_cell_func::set_cell_value(this->xCell_, "");
+	}
+
+	std::size_t get_row_index() const {
+		return row;
+	}
+
+	std::size_t get_column_index() const {
+		return column;
+	}
+
  	~libre_cell() {
  	}
 

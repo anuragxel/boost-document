@@ -30,6 +30,24 @@ namespace boost {
         return *this;
     }
 
+    /*
+    cell& operator=(cell c) {
+    	reset();
+    	switch(c.get_content_type()) {
+    		case boost::cell_content_type::STRING:
+    			set_string(c.get_string());
+    			break;
+    		case boost::cell_content_type::VALUE:
+    			set_value(c.get_value());
+    			break;
+    		case boost::cell_content_type::FORMULA:
+    			set_formula(c.get_formula());
+    			break;
+    	}
+    	return *this;
+    }
+    */
+
     void set_formula(const std::string& s) {
 		pimpl_->set_cell_value(s);
 	}
@@ -43,6 +61,10 @@ namespace boost {
 		pimpl_->set_cell_value(x);
 	}
 
+	void reset() {
+		pimpl_->reset();
+	}
+
 	std::string get_formula() const {
 		return pimpl_->get_formula();
 	}
@@ -54,6 +76,14 @@ namespace boost {
 
 	double get_value() const {
 		return pimpl_->get_value();
+	}
+
+	std::size_t get_row_index() const {
+		return pimpl_->get_row_index();
+	}
+
+	std::size_t get_column_index() const {
+		return pimpl_->get_column_index();
 	}
     
     bool empty() const {
