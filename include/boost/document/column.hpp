@@ -50,11 +50,13 @@ namespace boost {
 		boost::cell, 
 		boost::random_access_traversal_tag
 		> {
+		protected:
+		std::shared_ptr<sheet_interface> r_;
+		std::size_t cell_no_;
+		mutable boost::optional<boost::cell> current_cell_;
+		std::size_t row_;
 		public:
 		friend class boost::iterator_core_access;
-		boost::column* r_;
-		std::size_t cell_no_;
-		mutable boost::optional<boost::cell> current_cell_;        
 					
 		typedef boost::iterator_facade<
 			column_iterator, 
@@ -62,7 +64,7 @@ namespace boost {
 			boost::random_access_traversal_tag
 		> base_t;
 
-		column_iterator(boost::column* r, std::size_t num) : r_(r), cell_no_(num) 
+		column_iterator(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t row) : r_(r), cell_no_(num), row_(row) 
 		{}
 
 		void increment() { ++this->cell_no_; }
@@ -86,15 +88,15 @@ namespace boost {
 
 		base_t::reference dereference() const { 
 			if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
-				current_cell_ = r_->get_cell(cell_no_);
+				current_cell_ = r_->get_cell(row_,cell_no_);
 			}
 			return *current_cell_;
 		}
 	};
 
-	inline column_iterator column::begin() { return column_iterator(this, (std::size_t)0); }
+	inline column_iterator column::begin() { return column_iterator(obj_, (std::size_t)0,row_); }
 	
-	inline column_iterator column::end() { return column_iterator(this, obj_->max_column()); }
+	inline column_iterator column::end() { return column_iterator(obj_, obj_->max_column(),row_); }
 
 } // namespace boost
 
