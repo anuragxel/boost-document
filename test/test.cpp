@@ -469,7 +469,7 @@ int row_stl_functionality(boost::document& c) {
         boost::row r = s1.get_row(3);
         std::fill(r.begin(), r.begin() + 50, 1);
         double sum = 0;
-        const boost::row::row_iterator end(r.begin() + 50);
+        const boost::row_iterator end(r.begin() + 50);
         for (auto it = r.begin(); it != end; ++it) {
             sum += (*it).get_value();
         }
@@ -488,7 +488,7 @@ int row_iterator_caching(boost::document& c) {
         boost::sheet s1 = c["Anurag"];
         boost::cell c1 = s1[0][0];
         c1 = "Anurag";
-        boost::column::column_iterator it = s1[0].begin();
+        boost::column_iterator it = s1[0].begin();
         assert((*it).get_string() == c1.get_string());
         c1 = "Vatika"; // changed the cell value!
         assert((*it).get_string() == c1.get_string()); // Iterator should reflect the same. :)

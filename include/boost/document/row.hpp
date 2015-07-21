@@ -17,11 +17,15 @@
 
 
 namespace boost {
+
+	class row_iterator;
+
 	class row {
 		protected:
 		std::shared_ptr<sheet_interface> obj_;
 		std::size_t column_;
 		public:
+		typedef row_iterator iterator;	
 		row(std::shared_ptr<sheet_interface> obj, std::size_t column) : obj_(obj), column_(column) {}
 
 		boost::cell get_cell(std::size_t row) {
@@ -36,57 +40,63 @@ namespace boost {
 			return column_;
 		}
 
-		class row_iterator: public boost::iterator_facade<
-			row_iterator, 
-			boost::cell, 
-			boost::random_access_traversal_tag
-			> {
-			public:
-			friend class boost::iterator_core_access;
-			boost::row* r_;
-			std::size_t cell_no_;
+		inline row_iterator begin();
 
-			mutable boost::optional<boost::cell> current_cell_;        
-			
-			typedef boost::iterator_facade<
-				row_iterator, 
-				boost::cell,
-				boost::random_access_traversal_tag
-			> base_t;
-
-
-			row_iterator(boost::row* r, std::size_t num) : r_(r), cell_no_(num) 
-			{}
-
-			void increment() { ++this->cell_no_; }
-
-			void decrement() { --this->cell_no_; }
-						
-			void advance(std::size_t n) { this->cell_no_ += n; }
-						 
-			bool equal(row_iterator const& other) const {
-				return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
-			}
-
-			std::size_t distance_to(row_iterator const& other) const {
-				if(this->r_ != other.r_) {
-					boost::throw_exception(document_exception(
-					"Error: Both the iterators are not equal"));    
-				}
-				int s = (int)this->cell_no_ - (int)other.cell_no_;
-				return (std::size_t)(s>0?s:-s);
-			}
-
-			base_t::reference dereference() const {
-				if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
-					current_cell_ = r_->get_cell(cell_no_);
-				}
-				return *current_cell_;
-			}
-		};  
-		row_iterator begin() { return row_iterator(this, (std::size_t)0); }
-		row_iterator end() { return row_iterator(this, obj_->max_column()); }
+		inline row_iterator end();
 	};
+
+	class row_iterator: public boost::iterator_facade<
+		row_iterator, 
+		boost::cell, 
+		boost::random_access_traversal_tag
+		> {
+		public:
+		friend class boost::iterator_core_access;
+		boost::row* r_;
+		std::size_t cell_no_;
+
+		mutable boost::optional<boost::cell> current_cell_;        
+		
+		typedef boost::iterator_facade<
+			row_iterator, 
+			boost::cell,
+			boost::random_access_traversal_tag
+		> base_t;
+
+
+		row_iterator(boost::row* r, std::size_t num) : r_(r), cell_no_(num) 
+		{}
+
+		void increment() { ++this->cell_no_; }
+
+		void decrement() { --this->cell_no_; }
+					
+		void advance(std::size_t n) { this->cell_no_ += n; }
+					 
+		bool equal(row_iterator const& other) const {
+			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
+		}
+
+		std::size_t distance_to(row_iterator const& other) const {
+			if(this->r_ != other.r_) {
+				boost::throw_exception(document_exception(
+				"Error: Both the iterators are not equal"));    
+			}
+			int s = (int)this->cell_no_ - (int)other.cell_no_;
+			return (std::size_t)(s>0?s:-s);
+		}
+
+		base_t::reference dereference() const {
+			if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
+				current_cell_ = r_->get_cell(cell_no_);
+			}
+			return *current_cell_;
+		}
+	};
+
+	inline row_iterator row::begin() { return row_iterator(this, (std::size_t)0); }
+	inline row_iterator row::end() { return row_iterator(this, obj_->max_column()); }
+
 } // namespace boost
 
 #endif

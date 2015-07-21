@@ -13,9 +13,10 @@
 namespace boost {
 
 	class cell {
-
-	public:
+	protected:
 	std::shared_ptr<cell_interface> pimpl_;
+	
+	public:
 	explicit cell(const std::shared_ptr<cell_interface> impl) : pimpl_(impl) {
 		
 	}
@@ -31,8 +32,7 @@ namespace boost {
     }
 
     /*
-    cell& operator=(cell c) {
-    	reset();
+    cell& operator=(const cell& c) {
     	switch(c.get_content_type()) {
     		case boost::cell_content_type::STRING:
     			set_string(c.get_string());
@@ -43,11 +43,14 @@ namespace boost {
     		case boost::cell_content_type::FORMULA:
     			set_formula(c.get_formula());
     			break;
+    		case boost::cell_content_type::ERROR:
+    		case boost::cell_content_type::EMPTY:
+    			break;
     	}
     	return *this;
     }
     */
-
+    
     void set_formula(const std::string& s) {
 		pimpl_->set_cell_value(s);
 	}
@@ -90,7 +93,7 @@ namespace boost {
     	return pimpl_->empty();
     }
 
-    boost::cell_content_type::type get_content_type() {
+    boost::cell_content_type::type get_content_type() const {
     	return pimpl_->get_content_type();
     }
 
