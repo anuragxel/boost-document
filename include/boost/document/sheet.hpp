@@ -100,15 +100,32 @@ namespace boost {
 		boost::cell operator[](const std::string& str) {
 			std::size_t row = 0;
 			std::size_t column = 0;
+			bool numbers = false; // initially no numbers
+			bool alph = false;
 			for(auto &c : str) {
 				if(!isdigit(c) && isupper(c)) {
+					alph = true;
+					if(numbers) {
+						boost::throw_exception(document_exception(
+							"Error: Invalid Index"));
+					}
 					row = row*26 + (c - 'A' + 1);
 				}
 				else if(!isdigit(c) && islower(c)) {
+					alph = true;
+					if(numbers) { // alphabet after a number comes
+						boost::throw_exception(document_exception(
+							"Error: Invalid Index"));
+					}
 					row = row*26 + (c - 'a'+ 1);
 				}
 				else {
-						column = column*10 + (c - '0');
+					if(!alph) { // doesn't start with alphabet 
+						boost::throw_exception(document_exception(
+							"Error: Invalid Index"));
+					}
+					numbers = true; // as soon as first number comes
+					column = column*10 + (c - '0');
 				}
 			}
 			// zero-indexed
