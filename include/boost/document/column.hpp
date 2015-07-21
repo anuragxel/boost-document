@@ -76,9 +76,9 @@ namespace boost {
 			}
 
 			base_t::reference dereference() const { 
-				//if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
-				current_cell_ = r_->get_cell(cell_no_);
-				//}
+				if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
+					current_cell_ = r_->get_cell(cell_no_);
+				}
 				return *current_cell_;
 			}
 		};  

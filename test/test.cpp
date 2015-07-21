@@ -483,21 +483,22 @@ int row_stl_functionality(boost::document& c) {
     }
 }
 
-int row_iterator_scoping(boost::document& c) {
+int row_iterator_caching(boost::document& c) {
     try {
         boost::sheet s1 = c["Anurag"];
-        boost::row r = s1.get_row(3);
-        std::fill(r.begin(), r.begin() + 50, 1);
-        double sum = 0;
-        const boost::row::row_iterator end(r.begin() + 50);
-        for (auto it = r.begin(); it != end; ++it) {
-            sum += (*it).get_value();
-        }
-        BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
+        boost::cell c1 = s1[0][0];
+        c1 = "Anurag";
+        boost::column::column_iterator it = s1[0].begin();
+        assert((*it).get_string() == c1.get_string());
+        c1 = "Vatika"; // changed the cell value!
+        assert((*it).get_string() == c1.get_string()); // Iterator should reflect the same. :)
+        // It does reflect because the operations are write through.
+        // there are no operations which are locally performed in the instance
+        // and delegated for later. All operations are final in nature.
         return 0;
     }
     catch(boost::document_exception& e) {
-        std::cerr << "Test use_row_iterator Failed." << std::endl;
+        std::cerr << "Test row_iterator_caching Failed." << std::endl;
         std::cerr << e.what() << std::endl;
         return 1;
     }
@@ -557,13 +558,14 @@ int test_main(int argc, char *argv[]) {
     rv += cell_formula_check(c);
     //rv += cell_reset_check(c);
     rv += negative_cell_index_check(c);
-    
+
     //  iterator checks
     rv += check_row_and_column_class(c);
     rv += check_for_sheet_and_row_scope(c);
     rv += use_row_iterator(c);
     rv += row_stl_functionality(c);
-    
+    rv += row_iterator_caching(c);
+
     if (rv > 0) {
         std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
     } 
