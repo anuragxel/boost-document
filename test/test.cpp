@@ -310,6 +310,25 @@ int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
     return 0;
 }
 
+
+int negative_cell_index_check(boost::document& c) {
+    boost::sheet s1 = c["Anurag"];    
+    try {
+        s1["0A2"] = "Anurag";
+        return 1;
+    }
+    catch(boost::document_exception& e) {
+    }
+    try {
+        s1["A22B"] = "Anurag";
+        return 1;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test negative_cell_index_check Passed." << std::endl;
+        return 0;
+    }
+}
+
 int cell_type_check(boost::document& c) {
     try {
         boost::sheet s1 = c["Anurag"];
@@ -362,6 +381,8 @@ int cell_formula_check(boost::document& c) {
     }
 }
 
+
+// TODO: Fix in a day. Not able to find the fix. :/ 
 int cell_reset_check(boost::document& c) {
     try {
         boost::sheet s1 = c["Anurag"];
@@ -535,7 +556,8 @@ int test_main(int argc, char *argv[]) {
     rv += cell_getters_check(c);
     rv += cell_formula_check(c);
     //rv += cell_reset_check(c);
-
+    rv += negative_cell_index_check(c);
+    
     //  iterator checks
     rv += check_row_and_column_class(c);
     rv += check_for_sheet_and_row_scope(c);
