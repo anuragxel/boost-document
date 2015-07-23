@@ -15,10 +15,16 @@
 
 #include <boost/optional.hpp>
 
+#include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/conditional.hpp>
+
 
 namespace boost {
 
-	class column_iterator;
+	template<typename Value> class column_iter;
+
+	typedef column_iter<boost::cell> column_iterator;
+	typedef column_iter<const boost::cell> const_column_iterator;
 	
 	class column {
 		protected:
@@ -43,28 +49,31 @@ namespace boost {
 		inline column_iterator begin();
 		
 		inline column_iterator end();
+		
+		inline const_column_iterator cbegin();
+		
+		inline const_column_iterator cend();
+		
 	};
 
-	class column_iterator: public boost::iterator_facade<
-		column_iterator, 
-		boost::cell, 
+	template<typename Cell> class column_iter: public boost::iterator_facade<
+		column_iter<Cell>, 
+		Cell, 
 		boost::random_access_traversal_tag
 		> {
 		protected:
-		std::shared_ptr<sheet_interface> r_;
+		typename boost::conditional<
+        	boost::is_const<Cell>::value,
+        	std::shared_ptr<const sheet_interface>,
+        	std::shared_ptr<sheet_interface>
+    	>::type r_;
 		std::size_t cell_no_;
 		mutable boost::optional<boost::cell> current_cell_;
 		std::size_t row_;
 		public:
 		friend class boost::iterator_core_access;
-					
-		typedef boost::iterator_facade<
-			column_iterator, 
-			boost::cell,
-			boost::random_access_traversal_tag
-		> base_t;
 
-		column_iterator(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t row) : r_(r), cell_no_(num), row_(row) 
+		column_iter(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t row) : r_(r), cell_no_(num), row_(row) 
 		{}
 
 		void increment() { ++this->cell_no_; }
@@ -73,11 +82,11 @@ namespace boost {
 					
 		void advance(std::size_t n) { this->cell_no_ += n; }
 					 
-		bool equal(column_iterator const& other) const {
+		bool equal(column_iter<Cell> const& other) const {
 			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
 		}
 
-		std::size_t distance_to(column_iterator const& other) const {
+		std::size_t distance_to(column_iter<Cell> const& other) const {
 			if(this->r_ != other.r_) {
 				boost::throw_exception(document_exception(
 				"Error: Both the iterators are not equal"));    
@@ -86,9 +95,10 @@ namespace boost {
 			return (std::size_t)(s>0?s:-s);
 		}
 
-		base_t::reference dereference() const { 
+		Cell& dereference() const { 
 			if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
-				current_cell_ = r_->get_cell(row_,cell_no_);
+				current_cell_ = boost::none; // set it to none.
+				current_cell_ = r_->get_cell(row_,cell_no_); // now this isn't an assignment :D
 			}
 			return *current_cell_;
 		}
@@ -97,6 +107,10 @@ namespace boost {
 	inline column_iterator column::begin() { return column_iterator(obj_, (std::size_t)0,row_); }
 	
 	inline column_iterator column::end() { return column_iterator(obj_, obj_->max_column(),row_); }
+
+	inline const_column_iterator column::cbegin() { return const_column_iterator(obj_, (std::size_t)0,row_); }
+	
+	inline const_column_iterator column::cend() { return const_column_iterator(obj_, obj_->max_column(),row_); }
 
 } // namespace boost
 

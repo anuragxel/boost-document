@@ -26,9 +26,50 @@ namespace boost {
 	class sheet {
 	private:
 		std::shared_ptr<sheet_interface> pimpl_;
-		//boost::shared_ptr<sheet_interface> init() {
-		//	return boost::detail::open_sheet_instance();
-		//}
+
+		boost::cell cell_from_string(const char* str, std::size_t length) {
+			std::size_t row = 0;
+			std::size_t column = 0;
+			bool numbers = false; // initially no numbers
+			bool alph = false;
+
+			for (std::size_t i = 0; i < length; ++i) {
+				const char c = str[i];
+				if(!isdigit(c)) {
+					alph = true;
+					if(numbers || !isalpha(c)) {
+						boost::throw_exception(document_exception(
+							"Invalid index error: index must start with letters, followed by numbers"));
+					}
+					column = column*26 + (c + 1);
+					if(isupper(c)) {
+						column -= 'A';
+					}
+					else {
+						column -= 'a';
+					}
+				}
+				else {
+					if(!alph) { // doesn't start with alphabet 
+						boost::throw_exception(document_exception(
+							"Invalid index error: index must start with letters, followed by numbers"));
+					}
+					numbers = true; // as soon as first number comes
+					row = row*10 + (c - '0');
+				}
+			}
+
+			if (row == 0) {
+			    boost::throw_exception(document_exception(
+			        "Invalid index error: row number must be greater than 0"
+			    ));
+			}
+
+			// zero-indexed
+			column -= 1;
+			row -= 1;
+			return pimpl_->get_cell_unchecked(column,row);
+		}
 	public:
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
@@ -94,44 +135,26 @@ namespace boost {
 			return boost::column(pimpl_,i);
 		}
 
+
+		//! Gets the column instance
+		//! which can be manipulated.
+		//! No Exception Handling.
+		boost::column operator[](int i) {
+			return boost::column(pimpl_,(std::size_t)i);
+		}
+
 		//! Gets the cell instance
 		//! which can be manipulated.
 		//! No Exception Handling.
 		boost::cell operator[](const std::string& str) {
-			std::size_t row = 0;
-			std::size_t column = 0;
-			bool numbers = false; // initially no numbers
-			bool alph = false;
-			for(auto &c : str) {
-				if(!isdigit(c) && isupper(c)) {
-					alph = true;
-					if(numbers) {
-						boost::throw_exception(document_exception(
-							"Error: Invalid Index"));
-					}
-					row = row*26 + (c - 'A' + 1);
-				}
-				else if(!isdigit(c) && islower(c)) {
-					alph = true;
-					if(numbers) { // alphabet after a number comes
-						boost::throw_exception(document_exception(
-							"Error: Invalid Index"));
-					}
-					row = row*26 + (c - 'a'+ 1);
-				}
-				else {
-					if(!alph) { // doesn't start with alphabet 
-						boost::throw_exception(document_exception(
-							"Error: Invalid Index"));
-					}
-					numbers = true; // as soon as first number comes
-					column = column*10 + (c - '0');
-				}
-			}
-			// zero-indexed
-			row -= 1;
-			column -= 1;
-			return pimpl_->get_cell_unchecked(row,column);
+			return cell_from_string(str.data(),str.length());
+		}
+
+		//! Gets the cell instance
+		//! which can be manipulated.
+		//! No Exception Handling.
+		boost::cell operator[](const char* str) {
+		    return cell_from_string(str, std::strlen(str));
 		}
 		
 		//! \brief Destructor
