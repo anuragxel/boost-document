@@ -401,6 +401,24 @@ int cell_reset_check(boost::document& c) {
     }
 }
 
+int cell_comparison_check(boost::document& c) {
+    try {
+        boost::sheet s1 = c["Anurag"];
+        s1[2][2] = "Anurag";
+        BOOST_REQUIRE(s1[2][2] == "Anurag");
+        BOOST_REQUIRE(s1[2][2] > "Aaaaaa");
+        BOOST_REQUIRE("Vatika" > s1[2][2]);
+        BOOST_REQUIRE(s1[2][2] < "Poland");
+        return 0;
+    }
+    catch(boost::document_exception& e) {
+        std::cerr << "Test cell_comparison_check Failed." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
+}
+
+
 int check_row_and_column_class(boost::document& c) {
     try {
 
@@ -473,6 +491,7 @@ int row_stl_functionality(boost::document& c) {
         for (auto it = r.begin(); it != end; ++it) {
             sum += (*it).get_value();
         }
+        std::cout << "#sum " << sum << std::endl; 
         BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
         return 0;
     }
@@ -558,10 +577,12 @@ int test_main(int argc, char *argv[]) {
     rv += cell_formula_check(c);
     //rv += cell_reset_check(c);
     rv += negative_cell_index_check(c);
+    rv += cell_comparison_check(c);
 
     //  iterator checks
     rv += check_row_and_column_class(c);
     rv += check_for_sheet_and_row_scope(c);
+    
     rv += use_row_iterator(c);
     rv += row_stl_functionality(c);
     rv += row_iterator_caching(c);

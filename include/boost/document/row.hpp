@@ -97,6 +97,7 @@ namespace boost {
 	};
 
 	inline row_iterator row::begin() { return row_iterator(obj_, (std::size_t)0, column_); }
+	
 	inline row_iterator row::end() { return row_iterator(obj_, obj_->max_column(), column_); }
 
 } // namespace boost
