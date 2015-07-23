@@ -90,14 +90,15 @@ namespace boost {
 
 		base_t::reference dereference() const {
 			if (!current_cell_ || current_cell_->get_row_index() != cell_no_) {
-				current_cell_ = r_->get_cell(cell_no_,column_);
+				current_cell_ = boost::none; // set it to none.
+				current_cell_ = r_->get_cell(cell_no_,column_); // now this isn't an assignment :D
 			}
 			return *current_cell_;
 		}
 	};
 
 	inline row_iterator row::begin() { return row_iterator(obj_, (std::size_t)0, column_); }
-	
+
 	inline row_iterator row::end() { return row_iterator(obj_, obj_->max_column(), column_); }
 
 } // namespace boost

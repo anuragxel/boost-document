@@ -31,7 +31,6 @@ namespace boost {
 		: pimpl_(c.pimpl_)
 		{}
 
-		/*
 		cell& operator=(const cell& c) {
 			switch(c.get_content_type()) {
 				case boost::cell_content_type::STRING:
@@ -49,8 +48,7 @@ namespace boost {
 			}
 			return *this;
 		}
-		*/
-
+	
 		cell& operator=(const std::string& str) {
 			pimpl_->set_cell_value(str);
 			return *this;
