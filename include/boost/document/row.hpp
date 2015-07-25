@@ -63,16 +63,19 @@ namespace boost {
 		boost::random_access_traversal_tag
 		> {
 		protected:
+		
 		typename boost::conditional<
         	boost::is_const<Cell>::value,
         	std::shared_ptr<const sheet_interface>,
         	std::shared_ptr<sheet_interface>
     	>::type r_;
+
 		std::size_t cell_no_;
 		mutable boost::optional<boost::cell> current_cell_;
 		std::size_t column_;
 
 		public:
+		
 		friend class boost::iterator_core_access;
 
 		row_iter(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t column) : r_(r), cell_no_(num), column_(column)
@@ -83,18 +86,19 @@ namespace boost {
 		void decrement() { --this->cell_no_; }
 					
 		void advance(std::size_t n) { this->cell_no_ += n; }
-					 
-		bool equal(row_iter<Cell> const& other) const {
-			return this->r_ == other.r_ and this->cell_no_ == other.cell_no_;
+		
+		template <class T>
+		bool equal(row_iter<T> const& other) const {
+		    return this->r_ == other.r_ && this->cell_no_ == other.cell_no_;
 		}
 
-		std::size_t distance_to(row_iter<Cell> const& other) const {
+		template <class T>
+		std::size_t distance_to(row_iter<T> const& other) const {
 			if(this->r_ != other.r_) {
 				boost::throw_exception(document_exception(
 				"Error: Both the iterators are not equal"));    
 			}
-			int s = (int)this->cell_no_ - (int)other.cell_no_;
-			return (std::size_t)(s>0?s:-s);
+			return (std::size_t)(this->cell_no_> other.cell_no_?this->cell_no_-other.cell_no_:other.cell_no_-this->cell_no_);
 		}
 
 		Cell& dereference() const {
