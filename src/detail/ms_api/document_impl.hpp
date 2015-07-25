@@ -160,7 +160,7 @@ public:
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
-	std::size_t sheet_count() {
+	std::size_t sheet_count() const {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
 				"Error: Document Not Open."));

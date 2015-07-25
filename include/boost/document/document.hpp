@@ -34,7 +34,7 @@ namespace boost {
 	public:
 		//! \brief The Constructor.
 		//!        Creates a new document object.  
-		document(const boost::filesystem::path& path) : pimpl_(init()) {
+		explicit document(const boost::filesystem::path& path) : pimpl_(init()) {
 			pimpl_->initialize(path);
 		}
 		//! \brief creates document using Calc/Excel given in
@@ -106,9 +106,11 @@ namespace boost {
 			pimpl_->delete_sheet(index);
 		}
 
-		int sheet_count() {
+		//! \brief Gives you the number of sheets.
+		std::size_t sheet_count() const {
 			return pimpl_->sheet_count();
 		}
+
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~document() {

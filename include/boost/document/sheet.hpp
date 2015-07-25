@@ -68,7 +68,7 @@ namespace boost {
 			// zero-indexed
 			column -= 1;
 			row -= 1;
-			return pimpl_->get_cell_unchecked(column,row);
+			return pimpl_->get_cell_unchecked(row,column);
 		}
 	public:
 		//! \brief The Constructor.
@@ -78,13 +78,13 @@ namespace boost {
 		}
 		//! \brief Gets the sheet name
 		//!        which is being accessed.
-		std::string sheet_name() {
+		std::string sheet_name() const {
 			return pimpl_->sheet_name();
 		}
 
 		//! \brief Gets the sheet index
 		//!        which is being accessed.
-		std::size_t sheet_index() {
+		std::size_t sheet_index() const {
 			return pimpl_->sheet_index();
 		}
 
@@ -96,13 +96,13 @@ namespace boost {
 
 		//! Returns the maximum 
 		//! number of rows
-		std::size_t max_row() {
+		std::size_t max_row() const {
 			return pimpl_->max_row();
 		}
 
 		//! Returns the maximum 
 		//! number of columns
-		std::size_t max_column() {
+		std::size_t max_column() const {
 			return pimpl_->max_column();
 		}
 

@@ -35,6 +35,15 @@ class libre_document: public document_interface {
 	
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > xSheetDoc_;
+	
+	void get_sheets() {
+		if(this->xSheets_ == NULL) {
+ 			if(this->xSheetDoc_ == NULL) {
+				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
+			}
+			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
+		}
+	}
 	public:
 	void initialize(const boost::filesystem::path& fpath) {
 		boost::doc::libre_functions::set_bootstrap_offapi();
@@ -98,90 +107,52 @@ class libre_document: public document_interface {
  	}
 
  	boost::sheet insert_sheet(const std::string& str) {
-		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+		get_sheets();
 		std::string new_str(str);
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::insert_sheet_by_name(this->xSheets_,new_str);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet(const std::string& str) {
-		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_name(this->xSheets_,str);
 		std::string new_str(str);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet(std::size_t index) {
- 		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+ 		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_index(this->xSheets_,(int)index);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
  	}
 
  	boost::sheet get_sheet_unchecked(const std::string& str) {
-		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_name_unchecked(this->xSheets_,str);
 		std::string new_str(str);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet_unchecked(std::size_t index) {
- 		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+ 		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_index_unchecked(this->xSheets_,(int)index);
 		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
  	}
 
+
+
  	std::size_t sheet_count() {
- 		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+ 		get_sheets();
 		return (std::size_t)boost::doc::libre_sheet_func::get_sheet_count(this->xSheets_);
  	}
 
  	void delete_sheet(const std::string& str) {
- 		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+ 		get_sheets();
 		boost::doc::libre_sheet_func::delete_sheet_by_name(this->xSheets_,str);
  	}
 
  	void delete_sheet(std::size_t index) {
- 		if(this->xSheets_ == NULL) {
- 			if(this->xSheetDoc_ == NULL) {
-				this->xSheetDoc_ = boost::doc::libre_sheet_func::get_xSheetDoc(this->xComponent_);
-			}
-			this->xSheets_ = boost::doc::libre_sheet_func::get_sheets_of_document(this->xSheetDoc_);
-		}
+ 		get_sheets();
 		boost::doc::libre_sheet_func::delete_sheet_by_index(this->xSheets_,(int)index);
  	}
 
