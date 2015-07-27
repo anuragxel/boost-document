@@ -114,7 +114,6 @@ void auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLEST
 		boost::throw_exception(document_exception(
 			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  std::to_string((int)hr)));
     }
-
 	std::vector<VARIANT> pArgs(cArgs + 1);
 	for (int i = 0; i<cArgs; i++) {
 		pArgs[i] = va_arg(marker, VARIANT);
@@ -299,6 +298,11 @@ void export_ms(const boost::filesystem::path& fpath,
 //!     the book_ptr.
 void close_ms(const boost::filesystem::path& inp_path, bool save, 
 		IDispatch* appl_ptr, IDispatch*& book_ptr) {
+
+	if (!boost::filesystem::exists(inp_path)) {
+		boost::throw_exception(document_exception(
+			"Error: Path is empty or does not exist."));
+	}
 	if (save) {
 		save_ms(inp_path, appl_ptr, book_ptr);
 	}

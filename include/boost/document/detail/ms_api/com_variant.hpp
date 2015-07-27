@@ -34,6 +34,13 @@ class com_variant : boost::noncopyable {
         return v;
     }
 
+    static VARIANT make_double(double i) {
+        VARIANT v;
+        v.vt = VT_R8;
+        v.dblVal = i;
+        return v;
+    }
+
 public:
     com_variant()
         : v_(make_empty())
@@ -49,6 +56,11 @@ public:
 
     explicit com_variant(int i)
         : v_(make_int(i))
+    {}
+
+
+    explicit com_variant(double i)
+        : v_(make_double(i))
     {}
 
     void clear() {
@@ -74,6 +86,12 @@ public:
     com_variant& operator=(int i) {
         clear();
         v_ = make_int(i);
+        return *this;
+    }
+
+    com_variant& operator=(double i) {
+        clear();
+        v_ = make_double(i);
         return *this;
     }
 

@@ -17,6 +17,7 @@
 #include <boost/document/detail/cell_interface.hpp>
 
 #include <boost/document/detail/ms_api/ms_sheet.hpp>
+#include <boost/document/detail/ms_api/ms_cell_func.hpp>
 
 
 #include "cell_impl.hpp"
@@ -66,11 +67,15 @@ namespace boost {
 				if( row > max_row() || column > max_column() ) {
 					boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
 				}
-				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
+				IDispatch* cell_ptr;
+				boost::doc::ms_cell_func::get_cell(this->sheet_ptr_,row + 1,column + 1,cell_ptr);
+				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
 			}
 
 			boost::cell get_cell_unchecked(std::size_t row,std::size_t column) {
-				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>()));
+				IDispatch* cell_ptr;
+				boost::doc::ms_cell_func::get_cell_unchecked(this->sheet_ptr_,row + 1,column + 1,cell_ptr);
+				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
 			}
 
 			std::size_t max_row() {
@@ -82,7 +87,7 @@ namespace boost {
 			}
 
 			~ms_sheet() {
-
+				sheet_ptr_->Release();
 			}
 
 		};

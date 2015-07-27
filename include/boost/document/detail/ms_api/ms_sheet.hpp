@@ -35,6 +35,7 @@ void activate_sheet(IDispatch* sheet_ptr);
 
 void delete_sheet_by_name(IDispatch *sheets_ptr, const std::string& str);
 void delete_sheet_by_index(IDispatch *sheets_ptr, int index);
+
 int get_sheet_count(IDispatch *sheets_ptr);
 
 std::string get_sheet_name(IDispatch *sheet_ptr);

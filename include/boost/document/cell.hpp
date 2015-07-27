@@ -60,7 +60,7 @@ namespace boost {
 		}
 
 		void set_formula(const std::string& s) {
-			pimpl_->set_cell_value(s);
+			pimpl_->set_cell_formula(s);
 		}
 
 

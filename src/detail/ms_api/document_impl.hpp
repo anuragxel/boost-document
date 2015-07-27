@@ -198,7 +198,7 @@ public:
 			boost::doc::ms_functions::close_ms(this->doc_path_, false, this->appl_ptr_, this->book_ptr_);
 			this->is_file_opened = false;
 		}
-		boost::doc::ms_functions::close_app(this->appl_ptr_);
+		//boost::doc::ms_functions::close_app(this->appl_ptr_);
 		CoUninitialize();
  	}
 

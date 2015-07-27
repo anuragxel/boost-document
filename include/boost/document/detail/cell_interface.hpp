@@ -14,6 +14,7 @@ namespace boost {
 	class cell_interface {
 	 public:
 	 	virtual void set_cell_value(const std::string& str) = 0;
+    	virtual void set_cell_formula(const std::string& str) = 0;
     	virtual void set_cell_value(double i) = 0;
     	virtual boost::cell_content_type::type get_content_type() const = 0;
     	virtual bool empty() const = 0;
