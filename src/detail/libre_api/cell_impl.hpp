@@ -29,6 +29,10 @@ class libre_cell : public cell_interface {
 		this->column = column;
 	}
 
+	void set_cell_formula(const std::string& str) {
+ 		boost::doc::libre_cell_func::set_cell_value(this->xCell_, str);
+	}
+
 	void set_cell_value(const std::string& str) {
  		boost::doc::libre_cell_func::set_cell_value(this->xCell_, str);
 	}
