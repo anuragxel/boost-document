@@ -27,8 +27,7 @@ namespace ms_func = boost::doc::ms_functions;
 namespace boost { namespace doc { namespace ms_cell_func {
 
 //! \fn https://msdn.microsoft.com/en-us/library/bb687869(v=office.12).aspx
-//!     Gets the representation of the cell row and column
-//! 
+//!     Gets the representation of the cell row and column as string.
 std::string get_cell_str(int row, int column) {
 	std::string result = "";
 	while(column != 0) {

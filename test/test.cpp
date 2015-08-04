@@ -9,9 +9,7 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 
-#include <boost/document/document.hpp>
-#include <boost/document/sheet.hpp>
-#include <boost/document/column.hpp>
+#include <boost/document.hpp>
 
 #include <boost/test/minimal.hpp>
 
