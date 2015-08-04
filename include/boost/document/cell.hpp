@@ -15,7 +15,7 @@
 namespace boost {
 
 	class cell
-//	less_than_comparable<cell, std::string>
+//	: less_than_comparable<cell, std::string>
 //	, equality_comparable<cell, std::string>
 //	, equality_comparable<cell> {
 	{
@@ -23,14 +23,21 @@ namespace boost {
 		std::shared_ptr<cell_interface> pimpl_;
 	public:
 
+		//!
+		//!
+		//!
 		explicit cell(const std::shared_ptr<cell_interface> impl) 
 		: pimpl_(impl) 
 		{}
 
+		//! \fn The copy constructor of the cell.
 		cell(const cell& c)
 		: pimpl_(c.pimpl_)
 		{}
 
+		//! \fn The assignment operator of the cell class.
+		//!     Makes all operations non shallow 
+		//!     with respect to the internal cells.
 		cell& operator=(const cell& c) {
 			switch(c.get_content_type()) {
 				case boost::cell_content_type::STRING:
@@ -48,78 +55,121 @@ namespace boost {
 			}
 			return *this;
 		}
-	
+		
+		//! \fn The overloaded = operator sets a string
+		//!     in the cell.
 		cell& operator=(const std::string& str) {
 			pimpl_->set_cell_value(str);
 			return *this;
 		}
 
+
+		//! \fn The overloaded = operator sets a double
+		//!     in the cell.
 		cell& operator=(double x) {
 			pimpl_->set_cell_value(x);
 			return *this;
 		}
 
+
+		//! \fn Sets a formula
+		//!     in the cell.
 		void set_formula(const std::string& s) {
 			pimpl_->set_cell_formula(s);
 		}
 
-
+		//! \fn Sets a string
+		//!     in the cell.
 		void set_string(const std::string& str) {
 			pimpl_->set_cell_value(str);
 		}
 
+		//! \fn Sets a double
+		//!     in the cell.
 		void set_value(double x) {
 			pimpl_->set_cell_value(x);
 		}
 
+		//! \fn resets the contents
+		//!     of the cell.
 		void reset() {
 			pimpl_->reset();
 		}
 
+		//! \fn Gets the formula
+		//!     in the cell
 		std::string get_formula() const {
 			return pimpl_->get_formula();
 		}
 
-
+		//! \fn Gets the string present
+		//!     in the cell
 		std::string get_string() const {
 			return pimpl_->get_string();
 		}
 
+
+		//! \fn Gets the value present
+		//!     in the cell
 		double get_value() const {
 			return pimpl_->get_value();
 		}
 
+		//!  \fn Gets the row index of the
+		//!      cell.
 		std::size_t get_row_index() const {
 			return pimpl_->get_row_index();
 		}
 
+		//! \fn Gets the column index of the
+		//!     cell.
 		std::size_t get_column_index() const {
 			return pimpl_->get_column_index();
 		}
-	
+
+		//! \fn Returns whether the cell
+		//!     is empty or not.
 		bool empty() const {
 			return pimpl_->empty();
 		}
 
+		//!
+		//!
+		//!
 		boost::cell_content_type::type get_content_type() const {
 			return pimpl_->get_content_type();
 		}
 
+		//!
+		//!
+		//!
 		~cell() {
 		}
 
+		//!
+		//!
+		//!
 		inline bool operator<(const std::string& str) {
 			return pimpl_->get_string() < str;
 		}
 
+		//!
+		//!
+		//!
 		inline bool operator>(const std::string& str) {
 			return pimpl_->get_string() > str;
 		}
 		
+		//!
+		//!
+		//!
 		inline bool operator==(const std::string& str) {
 			return pimpl_->get_string() == str;
 		}
 
+		//!
+		//!
+		//!
 		inline bool operator==(const cell& c) {
 			if(pimpl_->get_content_type() == c.get_content_type()) {
 				switch(pimpl_->get_content_type()) {
@@ -137,7 +187,10 @@ namespace boost {
 			return false;
 		}
 	}; // class cell
-
+	
+	//!
+	//!
+	//!	
 	inline bool operator>(const std::string& lhs, const cell& rhs) {
 		return lhs > rhs.get_string();
 	}

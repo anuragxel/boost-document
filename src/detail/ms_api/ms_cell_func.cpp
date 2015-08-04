@@ -26,8 +26,9 @@ namespace ms_func = boost::doc::ms_functions;
 
 namespace boost { namespace doc { namespace ms_cell_func {
 
-//! https://msdn.microsoft.com/en-us/library/bb687869(v=office.12).aspx
-
+//! \fn https://msdn.microsoft.com/en-us/library/bb687869(v=office.12).aspx
+//!     Gets the representation of the cell row and column
+//! 
 std::string get_cell_str(int row, int column) {
 	std::string result = "";
 	while(column != 0) {
@@ -52,6 +53,7 @@ void get_cell_unchecked(IDispatch* sheet_ptr,int i, int j, IDispatch*& cell_ptr)
 	get_cell(sheet_ptr,i,j,cell_ptr);
 }
 
+//! \fn Sets Cell value as float str
 void set_cell_value(IDispatch* cell_ptr,const std::string& str) {
 	boost::detail::com_variant vt_cell(str);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"Value", 1, 
@@ -59,6 +61,7 @@ void set_cell_value(IDispatch* cell_ptr,const std::string& str) {
 		);
 }
 
+//! \fn Sets Cell value as string str
 void set_cell_value(IDispatch* cell_ptr,double x) {
 	boost::detail::com_variant vt_cell(x);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"Value", 1, 
@@ -66,6 +69,7 @@ void set_cell_value(IDispatch* cell_ptr,double x) {
 		);
 }
 
+//! \fn Sets Cell formula as string str
 void set_cell_formula(IDispatch* cell_ptr, const std::string& str) {
 	boost::detail::com_variant vt_cell(str);
 	ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"Formula", 1, 
@@ -73,15 +77,21 @@ void set_cell_formula(IDispatch* cell_ptr, const std::string& str) {
 		);
 }
 
+
+//! \fn Gets the string value of the cell if 
+//!     it is present.
 std::string get_string(IDispatch* cell_ptr) {
 	VARIANT result;
 	VariantInit(&result);
-	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, cell_ptr, L"Value", 0);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, cell_ptr, L"Text", 0);
 	std::string s = ms_func::BSTR_to_string(result.bstrVal);
-	VariantCleat(&result);
+	VariantClear(&result);
 	return s;
 }
 
+
+//! \fn Gets the formula of the cell if 
+//!     it is present.
 std::string get_formula(IDispatch* cell_ptr) {
 	VARIANT result;
 	VariantInit(&result);
@@ -89,6 +99,9 @@ std::string get_formula(IDispatch* cell_ptr) {
 	return ms_func::BSTR_to_string(result.bstrVal);
 }
 
+
+//! \fn Gets the float value of the cell if 
+//!     it is present.
 double get_value(IDispatch* cell_ptr) {
 	VARIANT result;
 	VariantInit(&result);
@@ -96,9 +109,29 @@ double get_value(IDispatch* cell_ptr) {
 	return result.dblVal;
 }
 
+//! \fn Gets the content type of the cell in Excel
+//! https://fastexcel.wordpress.com/2011/11/30/text-vs-value-vs-value2-slow-text-and-how-to-avoid-it/
 boost::cell_content_type::type get_content_type(IDispatch* cell_ptr) {
-
+	VARIANT result;
+	VariantInit(&result);
+	ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, cell_ptr, L"Value2", 0);
+	int vt = result.vt;
+	VariantClear(&result);
+	switch(vt) {
+		case VT_I4:
+		case VT_R8:
+			return boost::cell_content_type::VALUE;
+		case VT_BSTR:
+			return boost::cell_content_type::STRING;
+		case VT_ERROR:
+			return boost::cell_content_type::ERROR;
+		case VT_EMPTY:
+		case VT_NULL:
+		case VT_VOID:
+			return boost::cell_content_type::EMPTY;
+	} //EMPTY,STRING,VALUE,FORMULA,ERROR
 }
 
 }}}
+
 #endif

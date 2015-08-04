@@ -74,7 +74,7 @@ void set_cell_value(Reference< XCell > xCell, const std::string& str) {
     }
 }
 
-//! \fnSets Cell value as float x. the enum value of the cell
+//! \fn Sets Cell value as float x. the enum value of the cell
 //!     changes to CellContentType_VALUE
 //!
 void set_cell_value(Reference< XCell > xCell, float x) {

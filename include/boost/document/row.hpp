@@ -106,7 +106,7 @@ namespace boost {
 	};
 
 	inline row_iterator row::begin() { return row_iterator(obj_, (std::size_t)0,row_); }
-	
+
 	inline row_iterator row::end() { return row_iterator(obj_, obj_->max_column(),row_); }
 
 	inline const_row_iterator row::cbegin() { return const_row_iterator(obj_, (std::size_t)0,row_); }

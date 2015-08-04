@@ -43,7 +43,7 @@ class ms_cell : public cell_interface {
 	}
 
 	boost::cell_content_type::type get_content_type() {
-		return boost::cell_content_type::EMPTY;
+		return boost::doc::ms_cell_func::get_content_type(cell_ptr_);
 	}
 
 	std::string get_string() {
@@ -60,11 +60,14 @@ class ms_cell : public cell_interface {
 	}
  
 	bool empty() {
-		
+		if(boost::doc::ms_cell_func::get_content_type(cell_ptr_) == boost::cell_content_type::EMPTY) {
+			return true;
+		}
+		return false;
 	}
 
 	void reset() {
-		
+		boost::doc::ms_cell_func::set_cell_value(cell_ptr_,"");
 	}
 
 	std::size_t get_row_index() {
