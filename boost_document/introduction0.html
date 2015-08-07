@@ -1,13 +1,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Brief Overview</title>
+<title>How to Set up?</title>
 <link rel="stylesheet" href="http://www.boost.org/doc/libs/1_57_0/doc/src/boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
 <link rel="prev" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
-<link rel="next" href="../document/reference.html" title="Reference">
+<link rel="next" href="introduction1.html" title="Tutorial">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,128 +20,151 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../document/reference.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="introduction1.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="boost_document.introduction0"></a><a class="link" href="introduction0.html" title="Brief Overview">Brief Overview</a>
+<a name="boost_document.introduction0"></a><a class="link" href="introduction0.html" title="How to Set up?">How to Set up?</a>
 </h2></div></div></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="introduction0.html#boost_document.introduction.using_microsoft_office">Using
+      Microsoft Office</a></span></dt>
+<dt><span class="section"><a href="introduction0.html#boost_document.introduction.using_libre_office">Using
+      Libre Office</a></span></dt>
+</dl></div>
 <p>
-      The library uses either Libre Office API or Microsoft Office API as the underlaying
-      API to provide an easy interface to manipulate Spreadsheets. For example we
-      can open a spreasheet document and export it to PDF format like this. Currently
-      Exporting to PDF and CSV are supported.
+      The document library facilitates the usage of the Document Automation API of
+      Microsoft and/or the API's of Libreoffice in a very easy to use and intuitive
+      manner. However, some amount of work needs to be done before the library can
+      be compiled using Boost.Build and used.
     </p>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_document.introduction.using_microsoft_office"></a><a class="link" href="introduction0.html#boost_document.introduction.using_microsoft_office" title="Using Microsoft Office">Using
+      Microsoft Office</a>
+</h3></div></div></div>
 <p>
-</p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">d</span><span class="special">(</span><span class="string">"file_path"</span><span class="special">);</span>
-<span class="identifier">d</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
-<span class="identifier">d</span><span class="special">.</span><span class="identifier">export_document</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">PDF</span><span class="special">);</span>
-<span class="identifier">d</span><span class="special">.</span><span class="identifier">close_document</span><span class="special">();</span>
-</pre>
+        You would need to install Microsoft Office 2003 or above as certain features
+        are not available in Office'97. Also, Visual Studio would be recommended
+        as the Library has been tested to compile using Visual Studio on Windows
+        and uses the Visual Studio included header files. If these prerequisities
+        are satisfied, one needs to open a shell at <code class="computeroutput"><span class="error">$</span><span class="identifier">boost_document_lib</span><span class="special">\</span><span class="identifier">build</span></code> and run '......\b2' to compile the
+        library. This shall work only on Windows and not on Linux.
+      </p>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_document.introduction.using_libre_office"></a><a class="link" href="introduction0.html#boost_document.introduction.using_libre_office" title="Using Libre Office">Using
+      Libre Office</a>
+</h3></div></div></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="introduction0.html#boost_document.introduction.using_libre_office.on_linux">On
+        Linux</a></span></dt>
+<dt><span class="section"><a href="introduction0.html#boost_document.introduction.using_libre_office.on_windows">On
+        Windows</a></span></dt>
+</dl></div>
 <p>
-    </p>
-<p>
-      We can perform other generic operations like Saving the spreadsheet etc.
-    </p>
-<p>
-      A document needs to be opened first to manipulate it. It may or may not be
-      closed explicitly as the destruction automatically triggers a close if it is
-      open. However, closing and reopening causes buggy behaviour right now and thus
-      should be avoided. The interface is designed to accomodate all the differences
-      between the API's and thus uniform behaviour can be expected irregardless of
-      the base.
-    </p>
-<p>
-      Simple Sheet Operations such as inserting sheets, deleting sheets, counting
-      the number of sheets, getting sheets by indices are currently supported. A
-      simple example can be seen as follows.
-    </p>
-<p>
-</p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">d</span><span class="special">(</span><span class="identifier">file_path</span><span class="special">);</span>
-<span class="identifier">d</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
-
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">d</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">);</span>
-<span class="identifier">s</span><span class="special">.</span><span class="identifier">rename_sheet</span><span class="special">(</span><span class="string">"Vatika"</span><span class="special">);</span>
-
-<span class="identifier">d</span><span class="special">.</span><span class="identifier">delete_sheet</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
-
-<span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span><span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">d</span><span class="special">.</span><span class="identifier">sheet_count</span><span class="special">();</span> <span class="identifier">i</span><span class="special">++)</span> <span class="special">{</span>
-    <span class="identifier">sheet</span> <span class="identifier">sx</span> <span class="special">=</span> <span class="identifier">d</span><span class="special">.</span><span class="identifier">getSheet</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
-    <span class="identifier">sx</span><span class="special">.</span><span class="identifier">rename_sheet</span><span class="special">(</span><span class="string">"AnuragSheet"</span> <span class="special">+</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">to_string</span><span class="special">(</span><span class="identifier">i</span><span class="special">));</span>
-<span class="special">}</span>
-</pre>
-<p>
-    </p>
-<div class="warning"><table border="0" summary="Warning">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
-<th align="left">Warning</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Sheets are zero indexed irrespective of the underlaying API!
-      </p></td></tr>
-</table></div>
-<p>
-      There are various ways of getting a cell from a sheet or a document. The <code class="computeroutput"><span class="special">[]</span></code> operator has been overloaded, also there
-      are <code class="computeroutput"><span class="identifier">get_cell</span><span class="special">()</span></code>
-      functions which also provide exception handling.
-    </p>
-<p>
-</p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">d</span><span class="special">(</span><span class="identifier">file_path</span><span class="special">);</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">d</span><span class="special">[</span><span class="string">"Anurag"</span><span class="special">];</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="identifier">c</span> <span class="special">=</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">get_cell</span><span class="special">(</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">);</span> <span class="comment">// row, column</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="identifier">c1</span> <span class="special">=</span> <span class="identifier">s</span><span class="special">[</span><span class="number">4</span><span class="special">][</span><span class="number">5</span><span class="special">];</span> <span class="comment">// 5,4 actually</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="identifier">c2</span> <span class="special">=</span> <span class="identifier">s</span><span class="special">[</span><span class="string">"C4"</span><span class="special">];</span> <span class="comment">// 4,2  </span>
-</pre>
-<p>
-    </p>
-<div class="warning"><table border="0" summary="Warning">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
-<th align="left">Warning</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Cells are zero indexed irrespective of the underlaying API!
-      </p></td></tr>
-</table></div>
-<p>
-      Certain cell operations are also supported currently, such as setting and getting
-      strings, doubles and formulas. For Example,
-    </p>
-<p>
-</p>
-<pre class="programlisting"><span class="keyword">if</span><span class="special">(</span><span class="identifier">c1</span><span class="special">.</span><span class="identifier">get_content_type</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell_content_type</span><span class="special">::</span><span class="identifier">EMPTY</span><span class="special">)</span> <span class="special">{</span>
-    <span class="keyword">return</span><span class="special">;</span>
-<span class="special">}</span>
-<span class="identifier">c1</span> <span class="special">=</span> <span class="number">14.66</span><span class="special">;</span>
-<span class="identifier">c1</span> <span class="special">=</span> <span class="string">"Anurag"</span><span class="special">;</span>
-<span class="identifier">c1</span><span class="special">.</span><span class="identifier">set_cell_formula</span><span class="special">(</span><span class="string">"=C3+C4"</span><span class="special">);</span>
-<span class="identifier">c1</span><span class="special">.</span><span class="identifier">set_cell_value</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">c1</span><span class="special">.</span><span class="identifier">get_string</span><span class="special">();</span>
-</pre>
-<p>
-    </p>
-<p>
-      Row and column classes are iteratable and can be used to manipulate the cells.
-      The iterators themselves are random - access iterators and can be taken advantage
-      of.
-    </p>
-<p>
-</p>
-<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s1</span> <span class="special">=</span> <span class="identifier">c</span><span class="special">[</span><span class="string">"Anurag"</span><span class="special">];</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">row</span> <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">s1</span><span class="special">.</span><span class="identifier">get_row</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">fill</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">()</span> <span class="special">+</span> <span class="number">50</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
-<span class="keyword">double</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
-<span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">row_iterator</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">()</span> <span class="special">+</span> <span class="number">50</span><span class="special">);</span>
-<span class="keyword">for</span> <span class="special">(</span><span class="keyword">auto</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">();</span> <span class="identifier">it</span> <span class="special">!=</span> <span class="identifier">end</span><span class="special">;</span> <span class="special">++</span><span class="identifier">it</span><span class="special">)</span> <span class="special">{</span>
-    <span class="identifier">sum</span> <span class="special">+=</span> <span class="special">(*</span><span class="identifier">it</span><span class="special">).</span><span class="identifier">get_value</span><span class="special">();</span>
-<span class="special">}</span>
-</pre>
-<p>
-    </p>
+        You would need to atleast install Libre Office 4 and the Libre Office SDK
+        at least with the default folder configuration. Expected folder path of Libreoffice
+        is <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Program</span> <span class="identifier">Files</span>
+        <span class="special">(</span><span class="identifier">x86</span><span class="special">)\</span><span class="identifier">LibreOffice</span>
+        <span class="number">4</span><span class="special">\</span></code>
+        on Windows and <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">lib</span><span class="special">/</span><span class="identifier">libreoffice</span><span class="special">/</span></code>
+        on Linux.
+      </p>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="boost_document.introduction.using_libre_office.on_linux"></a><a class="link" href="introduction0.html#boost_document.introduction.using_libre_office.on_linux" title="On Linux">On
+        Linux</a>
+</h4></div></div></div>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+              Install SDK using variant of the following command <code class="computeroutput"><span class="identifier">sudo</span>
+              <span class="identifier">apt</span><span class="special">-</span><span class="identifier">get</span> <span class="identifier">install</span>
+              <span class="identifier">libreoffice</span><span class="special">-</span><span class="identifier">dev</span></code>.
+            </li>
+<li class="listitem">
+              On the terminal, Go to <code class="computeroutput"><span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">lib</span><span class="special">/</span><span class="identifier">libreoffice</span><span class="special">/</span><span class="identifier">sdk</span></code>.
+            </li>
+<li class="listitem">
+              Set the appropriate environment variables using <code class="computeroutput"><span class="identifier">source</span>
+              <span class="identifier">setsdkenv_unix</span><span class="special">.</span><span class="identifier">sh</span></code>
+            </li>
+<li class="listitem">
+              Change directory to the appropriate SDK Directory in your home folder.
+            </li>
+<li class="listitem">
+              Run the following command to generate the includes, Add <code class="computeroutput"><span class="special">-</span><span class="identifier">BUCR</span></code>
+              after <code class="computeroutput"><span class="special">-</span><span class="identifier">Gc</span></code>
+              if necessary. <code class="computeroutput"><span class="identifier">cppumaker</span> <span class="special">-</span><span class="identifier">Gc</span> <span class="special">-</span><span class="identifier">O</span><span class="string">"$OO_SDK_OUT/include/"</span> <span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">lib</span><span class="special">/</span><span class="identifier">ure</span><span class="special">/</span><span class="identifier">share</span><span class="special">/</span><span class="identifier">misc</span><span class="special">/</span><span class="identifier">types</span><span class="special">.</span><span class="identifier">rdb</span> <span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">lib</span><span class="special">/</span><span class="identifier">libreoffice</span><span class="special">/</span><span class="identifier">program</span><span class="special">/</span><span class="identifier">types</span><span class="special">/</span><span class="identifier">offapi</span><span class="special">.</span><span class="identifier">rdb</span> <span class="special">/</span><span class="identifier">usr</span><span class="special">/</span><span class="identifier">lib</span><span class="special">/</span><span class="identifier">libreoffice</span><span class="special">/</span><span class="identifier">program</span><span class="special">/</span><span class="identifier">types</span><span class="special">/</span><span class="identifier">oovbaapi</span><span class="special">.</span><span class="identifier">rdb</span></code>
+            </li>
+<li class="listitem">
+              Change directory to your boost directory which you downloaded from
+              sourceforge. Go to <code class="computeroutput"><span class="identifier">libs</span><span class="special">/</span></code> folder.
+            </li>
+<li class="listitem">
+              Clone the library from github as document. <code class="computeroutput"><span class="identifier">git</span>
+              <span class="identifier">clone</span> <span class="identifier">https</span><span class="special">://</span><span class="identifier">github</span><span class="special">.</span><span class="identifier">com</span><span class="special">/</span><span class="identifier">anuragxel</span><span class="special">/</span><span class="identifier">boost</span><span class="special">-</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">git</span> <span class="identifier">document</span></code>
+            </li>
+<li class="listitem">
+              Change directory to the <code class="computeroutput"><span class="identifier">build</span><span class="special">/</span></code> dicrectory.
+            </li>
+<li class="listitem">
+              Run <code class="computeroutput"><span class="special">../../../</span><span class="identifier">b2</span></code>
+              to compile the library. You may need to run <code class="computeroutput"><span class="identifier">bootstrap</span><span class="special">.</span><span class="identifier">sh</span></code>
+              in the <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span></code>
+              directory first to generate <code class="computeroutput"><span class="identifier">b2</span></code>.
+            </li>
+</ol></div>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="boost_document.introduction.using_libre_office.on_windows"></a><a class="link" href="introduction0.html#boost_document.introduction.using_libre_office.on_windows" title="On Windows">On
+        Windows</a>
+</h4></div></div></div>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+              Install both LibreOffice 4.4 and LibreOffice 4.4 SDK by downloading
+              them from the official website.
+            </li>
+<li class="listitem">
+              Open Your Command Prompt, go to C:\Program Files (x86)\LibreOffice
+              4\sdk and run setsdkenv_windows.bat and provide the necessary paths.
+              Install cat, sed, zip.
+            </li>
+<li class="listitem">
+              Add <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Program</span> <span class="identifier">Files</span>
+              <span class="special">(</span><span class="identifier">x86</span><span class="special">)\</span><span class="identifier">LibreOffice</span>
+              <span class="number">4</span><span class="special">\</span><span class="identifier">URE</span><span class="special">\</span><span class="identifier">bin</span></code> to the system PATH.
+            </li>
+<li class="listitem">
+              Go to <code class="computeroutput"><span class="identifier">C</span><span class="special">:\</span><span class="identifier">Program</span> <span class="identifier">Files</span>
+              <span class="special">(</span><span class="identifier">x86</span><span class="special">)\</span><span class="identifier">LibreOffice</span>
+              <span class="number">4</span><span class="special">\</span><span class="identifier">sdk</span><span class="special">\</span><span class="identifier">bin</span></code> and run the following command
+              to generate the includes, <code class="computeroutput"><span class="identifier">cppumaker</span><span class="special">.</span><span class="identifier">exe</span> <span class="special">-</span><span class="identifier">Gc</span> <span class="special">-</span><span class="identifier">O</span><span class="string">"$OO_SDK_OUT\include"</span> <span class="string">"C:\Program
+              Files (x86)\LibreOffice 4\URE\misc\types.rdb"</span> <span class="string">"C:\Program Files (x86)\LibreOffice 4\program\types\oovbaapi.rdb"</span>
+              <span class="string">"C:\Program Files (x86)\Libreoffice 4\program\types\offapi.rdb"</span></code>
+            </li>
+<li class="listitem">
+              Change directory to the boost libs directory (assuming you have already
+              run bootstrap.bat, else run it now)
+            </li>
+<li class="listitem">
+              Clone the library from github as document. <code class="computeroutput"><span class="identifier">git</span>
+              <span class="identifier">clone</span> <span class="identifier">https</span><span class="special">://</span><span class="identifier">github</span><span class="special">.</span><span class="identifier">com</span><span class="special">/</span><span class="identifier">anuragxel</span><span class="special">/</span><span class="identifier">boost</span><span class="special">-</span><span class="identifier">generic</span><span class="special">-</span><span class="identifier">document</span><span class="special">-</span><span class="identifier">library</span><span class="special">.</span><span class="identifier">git</span> <span class="identifier">document</span></code>
+            </li>
+<li class="listitem">
+              Change directory to the <code class="computeroutput"><span class="identifier">build</span><span class="special">/</span></code> dicrectory.
+            </li>
+<li class="listitem">
+              Run <code class="computeroutput"><span class="special">../../../</span><span class="identifier">b2</span></code>
+              to compile the library. You may need to run <code class="computeroutput"><span class="identifier">bootstrap</span><span class="special">.</span><span class="identifier">bat</span></code>
+              in the <code class="computeroutput"><span class="identifier">boost</span><span class="special">/</span></code>
+              directory first to generate <code class="computeroutput"><span class="identifier">b2</span><span class="special">.</span><span class="identifier">exe</span></code>.
+            </li>
+</ol></div>
+</div>
+</div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -153,7 +176,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../document/reference.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="introduction1.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
