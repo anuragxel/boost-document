@@ -22,9 +22,243 @@
 <div class="spirit-nav">
 <a accesskey="p" href="introduction0.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="introduction2.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<div class="section">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_document.introduction1"></a><a class="link" href="introduction1.html" title="Tutorial">Tutorial</a>
-</h2></div></div></div></div>
+</h2></div></div></div>
+<p>
+      The tutorial aims to present some basic ideas and usage of the library and
+      would end with real life examples so that the use of the library is apparent.
+      It is hopeful that the followed style is easy to follow. The term document
+      refers to spreadsheet documents in general unless explicitly defined.
+    </p>
+<p>
+      Firstly, to use the library in your C++ code, one would need to add the following
+      header in your code.
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<p>
+    </p>
+<p>
+      One can also include the different headers separately, in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="comment">/*.hpp&gt;</span></code>, the above header merely includes
+      all the headers. All the types and classes fall in the namespace boost and
+      using namespace aliases might be useful for clean coding.
+    </p>
+<p>
+      Firstly, we would need to declare a variable for the document by specifying
+      the file path, specifically as boost::filesystem::path type. So, we can write,
+</p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">d</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+</pre>
+<p>
+      Or use a path variable to achieve the same thing,
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span> <span class="identifier">p</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">d</span><span class="special">(</span><span class="identifier">p</span><span class="special">);</span>
+</pre>
+<p>
+    </p>
+<p>
+      We would like to do something interesting with our document variable now. So,
+      let's open it and export it as a CSV file.
+    </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        To Perform virtually nearly anything with the document, you would need to
+        open it first and then close it. Closing however happens automatically when
+        the variable goes out of scope, during the destruction sequence of the object
+        and hence need not be explicitly carried out.
+      </p></td></tr>
+</table></div>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">export_document</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">CSV</span><span class="special">);</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      Important thing to note here is the enum document_file_format which has three
+      values, PDF, CSV and XML which it can accept. The exported file would reside
+      in the same folder as the original file. Also, note the ommision of the <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">close_document</span><span class="special">()</span></code> which would happen automatically.
+    </p>
+<p>
+      We would also like to make some changes to our sheets in the document and get
+      some information about them. There are various methods provided in the document
+      class for the same. For example, the following examples prints out the names
+      of all the sheets, after getting an instance by their indices. The sheet class
+      is a wrapper over the actual sheet of the document and acts like a reference
+      to the same.
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">count</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">.</span><span class="identifier">sheet_count</span><span class="special">();</span>
+    <span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span> <span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="identifier">count</span><span class="special">;</span> <span class="identifier">i</span><span class="special">++)</span> <span class="special">{</span>
+        <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"#"</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span> <span class="special">&lt;&lt;</span> <span class="string">"\t"</span> <span class="special">&lt;&lt;</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">sheet_name</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Sheets are zero indexed irrespective of implementation details. Same goes
+        for cells, rows and columns.
+      </p></td></tr>
+</table></div>
+<p>
+      Sheet instances can be obtained by their names or indices, and also through
+      the <code class="computeroutput"><span class="special">[]</span></code> operator, however the
+      <code class="computeroutput"><span class="special">[]</span></code> provides no exception handling
+      unlike the <code class="computeroutput"><span class="identifier">get_sheet</span></code> methods.
+    </p>
+<p>
+      Moving on, we would like to save our files after we have edited them programmatically.
+      The user can call the <code class="computeroutput"><span class="identifier">save_document</span><span class="special">()</span></code> or the <code class="computeroutput"><span class="identifier">save_as_document</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">filesystem</span><span class="special">::</span><span class="identifier">path</span><span class="special">&amp;)</span></code>
+      methods to save their document after they have been edited. The following example
+      renames a sheet and then saves the document.
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">[</span><span class="string">"Anurag"</span><span class="special">];</span>
+    <span class="identifier">s</span><span class="special">.</span><span class="identifier">rename_sheet</span><span class="special">(</span><span class="string">"Vatika"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">save_document</span><span class="special">();</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      Point to note here is that, the program would crash if there is no sheet "Anurag"
+      present. We can also use <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">)</span></code> for exception being raised. There are other
+      sheet methods which can be used, checking the reference would be a good idea.
+    </p>
+<p>
+      Now, to use the cells there are multiple ways, all of which come with their
+      own advantages and disadvantages. One could use the <code class="computeroutput"><span class="identifier">get_cell</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">row</span><span class="special">,</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <span class="identifier">column</span><span class="special">)</span></code> method, or the <code class="computeroutput"><span class="special">[]</span></code>
+      operators. The following example would illustrate effectively. We would also
+      understand the various intricacies of cell usage. The example is a mix of many
+      styles and must not be used as a good coding example, it is only to illustrate
+      the capabilities of the library.
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">);</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="identifier">c</span> <span class="special">=</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">get_cell</span><span class="special">(</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">);</span> <span class="comment">// row = 4, column = 5</span>
+    <span class="identifier">c</span><span class="special">.</span><span class="identifier">set_string</span><span class="special">(</span><span class="string">"Boost"</span><span class="special">);</span>
+
+    <span class="keyword">if</span><span class="special">(</span><span class="identifier">c</span><span class="special">.</span><span class="identifier">get_content_type</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell_content_type</span><span class="special">::</span><span class="identifier">STRING</span><span class="special">)</span> <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">get_string</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="keyword">if</span><span class="special">(</span><span class="identifier">s</span><span class="special">[</span><span class="string">"B2"</span><span class="special">].</span><span class="identifier">empty</span><span class="special">())</span> <span class="special">{</span>
+        <span class="identifier">s</span><span class="special">[</span><span class="string">"B2"</span><span class="special">]</span> <span class="special">=</span> <span class="number">2.56</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="identifier">doc</span><span class="special">[</span><span class="string">"Vatika"</span><span class="special">][</span><span class="number">7</span><span class="special">][</span><span class="number">2</span><span class="special">]</span> <span class="special">=</span> <span class="string">"Anurag"</span><span class="special">;</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="keyword">new</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">[</span><span class="string">"Vatika"</span><span class="special">];</span>
+
+    <span class="keyword">new</span><span class="special">[</span><span class="string">"C3"</span><span class="special">]</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span> <span class="comment">// row = 4, column = 2</span>
+    <span class="keyword">new</span><span class="special">[</span><span class="string">"C4"</span><span class="special">]</span> <span class="special">=</span> <span class="number">0.5</span><span class="special">;</span>
+    <span class="keyword">new</span><span class="special">[</span><span class="string">"C5"</span><span class="special">].</span><span class="identifier">set_formula</span><span class="special">(</span><span class="string">"=C3+C4"</span><span class="special">);</span>
+
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">doc</span><span class="special">[</span><span class="string">"Vatika"</span><span class="special">][</span><span class="string">"C5"</span><span class="special">].</span><span class="identifier">get_value</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+    <span class="keyword">new</span><span class="special">[</span><span class="string">"D8"</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">c</span><span class="special">;</span> <span class="comment">// Assignment</span>
+    <span class="keyword">if</span><span class="special">(</span><span class="keyword">new</span><span class="special">[</span><span class="string">"D8"</span><span class="special">].</span><span class="identifier">get_string</span><span class="special">()</span> <span class="special">==</span> <span class="string">"Boost"</span><span class="special">)</span> <span class="special">{</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Yay!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="special">}</span>
+
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">save_document</span><span class="special">();</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Cells are zero indexed irrespective of implementation details.
+      </p></td></tr>
+</table></div>
+<p>
+      The <code class="computeroutput"><span class="identifier">get_cell</span><span class="special">()</span></code>
+      method expects the row number and the column number of the cell, in zero indexed
+      format. A lot of people are more accustomed with the alphanumeric index (Eg.
+      "A2" or "F5") which have been provided too as <code class="computeroutput"><span class="special">[]</span></code> operators. Method like <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code> returns a <code class="computeroutput"><span class="keyword">bool</span></code>
+      telling whether the cell is empty or not. <code class="computeroutput"><span class="identifier">get_content_type</span><span class="special">()</span></code> returns an enum value which can be either
+      EMPTY,STRING,VALUE,FORMULA or ERROR.
+    </p>
+<p>
+      The user can use <code class="computeroutput"><span class="identifier">set_formula</span><span class="special">()</span></code> or <code class="computeroutput"><span class="identifier">set_string</span><span class="special">()</span></code> or <code class="computeroutput"><span class="identifier">set_value</span><span class="special">()</span></code> methods, or can use the <code class="computeroutput"><span class="special">=</span></code>
+      operators which sets a value for doubles passed and sets a string for std::string
+      passed. Likewise, <code class="computeroutput"><span class="identifier">get_value</span><span class="special">()</span></code>, <code class="computeroutput"><span class="identifier">get_formula</span><span class="special">()</span></code> and <code class="computeroutput"><span class="identifier">get_string</span><span class="special">()</span></code> are also provided.
+    </p>
+<p>
+      The explicit function calls instead of the <code class="computeroutput"><span class="special">[]</span></code>
+      operator provide the safety of exceptions. Having a look at the cell class
+      reference document would help in aligning your coding style with the library
+      usage.
+    </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        The cells are a reference to the actual cells in the spreadsheet. Assignment
+        operator must be carefully used.
+      </p></td></tr>
+</table></div>
+<p>
+      Assignment of a cell with another cell holding some instance would result in
+      copying of the contents of the cell to the former. This should be used very
+      carefully.
+    </p>
+<p>
+      Documents thus act like a 3D matrix, the first dimension being the sheet name/sheet
+      index, the second and third being the column and row index of the cell respectively.
+    </p>
+</div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><div class="copyright-footer">Copyright &#169; 2015 Anurag Ghosh<p>
