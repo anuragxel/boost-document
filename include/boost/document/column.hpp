@@ -25,8 +25,13 @@ namespace boost {
 	template<typename Value> class column_iter;
 
 	typedef column_iter<boost::cell> column_iterator;
+	
 	typedef column_iter<const boost::cell> const_column_iterator;
 
+	//! \brief This is the class which
+	//! exposes a column of cells to work with.
+	//! column_iterator is the standard iterator
+	//! with this class.
 	class column {
 		protected:
 		std::shared_ptr<sheet_interface> obj_;

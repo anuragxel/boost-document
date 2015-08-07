@@ -20,6 +20,7 @@
 #include <cctype>
 
 namespace boost {
+	
 	//! \brief This is the main class interface to be 
 	//!        exposed to the library user.
 	//!

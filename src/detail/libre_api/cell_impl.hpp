@@ -15,18 +15,18 @@
 
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
 
 class libre_cell : public cell_interface {
 
 	protected:
-	std::size_t row, column;
+	std::size_t row_, column_;
 	::com::sun::star::uno::Reference < com::sun::star::table::XCell > xCell_;
 	public:
 	libre_cell(::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, std::size_t& row, std::size_t& column) {
 		this->xCell_ = xCell;
-		this->row = row;
-		this->column = column;
+		this->row_ = row;
+		this->column_ = column;
 	}
 
 	void set_cell_formula(const std::string& str) {
@@ -70,11 +70,11 @@ class libre_cell : public cell_interface {
 	}
 
 	std::size_t get_row_index() const {
-		return row;
+		return row_;
 	}
 
 	std::size_t get_column_index() const {
-		return column;
+		return column_;
 	}
 
  	~libre_cell() {

@@ -12,9 +12,76 @@ Boost.Document library is meant to simplify tasks related to manipulation of Off
 
 [endsect]
 
+[section:introduction How to Set up?]
+
+The document library facilitates the usage of the Document Automation API of Microsoft and/or the API's of Libreoffice in a very easy to use and intuitive manner. However, some amount of work needs to be done before the library can be compiled using Boost.Build and used.
+
+[section Using Microsoft Office]
+
+You would need to install Microsoft Office 2003 or above as certain features are not available in Office'97. Also, Visual Studio would be recommended as the Library has been tested to compile using Visual Studio on Windows and uses the Visual Studio included header files.
+If these prerequisities are satisfied, one needs to open a shell at `$boost_document_lib\build` and run '..\..\..\b2' to compile the library. This shall work only on Windows and not on Linux.
+
+[endsect]
+
+[section Using Libre Office]
+
+You would need to atleast install Libre Office 4 and the Libre Office SDK at least with the default folder configuration. Expected folder path of Libreoffice is `C:\Program Files (x86)\LibreOffice 4\` on Windows and `/usr/lib/libreoffice/` on Linux.
+
+[section On Linux]
+ 
+# Install SDK using variant of the following command `sudo apt-get install libreoffice-dev`.
+
+# On the terminal, Go to `/usr/lib/libreoffice/sdk`.
+
+# Set the appropriate environment variables using `source setsdkenv_unix.sh`
+
+# Change directory to the appropriate SDK Directory in your home folder.
+
+# Run the following command to generate the includes, Add `-BUCR` after `-Gc` if necessary. `cppumaker -Gc -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb`
+
+# Change directory to your boost directory which you downloaded from sourceforge. Go to `libs/` folder.
+
+# Clone the library from github as document. `git clone https://github.com/anuragxel/boost-document.git document`
+
+# Change directory to the `build/` dicrectory.
+
+# Run `../../../b2` to compile the library. You may need to run `bootstrap.sh` in the `boost/` directory first to generate `b2`.
+
+[endsect]
+
+[section On Windows]
+
+# Install both LibreOffice 4.4 and LibreOffice 4.4 SDK by downloading them from the official website.
+
+# Open Your Command Prompt, go to C:\Program Files (x86)\LibreOffice 4\sdk and run setsdkenv_windows.bat and provide the necessary paths. Install cat, sed, zip.
+
+# Add  `C:\Program Files (x86)\LibreOffice 4\URE\bin` to the system PATH.
+
+# Go to `C:\Program Files (x86)\LibreOffice 4\sdk\bin` and run the following command to generate the includes,
+   `cppumaker.exe -Gc -O"$OO_SDK_OUT\include" "C:\Program Files (x86)\LibreOffice 4\URE\misc\types.rdb" "C:\Program Files (x86)\LibreOffice 4\program\types\oovbaapi.rdb" "C:\Program Files (x86)\Libreoffice 4\program\types\offapi.rdb"`
+
+# Change directory to the boost libs directory (assuming you have already run bootstrap.bat, else run it now)
+
+# Clone the library from github as document. `git clone https://github.com/anuragxel/boost-generic-document-library.git document`
+
+# Change directory to the `build/` dicrectory.
+
+# Run `../../../b2` to compile the library. You may need to run `bootstrap.bat` in the `boost/` directory first to generate `b2.exe`.
+
+[endsect]
+
+[endsect]
+
+[endsect]
+
+[section:introduction Tutorial]
+
+
+[endsect]
+
 [section:introduction Brief Overview]
 
-The library uses either Libre Office API or Microsoft Office API as the underlaying API to provide an easy interface to manipulate Spreadsheets. For example we can open a spreasheet document and export it to PDF format like this. Currently Exporting to PDF and CSV are supported.
+The library uses either Libre Office API or Microsoft Office API as the underlaying API to provide an easy interface to manipulate Spreadsheets. For example we can open a spreasheet document and export it to PDF format like this.
 
 ```
     boost::document d("file_path");
@@ -23,7 +90,7 @@ The library uses either Libre Office API or Microsoft Office API as the underlay
     d.close_document();
 ```
 
-We can perform other generic operations like Saving the spreadsheet etc.
+We can perform other simple operations to the document like this, See the Reference of document header file.
 
 A document needs to be opened first to manipulate it. It may or may not be closed explicitly as the destruction automatically triggers a close if it is open. However, closing and reopening causes buggy behaviour right now and thus should be avoided. The interface is designed to accomodate all the differences between the API's and thus uniform behaviour can be expected irregardless of the base.
 
