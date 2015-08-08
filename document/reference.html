@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
 <link rel="prev" href="../boost_document/introduction2.html" title="Brief Overview">
-<link rel="next" href="../boost/document.html" title="Class document">
+<link rel="next" href="../boost/cell.html" title="Class cell">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../boost_document/introduction2.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost/document.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../boost_document/introduction2.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost/cell.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -30,12 +30,71 @@
 <div class="section">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="document_library_reference"></a>Document Library Reference</h3></div></div></div>
-<div class="toc"><dl class="toc"><dt><span class="section"><a href="reference.html#header.boost.document.document_hpp">Header &lt;boost/document/document.hpp&gt;</a></span></dt></dl></div>
+<div class="toc"><dl class="toc">
+<dt><span class="section"><a href="reference.html#header.boost.document.cell_hpp">Header &lt;boost/document/cell.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.column_hpp">Header &lt;boost/document/column.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.detail.cell_content_type_hpp">Header &lt;boost/document/detail/cell_content_type.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.detail.document_file_format_hpp">Header &lt;boost/document/detail/document_file_format.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.document_hpp">Header &lt;boost/document/document.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.row_hpp">Header &lt;boost/document/row.hpp&gt;</a></span></dt>
+<dt><span class="section"><a href="reference.html#header.boost.document.sheet_hpp">Header &lt;boost/document/sheet.hpp&gt;</a></span></dt>
+</dl></div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.cell_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/cell.hpp" target="_top">boost/document/cell.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">class</span> <a class="link" href="../boost/cell.html" title="Class cell">cell</a><span class="special">;</span>
+  <span class="keyword">bool</span> <a name="boost.operator_idp11057632"></a><span class="keyword">operator</span><span class="special">&gt;</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> lhs<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cell</span> <span class="special">&amp;</span> rhs<span class="special">)</span><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.column_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/column.hpp" target="_top">boost/document/column.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Value<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/column_iter.html" title="Class template column_iter">column_iter</a><span class="special">;</span>
+  <span class="keyword">class</span> <a class="link" href="../boost/column.html" title="Class column">column</a><span class="special">;</span>
+
+  <span class="keyword">typedef</span> <span class="identifier">column_iter</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="special">&gt;</span> <a name="boost.column_iterator"></a><span class="identifier">column_iterator</span><span class="special">;</span>
+  <span class="keyword">typedef</span> <span class="identifier">column_iter</span><span class="special">&lt;</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="special">&gt;</span> <a name="boost.const_column_iterator"></a><span class="identifier">const_column_iterator</span><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.detail.cell_content_type_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/detail/cell_content_type.hpp" target="_top">boost/document/detail/cell_content_type.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">struct</span> <a class="link" href="../boost/cell_content_type.html" title="Struct cell_content_type">cell_content_type</a><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.detail.document_file_format_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/detail/document_file_format.hpp" target="_top">boost/document/detail/document_file_format.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">struct</span> <a class="link" href="../boost/document_file_format.html" title="Struct document_file_format">document_file_format</a><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
 <div class="section">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="header.boost.document.document_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/document.hpp" target="_top">boost/document/document.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">class</span> <a class="link" href="../boost/document.html" title="Class document">document</a><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.row_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/row.hpp" target="_top">boost/document/row.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> Value<span class="special">&gt;</span> <span class="keyword">class</span> <a class="link" href="../boost/row_iter.html" title="Class template row_iter">row_iter</a><span class="special">;</span>
+  <span class="keyword">class</span> <a class="link" href="../boost/row.html" title="Class row">row</a><span class="special">;</span>
+
+  <span class="keyword">typedef</span> <span class="identifier">row_iter</span><span class="special">&lt;</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="special">&gt;</span> <a name="boost.row_iterator"></a><span class="identifier">row_iterator</span><span class="special">;</span>
+  <span class="keyword">typedef</span> <span class="identifier">row_iter</span><span class="special">&lt;</span> <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="special">&gt;</span> <a name="boost.const_row_iterator"></a><span class="identifier">const_row_iterator</span><span class="special">;</span>
+<span class="special">}</span></pre>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="header.boost.document.sheet_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/sheet.hpp" target="_top">boost/document/sheet.hpp</a>&gt;</h4></div></div></div>
+<pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
+  <span class="keyword">class</span> <a class="link" href="../boost/sheet.html" title="Class sheet">sheet</a><span class="special">;</span>
 <span class="special">}</span></pre>
 </div>
 </div>
@@ -50,7 +109,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../boost_document/introduction2.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost/document.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="../boost_document/introduction2.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../boost/cell.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

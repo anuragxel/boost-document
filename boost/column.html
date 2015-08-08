@@ -1,0 +1,89 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class column</title>
+<link rel="stylesheet" href="http://www.boost.org/doc/libs/1_57_0/doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
+<link rel="up" href="../document/reference.html#header.boost.document.column_hpp" title="Header &lt;boost/document/column.hpp&gt;">
+<link rel="prev" href="column_iter.html" title="Class template column_iter">
+<link rel="next" href="cell_content_type.html" title="Struct cell_content_type">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/1_57_0/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="column_iter.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.column_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cell_content_type.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+</div>
+<div class="refentry">
+<a name="boost.column"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class column</span></h2>
+<p>boost::column &#8212; This is the class which exposes a column of cells to work with. column_iterator is the standard iterator with this class. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../document/reference.html#header.boost.document.column_hpp" title="Header &lt;boost/document/column.hpp&gt;">boost/document/column.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="column.html" title="Class column">column</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// types</span>
+  <span class="keyword">typedef</span> <span class="identifier">column_iterator</span> <a name="boost.column.iterator"></a><span class="identifier">iterator</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="column.html#boost.columnconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <a class="link" href="column.html#idp17072272-bb"><span class="identifier">column</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">sheet_interface</span> <span class="special">&gt;</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="column.html#idp17064896-bb">public member functions</a></span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="column.html#idp17065392-bb"><span class="identifier">get_cell</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="column.html#idp17066768-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a class="link" href="column.html#idp17068144-bb"><span class="identifier">get_column_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">column_iterator</span> <a class="link" href="column.html#idp17069136-bb"><span class="identifier">begin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">column_iterator</span> <a class="link" href="column.html#idp17069888-bb"><span class="identifier">end</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_column_iterator</span> <a class="link" href="column.html#idp17070640-bb"><span class="identifier">cbegin</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">const_column_iterator</span> <a class="link" href="column.html#idp17071392-bb"><span class="identifier">cend</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp76150272"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="idp76150656"></a><h3>
+<a name="boost.columnconstruct-copy-destruct"></a><code class="computeroutput">column</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><a name="idp17072272-bb"></a><span class="identifier">column</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">sheet_interface</span> <span class="special">&gt;</span> obj<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> column<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
+</div>
+<div class="refsect2">
+<a name="idp76161328"></a><h3>
+<a name="idp17064896-bb"></a><code class="computeroutput">column</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem"><pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17065392-bb"></a><span class="identifier">get_cell</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> row<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17066768-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> row<span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a name="idp17068144-bb"></a><span class="identifier">get_column_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">column_iterator</span> <a name="idp17069136-bb"></a><span class="identifier">begin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">column_iterator</span> <a name="idp17069888-bb"></a><span class="identifier">end</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">const_column_iterator</span> <a name="idp17070640-bb"></a><span class="identifier">cbegin</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+<li class="listitem"><pre class="literallayout"><span class="identifier">const_column_iterator</span> <a name="idp17071392-bb"></a><span class="identifier">cend</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre></li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2015 Anurag Ghosh<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="column_iter.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.column_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="cell_content_type.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
