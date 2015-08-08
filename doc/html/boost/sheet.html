@@ -1,0 +1,139 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<title>Class sheet</title>
+<link rel="stylesheet" href="http://www.boost.org/doc/libs/1_57_0/doc/src/boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Document">
+<link rel="up" href="../document/reference.html#header.boost.document.sheet_hpp" title="Header &lt;boost/document/sheet.hpp&gt;">
+<link rel="prev" href="row.html" title="Class row">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr>
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="http://www.boost.org/doc/libs/1_57_0/boost.png"></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/index.html">Home</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="http://www.boost.org/users/people.html">People</a></td>
+<td align="center"><a href="http://www.boost.org/users/faq.html">FAQ</a></td>
+<td align="center"><a href="http://www.boost.org/doc/libs/1_57_0/more/index.htm">More</a></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="row.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.sheet_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a>
+</div>
+<div class="refentry">
+<a name="boost.sheet"></a><div class="titlepage"></div>
+<div class="refnamediv">
+<h2><span class="refentrytitle">Class sheet</span></h2>
+<p>boost::sheet &#8212; This is the main class interface to be exposed to the library user. </p>
+</div>
+<h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
+<div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="../document/reference.html#header.boost.document.sheet_hpp" title="Header &lt;boost/document/sheet.hpp&gt;">boost/document/sheet.hpp</a>&gt;
+
+</span>
+<span class="keyword">class</span> <a class="link" href="sheet.html" title="Class sheet">sheet</a> <span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+  <span class="comment">// <a class="link" href="sheet.html#boost.sheetconstruct-copy-destruct">construct/copy/destruct</a></span>
+  <span class="keyword">explicit</span> <a class="link" href="sheet.html#idp17161328-bb"><span class="identifier">sheet</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">sheet_interface</span> <span class="special">&gt;</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="sheet.html#idp17162704-bb"><span class="special">~</span><span class="identifier">sheet</span></a><span class="special">(</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="sheet.html#idp17137488-bb">private member functions</a></span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="sheet.html#idp17137984-bb"><span class="identifier">cell_from_string</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// <a class="link" href="sheet.html#idp17140112-bb">public member functions</a></span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a class="link" href="sheet.html#idp17140608-bb"><span class="identifier">sheet_name</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a class="link" href="sheet.html#idp17141856-bb"><span class="identifier">sheet_index</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="keyword">void</span> <a class="link" href="sheet.html#idp17143104-bb"><span class="identifier">rename_sheet</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a class="link" href="sheet.html#idp17144736-bb"><span class="identifier">max_row</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a class="link" href="sheet.html#idp17146112-bb"><span class="identifier">max_column</span></a><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="sheet.html#idp17147488-bb"><span class="identifier">get_cell</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">row</span> <a class="link" href="sheet.html#idp17149872-bb"><span class="identifier">get_row</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="column.html" title="Class column">boost::column</a> <a class="link" href="sheet.html#idp17151632-bb"><span class="identifier">get_column</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="column.html" title="Class column">boost::column</a> <a class="link" href="sheet.html#idp17153520-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span><span class="special">;</span>
+  <a class="link" href="column.html" title="Class column">boost::column</a> <a class="link" href="sheet.html#idp17155504-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="keyword">int</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="sheet.html#idp17157488-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span><span class="special">)</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a class="link" href="sheet.html#idp17159344-bb"><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span></a><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span><span class="special">)</span><span class="special">;</span>
+<span class="special">}</span><span class="special">;</span></pre></div>
+<div class="refsect1">
+<a name="idp76838960"></a><h2>Description</h2>
+<div class="refsect2">
+<a name="idp76839376"></a><h3>
+<a name="boost.sheetconstruct-copy-destruct"></a><code class="computeroutput">sheet</code> 
+        public
+       construct/copy/destruct</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">explicit</span> <a name="idp17161328-bb"></a><span class="identifier">sheet</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">shared_ptr</span><span class="special">&lt;</span> <span class="identifier">sheet_interface</span> <span class="special">&gt;</span> impl<span class="special">)</span><span class="special">;</span></pre>The Constructor. Creates a new document object. </li>
+<li class="listitem">
+<pre class="literallayout"><a name="idp17162704-bb"></a><span class="special">~</span><span class="identifier">sheet</span><span class="special">(</span><span class="special">)</span><span class="special">;</span></pre>Destructor Closes Unsaved Documents. </li>
+</ol></div>
+</div>
+<div class="refsect2">
+<a name="idp76854768"></a><h3>
+<a name="idp17137488-bb"></a><code class="computeroutput">sheet</code> private member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17137984-bb"></a><span class="identifier">cell_from_string</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> str<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> length<span class="special">)</span><span class="special">;</span></pre></li></ol></div>
+</div>
+<div class="refsect2">
+<a name="idp76866832"></a><h3>
+<a name="idp17140112-bb"></a><code class="computeroutput">sheet</code> public member functions</h3>
+<div class="orderedlist"><ol class="orderedlist" type="1">
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <a name="idp17140608-bb"></a><span class="identifier">sheet_name</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Gets the sheet name which is being accessed. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a name="idp17141856-bb"></a><span class="identifier">sheet_index</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>Gets the sheet index which is being accessed. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="keyword">void</span> <a name="idp17143104-bb"></a><span class="identifier">rename_sheet</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> str<span class="special">)</span><span class="special">;</span></pre>Renames the sheet to str which is being accessed. </li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a name="idp17144736-bb"></a><span class="identifier">max_row</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns the maximum number of rows </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> <a name="idp17146112-bb"></a><span class="identifier">max_column</span><span class="special">(</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span></pre>
+<p>Returns the maximum number of columns </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17147488-bb"></a><span class="identifier">get_cell</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> row<span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> column<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets the cell instance which can be manipulated. </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">row</span> <a name="idp17149872-bb"></a><span class="identifier">get_row</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> i<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets a row instance which can be iterated over </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="column.html" title="Class column">boost::column</a> <a name="idp17151632-bb"></a><span class="identifier">get_column</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> i<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets a column instance which can be iterated over </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="column.html" title="Class column">boost::column</a> <a name="idp17153520-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span> i<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets the column instance which can be manipulated. No Exception Handling. </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><a class="link" href="column.html" title="Class column">boost::column</a> <a name="idp17155504-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="keyword">int</span> i<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets the column instance which can be manipulated. No Exception Handling. </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17157488-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> str<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets the cell instance which can be manipulated. No Exception Handling. </p>
+</li>
+<li class="listitem">
+<pre class="literallayout"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <a name="idp17159344-bb"></a><span class="keyword">operator</span><span class="special">[</span><span class="special">]</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">char</span> <span class="special">*</span> str<span class="special">)</span><span class="special">;</span></pre>
+<p>Gets the cell instance which can be manipulated. No Exception Handling. </p>
+</li>
+</ol></div>
+</div>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2015 Anurag Ghosh<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+      </p>
+</div></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="row.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../document/reference.html#header.boost.document.sheet_hpp"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/home.png" alt="Home"></a>
+</div>
+</body>
+</html>

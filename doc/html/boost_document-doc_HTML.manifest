@@ -3,4 +3,12 @@ boost_document/introduction0.html
 boost_document/introduction1.html
 boost_document/introduction2.html
 document/reference.html
+boost/cell.html
+boost/column_iter.html
+boost/column.html
+boost/cell_content_type.html
+boost/document_file_format.html
 boost/document.html
+boost/row_iter.html
+boost/row.html
+boost/sheet.html

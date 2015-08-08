@@ -44,6 +44,12 @@ doxygen autodoc_boost_document_library_core
     :
         [ glob 
             ../include/boost/document/document.hpp
+            ../include/boost/document/sheet.hpp
+            ../include/boost/document/cell.hpp
+            ../include/boost/document/row.hpp
+            ../include/boost/document/column.hpp
+            ../include/boost/document/detail/cell_content_type.hpp
+            ../include/boost/document/detail/document_file_format.hpp
         ]
     :
         $(doxygen_params)

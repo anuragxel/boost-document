@@ -105,6 +105,16 @@
       is a wrapper over the actual sheet of the document and acts like a reference
       to the same.
     </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Sheets are zero indexed irrespective of implementation details. Same goes
+        for cells, rows and columns.
+      </p></td></tr>
+</table></div>
 <p>
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -121,22 +131,13 @@
 <span class="special">}</span>
 </pre>
 <p>
-    </p>
-<div class="warning"><table border="0" summary="Warning">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
-<th align="left">Warning</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Sheets are zero indexed irrespective of implementation details. Same goes
-        for cells, rows and columns.
-      </p></td></tr>
-</table></div>
-<p>
-      Sheet instances can be obtained by their names or indices, and also through
-      the <code class="computeroutput"><span class="special">[]</span></code> operator, however the
-      <code class="computeroutput"><span class="special">[]</span></code> provides no exception handling
-      unlike the <code class="computeroutput"><span class="identifier">get_sheet</span></code> methods.
+      <code class="computeroutput"><span class="identifier">sheet_count</span><span class="special">()</span></code>
+      method provides the number of sheets present in the document. Sheet instances
+      can be obtained by their names or indices (using the <code class="computeroutput"><span class="identifier">get_sheet</span></code>
+      methods), and also through the <code class="computeroutput"><span class="special">[]</span></code>
+      operator, however the <code class="computeroutput"><span class="special">[]</span></code> operator
+      provides no exception handling unlike the <code class="computeroutput"><span class="identifier">get_sheet</span></code>
+      methods.
     </p>
 <p>
       Moving on, we would like to save our files after we have edited them programmatically.
@@ -161,8 +162,11 @@
     </p>
 <p>
       Point to note here is that, the program would crash if there is no sheet "Anurag"
-      present. We can also use <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">)</span></code> for exception being raised. There are other
-      sheet methods which can be used, checking the reference would be a good idea.
+      present. We can also use <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">)</span></code> for an exception being raised.
+    </p>
+<p>
+      There are other sheet methods which can be used, checking the reference would
+      be a good idea.
     </p>
 <p>
       Now, to use the cells there are multiple ways, all of which come with their
@@ -172,6 +176,15 @@
       styles and must not be used as a good coding example, it is only to illustrate
       the capabilities of the library.
     </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        Cells are zero indexed irrespective of implementation details.
+      </p></td></tr>
+</table></div>
 <p>
 </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
@@ -180,9 +193,9 @@
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
     <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">.</span><span class="identifier">get_sheet</span><span class="special">(</span><span class="string">"Anurag"</span><span class="special">);</span>
+
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell</span> <span class="identifier">c</span> <span class="special">=</span> <span class="identifier">s</span><span class="special">.</span><span class="identifier">get_cell</span><span class="special">(</span><span class="number">4</span><span class="special">,</span><span class="number">5</span><span class="special">);</span> <span class="comment">// row = 4, column = 5</span>
     <span class="identifier">c</span><span class="special">.</span><span class="identifier">set_string</span><span class="special">(</span><span class="string">"Boost"</span><span class="special">);</span>
-
     <span class="keyword">if</span><span class="special">(</span><span class="identifier">c</span><span class="special">.</span><span class="identifier">get_content_type</span><span class="special">()</span> <span class="special">==</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cell_content_type</span><span class="special">::</span><span class="identifier">STRING</span><span class="special">)</span> <span class="special">{</span>
         <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">c</span><span class="special">.</span><span class="identifier">get_string</span><span class="special">()</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
     <span class="special">}</span>
@@ -211,21 +224,16 @@
 </pre>
 <p>
     </p>
-<div class="warning"><table border="0" summary="Warning">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/warning.png"></td>
-<th align="left">Warning</th>
-</tr>
-<tr><td align="left" valign="top"><p>
-        Cells are zero indexed irrespective of implementation details.
-      </p></td></tr>
-</table></div>
 <p>
       The <code class="computeroutput"><span class="identifier">get_cell</span><span class="special">()</span></code>
       method expects the row number and the column number of the cell, in zero indexed
       format. A lot of people are more accustomed with the alphanumeric index (Eg.
-      "A2" or "F5") which have been provided too as <code class="computeroutput"><span class="special">[]</span></code> operators. Method like <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code> returns a <code class="computeroutput"><span class="keyword">bool</span></code>
-      telling whether the cell is empty or not. <code class="computeroutput"><span class="identifier">get_content_type</span><span class="special">()</span></code> returns an enum value which can be either
+      "A2" or "F5") which have been provided too as <code class="computeroutput"><span class="special">[]</span></code> operators.
+    </p>
+<p>
+      Method like <code class="computeroutput"><span class="identifier">empty</span><span class="special">()</span></code>
+      returns a <code class="computeroutput"><span class="keyword">bool</span></code> telling whether
+      the cell is empty or not. <code class="computeroutput"><span class="identifier">get_content_type</span><span class="special">()</span></code> returns an enum value which can be either
       EMPTY,STRING,VALUE,FORMULA or ERROR.
     </p>
 <p>
@@ -257,6 +265,47 @@
 <p>
       Documents thus act like a 3D matrix, the first dimension being the sheet name/sheet
       index, the second and third being the column and row index of the cell respectively.
+    </p>
+<p>
+      Now that we can access cells, it would be great if we could iterate over them
+      too! The library provides access to two classes and associated <code class="computeroutput"><span class="keyword">const</span></code> and non-<code class="computeroutput"><span class="keyword">const</span></code>
+      iterators, namely a <code class="computeroutput"><span class="keyword">class</span> <span class="identifier">row</span></code>
+      and a <code class="computeroutput"><span class="keyword">class</span> <span class="identifier">column</span></code>.
+      There are <code class="computeroutput"><span class="identifier">get_column</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span></code> and <code class="computeroutput"><span class="identifier">get_row</span><span class="special">(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">size_t</span><span class="special">)</span></code> methods
+      in the <code class="computeroutput"><span class="identifier">sheet</span></code> class and the
+      <code class="computeroutput"><span class="special">[]</span></code> operator returns a column instance.
+      A small example for illustration is as follows,
+    </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sheet</span> <span class="identifier">s1</span> <span class="special">=</span> <span class="identifier">doc</span><span class="special">[</span><span class="string">"Anurag"</span><span class="special">];</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">row</span> <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">s1</span><span class="special">.</span><span class="identifier">get_row</span><span class="special">(</span><span class="number">3</span><span class="special">);</span>
+
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">fill</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">()</span> <span class="special">+</span> <span class="number">50</span><span class="special">,</span> <span class="number">1</span><span class="special">);</span>
+
+    <span class="keyword">double</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
+    <span class="keyword">const</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">row_iterator</span> <span class="identifier">end</span><span class="special">(</span><span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">()</span> <span class="special">+</span> <span class="number">50</span><span class="special">);</span>
+    <span class="keyword">for</span> <span class="special">(</span><span class="keyword">auto</span> <span class="identifier">it</span> <span class="special">=</span> <span class="identifier">r</span><span class="special">.</span><span class="identifier">begin</span><span class="special">();</span> <span class="identifier">it</span> <span class="special">!=</span> <span class="identifier">end</span><span class="special">;</span> <span class="special">++</span><span class="identifier">it</span><span class="special">)</span> <span class="special">{</span>
+        <span class="identifier">sum</span> <span class="special">+=</span> <span class="special">(*</span><span class="identifier">it</span><span class="special">).</span><span class="identifier">get_value</span><span class="special">();</span>
+    <span class="special">}</span>
+
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"#sum "</span> <span class="special">&lt;&lt;</span> <span class="identifier">sum</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+    </p>
+<p>
+      We can similarly work with columns also. The tutorial now ends having covered
+      the basic ideas to be presented in the Library. If you have any suggestions
+      to the interface or the tutorial, do not hesistate to contact the authors.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

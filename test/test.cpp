@@ -494,7 +494,7 @@ int row_stl_functionality(boost::document& c) {
 		return 0;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test use_row_iterator Failed." << std::endl;
+		std::cerr << "Test row_stl_functionality Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}

@@ -1,5 +1,78 @@
 <?xml version="1.0" standalone="yes"?>
-<library-reference id="document_library_reference"><title>Document Library Reference</title><header name="boost/document/document.hpp">
+<library-reference id="document_library_reference"><title>Document Library Reference</title><header name="boost/document/cell.hpp">
+<namespace name="boost">
+<class name="cell"><method-group name="public member functions">
+<method name="set_formula"><type>void</type><parameter name="s"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="set_string"><type>void</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="set_value"><type>void</type><parameter name="x"><paramtype>double</paramtype></parameter></method>
+<method name="reset"><type>void</type></method>
+<method name="get_formula" cv="const"><type>std::string</type></method>
+<method name="get_string" cv="const"><type>std::string</type></method>
+<method name="get_value" cv="const"><type>double</type></method>
+<method name="get_row_index" cv="const"><type>std::size_t</type></method>
+<method name="get_column_index" cv="const"><type>std::size_t</type></method>
+<method name="empty" cv="const"><type>bool</type></method>
+<method name="get_content_type" cv="const"><type>boost::cell_content_type::type</type></method>
+<method name="operator&lt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="operator&gt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="operator=="><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="operator=="><type>bool</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></method>
+</method-group>
+<constructor specifiers="explicit"><parameter name="impl"><paramtype>const std::shared_ptr&lt; cell_interface &gt;</paramtype></parameter></constructor>
+<constructor><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></constructor>
+<copy-assignment><type>cell &amp;</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></copy-assignment>
+<copy-assignment><type>cell &amp;</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></copy-assignment>
+<copy-assignment><type>cell &amp;</type><parameter name="x"><paramtype>double</paramtype></parameter></copy-assignment>
+<destructor/>
+</class><function name="operator&gt;"><type>bool</type><parameter name="lhs"><paramtype>const std::string &amp;</paramtype></parameter><parameter name="rhs"><paramtype>const cell &amp;</paramtype></parameter></function>
+</namespace>
+</header>
+<header name="boost/document/column.hpp">
+<namespace name="boost">
+<class name="column_iter"><template>
+      <template-type-parameter name="Value"/>
+    </template><inherit access="public">boost::iterator_facade&lt; column_iter&lt; Cell &gt;, Cell, boost::random_access_traversal_tag &gt;</inherit><method-group name="public member functions">
+<method name="increment"><type>void</type></method>
+<method name="decrement"><type>void</type></method>
+<method name="advance"><type>void</type><parameter name="n"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="equal" cv="const"><type>bool</type><template>
+          <template-type-parameter name="T"/>
+        </template><parameter name="other"><paramtype>column_iter&lt; T &gt; const &amp;</paramtype></parameter></method>
+<method name="distance_to" cv="const"><type>std::size_t</type><template>
+          <template-type-parameter name="T"/>
+        </template><parameter name="other"><paramtype>column_iter&lt; T &gt; const &amp;</paramtype></parameter></method>
+<method name="dereference" cv="const"><type>Cell &amp;</type></method>
+</method-group>
+<constructor><parameter name="r"><paramtype>std::shared_ptr&lt; sheet_interface &gt;</paramtype></parameter><parameter name="num"><paramtype>std::size_t</paramtype></parameter><parameter name="column"><paramtype>std::size_t</paramtype></parameter></constructor>
+</class><class name="column"><purpose>This is the class which exposes a column of cells to work with. column_iterator is the standard iterator with this class. </purpose><typedef name="iterator"><type>column_iterator</type></typedef>
+<method-group name="public member functions">
+<method name="get_cell"><type>boost::cell</type><parameter name="row"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="operator[]"><type>boost::cell</type><parameter name="row"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="get_column_index" cv="const"><type>std::size_t</type></method>
+<method name="begin"><type>column_iterator</type></method>
+<method name="end"><type>column_iterator</type></method>
+<method name="cbegin"><type>const_column_iterator</type></method>
+<method name="cend"><type>const_column_iterator</type></method>
+</method-group>
+<constructor><parameter name="obj"><paramtype>std::shared_ptr&lt; sheet_interface &gt;</paramtype></parameter><parameter name="column"><paramtype>std::size_t</paramtype></parameter></constructor>
+</class><typedef name="column_iterator"><type>column_iter&lt; boost::cell &gt;</type></typedef>
+<typedef name="const_column_iterator"><type>column_iter&lt; const boost::cell &gt;</type></typedef>
+
+</namespace>
+</header>
+<header name="boost/document/detail/cell_content_type.hpp">
+<namespace name="boost">
+<struct name="cell_content_type"><purpose>Cell Content Type Currently present in Cell. </purpose><enum name="type"><enumvalue name="EMPTY"/><enumvalue name="STRING"/><enumvalue name="VALUE"/><enumvalue name="FORMULA"/><enumvalue name="ERROR"/></enum>
+</struct>
+</namespace>
+</header>
+<header name="boost/document/detail/document_file_format.hpp">
+<namespace name="boost">
+<struct name="document_file_format"><purpose>Document File Format which can be exported. </purpose><enum name="type"><enumvalue name="PDF"/><enumvalue name="CSV"/><enumvalue name="XML"/></enum>
+</struct>
+</namespace>
+</header>
+<header name="boost/document/document.hpp">
 <namespace name="boost">
 <class name="document"><purpose>This is the main class interface to be exposed to the library user. </purpose><method-group name="private member functions">
 <method name="init"><type>std::shared_ptr&lt; document_interface &gt;</type></method>
@@ -11,17 +84,75 @@
 <method name="save_document"><type>void</type><purpose>saves document using Calc/Excel given in the file path. </purpose></method>
 <method name="save_as_document"><type>void</type><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><purpose>saves document at the path using Calc/Excel provided in first argument. </purpose></method>
 <method name="export_document"><type>void</type><parameter name="format"><paramtype>boost::document_file_format::type</paramtype><default>boost::document_file_format::PDF</default></parameter><purpose>Exports document using Calc/Excel given in the file path and the file format. Default format is PDF. </purpose></method>
-<method name="insert_sheet"><type>boost::sheet</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Inserts a sheet in the document and returns the sheet instance. </purpose></method>
-<method name="get_sheet"><type>boost::sheet</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Gets a sheet instance of name str which can be manipulated as needed. </purpose></method>
-<method name="operator[]"><type>boost::sheet</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="get_sheet"><type>boost::sheet</type><parameter name="index"><paramtype>std::size_t</paramtype></parameter><purpose>Gets a sheet instance of that index which can be manipulated as needed. </purpose></method>
-<method name="operator[]"><type>boost::sheet</type><parameter name="index"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="insert_sheet"><type><classname>boost::sheet</classname></type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Inserts a sheet in the document and returns the sheet instance. </purpose></method>
+<method name="get_sheet"><type><classname>boost::sheet</classname></type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Gets a sheet instance of name str which can be manipulated as needed. </purpose></method>
+<method name="operator[]"><type><classname>boost::sheet</classname></type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
+<method name="get_sheet"><type><classname>boost::sheet</classname></type><parameter name="index"><paramtype>std::size_t</paramtype></parameter><purpose>Gets a sheet instance of that index which can be manipulated as needed. </purpose></method>
+<method name="operator[]"><type><classname>boost::sheet</classname></type><parameter name="index"><paramtype>std::size_t</paramtype></parameter></method>
 <method name="delete_sheet"><type>void</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Deletes the sheet of name str. </purpose></method>
 <method name="delete_sheet"><type>void</type><parameter name="index"><paramtype>std::size_t</paramtype></parameter><purpose>Deletes the sheet of name str. </purpose></method>
 <method name="sheet_count" cv="const"><type>std::size_t</type><purpose>Gives you the number of sheets. </purpose></method>
 </method-group>
 <constructor specifiers="explicit"><parameter name="path"><paramtype>const boost::filesystem::path &amp;</paramtype></parameter><purpose>The Constructor. Creates a new document object. </purpose></constructor>
 <destructor><purpose>Destructor Closes Unsaved Documents. </purpose></destructor>
-</class></namespace>
+</class>
+</namespace>
+</header>
+<header name="boost/document/row.hpp">
+<namespace name="boost">
+<class name="row_iter"><template>
+      <template-type-parameter name="Value"/>
+    </template><inherit access="public">boost::iterator_facade&lt; row_iter&lt; Cell &gt;, Cell, boost::random_access_traversal_tag &gt;</inherit><method-group name="public member functions">
+<method name="increment"><type>void</type></method>
+<method name="decrement"><type>void</type></method>
+<method name="advance"><type>void</type><parameter name="n"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="equal" cv="const"><type>bool</type><template>
+          <template-type-parameter name="T"/>
+        </template><parameter name="other"><paramtype>row_iter&lt; T &gt; const &amp;</paramtype></parameter></method>
+<method name="distance_to" cv="const"><type>std::size_t</type><template>
+          <template-type-parameter name="T"/>
+        </template><parameter name="other"><paramtype>row_iter&lt; T &gt; const &amp;</paramtype></parameter></method>
+<method name="dereference" cv="const"><type>Cell &amp;</type></method>
+</method-group>
+<constructor><parameter name="r"><paramtype>std::shared_ptr&lt; sheet_interface &gt;</paramtype></parameter><parameter name="num"><paramtype>std::size_t</paramtype></parameter><parameter name="row"><paramtype>std::size_t</paramtype></parameter></constructor>
+</class><class name="row"><typedef name="iterator"><type>row_iterator</type></typedef>
+<method-group name="public member functions">
+<method name="get_cell"><type>boost::cell</type><parameter name="column"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="operator[]"><type>boost::cell</type><parameter name="column"><paramtype>std::size_t</paramtype></parameter></method>
+<method name="get_row_index" cv="const"><type>std::size_t</type></method>
+<method name="begin"><type>row_iterator</type></method>
+<method name="end"><type>row_iterator</type></method>
+<method name="cbegin"><type>const_row_iterator</type></method>
+<method name="cend"><type>const_row_iterator</type></method>
+</method-group>
+<constructor><parameter name="obj"><paramtype>std::shared_ptr&lt; sheet_interface &gt;</paramtype></parameter><parameter name="row"><paramtype>std::size_t</paramtype></parameter></constructor>
+</class><typedef name="row_iterator"><type>row_iter&lt; boost::cell &gt;</type></typedef>
+<typedef name="const_row_iterator"><type>row_iter&lt; const boost::cell &gt;</type></typedef>
+
+</namespace>
+</header>
+<header name="boost/document/sheet.hpp">
+<namespace name="boost">
+<class name="sheet"><purpose>This is the main class interface to be exposed to the library user. </purpose><method-group name="private member functions">
+<method name="cell_from_string"><type>boost::cell</type><parameter name="str"><paramtype>const char *</paramtype></parameter><parameter name="length"><paramtype>std::size_t</paramtype></parameter></method>
+</method-group>
+<method-group name="public member functions">
+<method name="sheet_name" cv="const"><type>std::string</type><purpose>Gets the sheet name which is being accessed. </purpose></method>
+<method name="sheet_index" cv="const"><type>std::size_t</type><purpose>Gets the sheet index which is being accessed. </purpose></method>
+<method name="rename_sheet"><type>void</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Renames the sheet to str which is being accessed. </purpose></method>
+<method name="max_row" cv="const"><type>std::size_t</type><description><para>Returns the maximum number of rows </para></description></method>
+<method name="max_column" cv="const"><type>std::size_t</type><description><para>Returns the maximum number of columns </para></description></method>
+<method name="get_cell"><type>boost::cell</type><parameter name="row"><paramtype>std::size_t</paramtype></parameter><parameter name="column"><paramtype>std::size_t</paramtype></parameter><description><para>Gets the cell instance which can be manipulated. </para></description></method>
+<method name="get_row"><type>boost::row</type><parameter name="i"><paramtype>std::size_t</paramtype></parameter><description><para>Gets a row instance which can be iterated over </para></description></method>
+<method name="get_column"><type><classname>boost::column</classname></type><parameter name="i"><paramtype>std::size_t</paramtype></parameter><description><para>Gets a column instance which can be iterated over </para></description></method>
+<method name="operator[]"><type><classname>boost::column</classname></type><parameter name="i"><paramtype>std::size_t</paramtype></parameter><description><para>Gets the column instance which can be manipulated. No Exception Handling. </para></description></method>
+<method name="operator[]"><type><classname>boost::column</classname></type><parameter name="i"><paramtype>int</paramtype></parameter><description><para>Gets the column instance which can be manipulated. No Exception Handling. </para></description></method>
+<method name="operator[]"><type>boost::cell</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><description><para>Gets the cell instance which can be manipulated. No Exception Handling. </para></description></method>
+<method name="operator[]"><type>boost::cell</type><parameter name="str"><paramtype>const char *</paramtype></parameter><description><para>Gets the cell instance which can be manipulated. No Exception Handling. </para></description></method>
+</method-group>
+<constructor specifiers="explicit"><parameter name="impl"><paramtype>const std::shared_ptr&lt; sheet_interface &gt;</paramtype></parameter><purpose>The Constructor. Creates a new document object. </purpose></constructor>
+<destructor><purpose>Destructor Closes Unsaved Documents. </purpose></destructor>
+</class>
+</namespace>
 </header>
 </library-reference>
