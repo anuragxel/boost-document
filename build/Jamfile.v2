@@ -88,7 +88,7 @@ local LIBRE_REQUIREMENTS =
         <toolset>gcc:<cxxflags>"-Wno-long-long -Wno-variadic-macros -Wno-pedantic"
 
         <toolset>gcc:<cxxflags>-std=c++11
-        
+	<toolset>clang:<cxxflags>"-std=c++11 -stdlib=libc++" 
         # This makes boost/document depend and link with boost_system and boost_filesystem
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
@@ -149,15 +149,15 @@ project boost/document
 
 local SOURCES ;
 
-
-#if  ( $(LIBRE_DEFINES) )
-#{
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/libre_api/libre_cell_func detail/open_instance ;
-#}
-#else if ( $(MS_DEFINES) )
+#if ( $(MS_REQUIREMENTS) )
 #{
 #   SOURCES = detail/ms_api/ms_functions detail/ms_api/ms_sheet detail/open_instance ;
 #}
+#else if  ( $(LIBRE_REQUIREMENTS) )
+#{
+   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/libre_api/libre_cell_func detail/open_instance ;
+#}
+
 
 lib boost_document
     :
