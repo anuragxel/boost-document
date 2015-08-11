@@ -26,8 +26,8 @@ namespace boost {
 		//!
 		//!
 		//!
-		explicit cell(const std::shared_ptr<cell_interface> impl) 
-		: pimpl_(impl) 
+		explicit cell(const std::shared_ptr<cell_interface> impl)
+		: pimpl_(impl)
 		{}
 
 		//! \fn The copy constructor of the cell.
@@ -36,7 +36,7 @@ namespace boost {
 		{}
 
 		//! \fn The assignment operator of the cell class.
-		//!     Makes all operations non shallow 
+		//!     Makes all operations non shallow
 		//!     with respect to the internal cells.
 		cell& operator=(const cell& c) {
 			switch(c.get_content_type()) {
@@ -55,7 +55,7 @@ namespace boost {
 			}
 			return *this;
 		}
-		
+
 		//! \fn The overloaded = operator sets a string
 		//!     in the cell.
 		cell& operator=(const std::string& str) {
@@ -159,7 +159,7 @@ namespace boost {
 		inline bool operator>(const std::string& str) {
 			return pimpl_->get_string() > str;
 		}
-		
+
 		//!
 		//!
 		//!
@@ -187,10 +187,10 @@ namespace boost {
 			return false;
 		}
 	}; // class cell
-	
+
 	//!
 	//!
-	//!	
+	//!
 	inline bool operator>(const std::string& lhs, const cell& rhs) {
 		return lhs > rhs.get_string();
 	}

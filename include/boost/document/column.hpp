@@ -21,11 +21,11 @@
 
 
 namespace boost {
-
+	
 	template<typename Value> class column_iter;
 
 	typedef column_iter<boost::cell> column_iterator;
-	
+
 	typedef column_iter<const boost::cell> const_column_iterator;
 
 	//! \brief This is the class which
@@ -37,7 +37,7 @@ namespace boost {
 		std::shared_ptr<sheet_interface> obj_;
 		std::size_t column_;
 		public:
-		typedef column_iterator iterator;	
+		typedef column_iterator iterator;
 		column(std::shared_ptr<sheet_interface> obj, std::size_t column) : obj_(obj), column_(column) {}
 
 		boost::cell get_cell(std::size_t row) {
@@ -63,12 +63,12 @@ namespace boost {
 	};
 
 	template<typename Cell> class column_iter: public boost::iterator_facade<
-		column_iter<Cell>, 
+		column_iter<Cell>,
 		Cell,
 		boost::random_access_traversal_tag
 		> {
 		protected:
-		
+
 		typename boost::conditional<
         	boost::is_const<Cell>::value,
         	std::shared_ptr<const sheet_interface>,
@@ -80,7 +80,7 @@ namespace boost {
 		std::size_t column_;
 
 		public:
-		
+
 		friend class boost::iterator_core_access;
 
 		column_iter(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t column) : r_(r), cell_no_(num), column_(column)
@@ -89,9 +89,9 @@ namespace boost {
 		void increment() { ++this->cell_no_; }
 
 		void decrement() { --this->cell_no_; }
-					
+
 		void advance(std::size_t n) { this->cell_no_ += n; }
-		
+
 		template <class T>
 		bool equal(column_iter<T> const& other) const {
 		    return this->r_ == other.r_ && this->cell_no_ == other.cell_no_;
@@ -101,7 +101,7 @@ namespace boost {
 		std::size_t distance_to(column_iter<T> const& other) const {
 			if(this->r_ != other.r_) {
 				boost::throw_exception(document_exception(
-				"Error: Both the iterators are not equal"));    
+				"Error: Both the iterators are not equal"));
 			}
 			return (std::size_t)(this->cell_no_> other.cell_no_?this->cell_no_-other.cell_no_:other.cell_no_-this->cell_no_);
 		}

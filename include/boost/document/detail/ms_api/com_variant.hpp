@@ -1,3 +1,6 @@
+#ifndef _COM_VARIANT_HPP
+#define _COM_VARIANT_HPP
+
 #include <string>
 #include <windows.h>
 #include <ole2.h>
@@ -101,3 +104,5 @@ public:
 };
 
 }}
+
+#endif

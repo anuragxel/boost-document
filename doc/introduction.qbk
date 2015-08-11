@@ -7,7 +7,7 @@
 [section:introduction Motivation]
 
 [warning This is not an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement. The intention is to submit the library to a formal review and get included as an official library, if community think that it is interesting!]
- 
+
 Boost.Document library is meant to simplify tasks related to manipulation of Office Documents in general and Spreadsheet Documents in particular. All the Current Office API's, be it LibreOffice/OpenOffice or MS Excel are not intuitive to use at all and the effort to write applications which use such API's distracts the developer from performing the core problems at hand. The idea here is to provide a simple, cross-platform and usable interface for developers to use to make their own applications which involve manipulating Excel/OpenOffice/LibreOffice sheets. Such a library will have many takers such as Students/Professors in academia, Banking/CRM softwares etc.
 
 [endsect]
@@ -28,7 +28,7 @@ If these prerequisities are satisfied, one needs to open a shell at `boost_docum
 You would need to atleast install Libre Office 4 and the Libre Office SDK at least with the default folder configuration. Expected folder path of Libreoffice is `C:\Program Files (x86)\LibreOffice 4\` on Windows and `/usr/lib/libreoffice/` on Linux.
 
 [section On Linux]
- 
+
 # Install SDK using variant of the following command `sudo apt-get install libreoffice-dev`.
 
 # On the terminal, Go to `/usr/lib/libreoffice/sdk`.
@@ -101,55 +101,25 @@ We would like to do something interesting with our document variable now. So, le
 
 [tip To Perform virtually nearly anything with the document, you would need to open it first and then close it. Closing however happens automatically when the variable goes out of scope, during the destruction sequence of the object and hence need not be explicitly carried out.]
 
-```
-    #include <boost/document.hpp>
+[import ../examples/basic.cpp]
+[basic_example]
 
-    int main(int argc, char **argv) {
-        boost::document doc("/foo/bar/file.ods");
-        doc.open_document();
-        doc.export_document(boost::document_file_format::CSV);
-        return 0;
-    }
-
-```
-
-Important thing to note here is the enum document_file_format which has three values, PDF, CSV and XML which it can accept. The exported file would reside in the same folder as the original file. Also, note the ommision of the `doc.close_document()` which would happen automatically.
+Important thing to note here is the `enum` document_file_format which has three values, PDF, CSV and XML which it can accept. The exported file would reside in the same folder as the original file. Also, note the ommision of the `doc.close_document()` which would happen automatically.
 
 We would also like to make some changes to our sheets in the document and get some information about them. There are various methods provided in the document class for the same. For example, the following examples prints out the names of all the sheets, after getting an instance by their indices. The sheet class is a wrapper over the actual sheet of the document and acts like a reference to the same.
 
 [warning Sheets are zero indexed irrespective of implementation details. Same goes for cells, rows and columns.]
 
-```
-    #include <boost/document.hpp>
+[import ../examples/sheet_names.cpp]
+[sheet_names_example]
 
-    int main(int argc, char **argv) {
-        boost::document doc("/foo/bar/file.ods");
-        doc.open_document();
-        std::size_t count = doc.sheet_count(); 
-        for(int i = 0 ; i < count; i++) {
-            boost::sheet s = doc.get_sheet(i);
-            std::cout << "#" << i << "\t" << s.sheet_name() << std::endl;
-        }
-        return 0;
-    }
-```
 `sheet_count()` method provides the number of sheets present in the document.
 Sheet instances can be obtained by their names or indices (using the `get_sheet` methods), and also through the `[]` operator, however the `[]` operator provides no exception handling unlike the `get_sheet` methods.
 
 Moving on, we would like to save our files after we have edited them programmatically. The user can call the `save_document()` or the `save_as_document(const boost::filesystem::path&)` methods to save their document after they have been edited. The following example renames a sheet and then saves the document.
 
-```
-    #include <boost/document.hpp>
-
-    int main(int argc, char **argv) {
-        boost::document doc("/foo/bar/file.ods");
-        doc.open_document();
-        boost::sheet s = doc["Anurag"];
-        s.rename_sheet("Vatika");
-        doc.save_document();
-        return 0;
-    }
-```
+[import ../examples/save_doc.cpp]
+[save_doc_example]
 
 Point to note here is that, the program would crash if there is no sheet "Anurag" present. We can also use `doc.get_sheet("Anurag")` for an exception being raised.
 
@@ -159,48 +129,14 @@ Now, to use the cells there are multiple ways, all of which come with their own 
 
 [warning Cells are zero indexed irrespective of implementation details.]
 
-```
-    #include <boost/document.hpp>
+[import ../examples/cell_basic.cpp]
+[cell_basic_example]
 
-    int main(int argc, char **argv) {
-        boost::document doc("/foo/bar/file.ods");
-        doc.open_document();
-        boost::sheet s = doc.get_sheet("Anurag");
-        
-        boost::cell c = s.get_cell(4,5); // row = 4, column = 5
-        c.set_string("Boost"); 
-        if(c.get_content_type() == boost::cell_content_type::STRING) {
-            std::cout << c.get_string() << std::endl;
-        }
-        
-        if(s["B2"].empty()) {
-            s["B2"] = 2.56;
-        }
-        
-        doc["Vatika"][7][2] = "Anurag";
-        boost::sheet new = doc["Vatika"];
-        
-        new["C3"] = 0.5; // row = 4, column = 2
-        new["C4"] = 0.5;
-        new["C5"].set_formula("=C3+C4");
-        
-        std::cout << doc["Vatika"]["C5"].get_value() << std::endl;
-
-        new["D8"] = c; // Assignment
-        if(new["D8"].get_string() == "Boost") {
-            std::cout << "Yay!" << std::endl;   
-        }
-
-        doc.save_document();
-        return 0;
-    }
-```
-
-The `get_cell()` method expects the row number and the column number of the cell, in zero indexed format. A lot of people are more accustomed with the alphanumeric index (Eg. "A2" or "F5") which have been provided too as `[]` operators. 
+The `get_cell()` method expects the row number and the column number of the cell, in zero indexed format. A lot of people are more accustomed with the alphanumeric index (Eg. "A2" or "F5") which have been provided too as `[]` operators.
 
 Method like `empty()` returns a `bool` telling whether the cell is empty or not. `get_content_type()` returns an enum value which can be either EMPTY,STRING,VALUE,FORMULA or ERROR.
 
-The user can use `set_formula()` or `set_string()` or `set_value()` methods, or can use the `=` operators which sets a value for doubles passed and sets a string for std::string passed. Likewise, `get_value()`, `get_formula()` and `get_string()` are also provided. 
+The user can use `set_formula()` or `set_string()` or `set_value()` methods, or can use the `=` operators which sets a value for doubles passed and sets a string for std::string passed. Likewise, `get_value()`, `get_formula()` and `get_string()` are also provided.
 
 The explicit function calls instead of the `[]` operator provide the safety of exceptions. Having a look at the cell class reference document would help in aligning your coding style with the library usage.
 
@@ -212,29 +148,9 @@ Documents thus act like a 3D matrix, the first dimension being the sheet name/sh
 
 Now that we can access cells, it would be great if we could iterate over them too! The library provides access to two classes and associated `const` and non-`const` iterators, namely a `class row` and a `class column`. There are `get_column(std::size_t)` and `get_row(std::size_t)` methods in the `sheet` class and the `[]` operator returns a column instance. A small example for illustration is as follows,
 
-```
-    #include <boost/document.hpp>
+[import ../examples/row_iter_usage.cpp]
+[row_iter_usage_example]
 
-    int main(int argc, char **argv) {
-        boost::document doc("/foo/bar/file.ods");
-        doc.open_document();
-        
-        boost::sheet s1 = doc["Anurag"];
-        boost::row r = s1.get_row(3);
-
-        std::fill(r.begin(), r.begin() + 50, 1);
-
-        double sum = 0;
-        const boost::row_iterator end(r.begin() + 50);
-        for (auto it = r.begin(); it != end; ++it) {
-            sum += (*it).get_value();
-        }
-
-        std::cout << "#sum " << sum << std::endl;
-
-        return 0;
-    }
-```
 [tip One should use the STL functionality over the iterators carefully as the copy constructors and the assignment operators do not behave as we expect at times.]
 
 The iterators themselves are random-access iterators in nature. We can similarly work with columns also. The tutorial now ends having covered the basic ideas to be presented in the Library. If you have any suggestions to the interface or the tutorial, do not hesistate to contact the authors.
@@ -243,7 +159,7 @@ The iterators themselves are random-access iterators in nature. We can similarly
 
 [section:introduction Brief Overview]
 
-The library uses either Libre Office API or Microsoft Office API as the underlaying API to provide an easy interface to manipulate Spreadsheets. For example we can open a spreasheet document and export it to PDF format like this.
+The library uses either Libre Office API or Microsoft Office API as the underlaying API to provide an easy interface to manipulate Spreadsheets. For example we can open a spreadsheet document and export it to PDF format like this.
 
 ```
     boost::document d("file_path");
@@ -256,12 +172,12 @@ We can perform other simple operations to the document like this, See the Refere
 
 A document needs to be opened first to manipulate it. It may or may not be closed explicitly as the destruction automatically triggers a close if it is open. However, closing and reopening causes buggy behaviour right now and thus should be avoided. The interface is designed to accomodate all the differences between the API's and thus uniform behaviour can be expected irregardless of the base.
 
-Simple Sheet Operations such as inserting sheets, deleting sheets, counting the number of sheets, getting sheets by indices are currently supported. A simple example can be seen as follows. 
+Simple Sheet Operations such as inserting sheets, deleting sheets, counting the number of sheets, getting sheets by indices are currently supported. A simple example can be seen as follows.
 
 ```
     boost::document d(file_path);
     d.open_document();
-    
+
     boost::sheet s = d.get_sheet("Anurag");
     s.rename_sheet("Vatika");
 
@@ -269,7 +185,7 @@ Simple Sheet Operations such as inserting sheets, deleting sheets, counting the 
 
     for(int i = 0;i < d.sheet_count(); i++) {
         sheet sx = d.getSheet(i);
-        sx.rename_sheet("AnuragSheet" + std::to_string(i)); 
+        sx.rename_sheet("AnuragSheet" + std::to_string(i));
     }
 ```
 
@@ -282,7 +198,7 @@ There are various ways of getting a cell from a sheet or a document. The `[]` op
     boost::sheet s = d["Anurag"];
     boost::cell c = s.get_cell(4,5); // row, column
     boost::cell c1 = s[4][5]; // 5,4 actually
-    boost::cell c2 = s["C4"]; // 4,2  
+    boost::cell c2 = s["C4"]; // 4,2
 ```
 [warning Cells are zero indexed irrespective of the underlaying API!]
 
