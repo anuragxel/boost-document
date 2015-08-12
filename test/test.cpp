@@ -22,7 +22,7 @@ int negative_try_opening_null() {
 		d.open_document();
 		return 1;
 	}
-	catch(boost::document_exception& e) {   
+	catch(boost::document_exception& e) {
 		std::cout << "Test negative_try_opening_null Passed. Expected -- " << e.what() << std::endl;
 		return 0;
 	}
@@ -34,7 +34,7 @@ int negative_try_exporting_null() {
 		d.export_document();
 		return 1;
 	}
-	catch(boost::document_exception& e) {   
+	catch(boost::document_exception& e) {
 		std::cout << "Test negative_try_exporting_null Passed. Expected -- " << e.what() << std::endl;
 		return 0;
 	}
@@ -46,7 +46,7 @@ int negative_try_closing_null() {
 		d.close_document();
 		return 1;
 	}
-	catch(boost::document_exception& e) {   
+	catch(boost::document_exception& e) {
 		std::cout << "Test negative_try_closing_null Passed. Expected -- " << e.what() << std::endl;
 		return 0;
 	}
@@ -177,7 +177,7 @@ int exporting_to_pdf(boost::document& b) {
 
 int exporting_to_csv(boost::document& b) {
 	try {
-		b.export_document(boost::document_file_format::CSV);        
+		b.export_document(boost::document_file_format::CSV);
 		std::cout << "Test exporting_to_csv Passed." << std::endl;
 		return 0;
 	}
@@ -250,7 +250,7 @@ int get_valid_sheet_count(boost::document& b) {
 int insert_new_sheet(boost::document& b) {
 	try {
 		boost::sheet s1 = b.insert_sheet("Vatika");
-		BOOST_REQUIRE(b.sheet_count() == 3); 
+		BOOST_REQUIRE(b.sheet_count() == 3);
 		std::cout << "Test insert_new_sheet Passed." << std::endl;
 		return 0;
 	}
@@ -264,7 +264,7 @@ int insert_new_sheet(boost::document& b) {
 int delete_new_sheet(boost::document& b) {
 	try {
 		b.delete_sheet("Vatika");
-		BOOST_REQUIRE(b.sheet_count() == 2); 
+		BOOST_REQUIRE(b.sheet_count() == 2);
 		std::cerr << "Test delete_new_sheet Passed." << std::endl;
 		return 0;
 	}
@@ -310,7 +310,7 @@ int sheet_and_cell_syntatic_sugar(boost::document& b,boost::document& c) {
 
 
 int negative_cell_index_check(boost::document& c) {
-	boost::sheet s1 = c["Anurag"];    
+	boost::sheet s1 = c["Anurag"];
 	try {
 		s1["0A2"] = "Anurag";
 		return 1;
@@ -357,7 +357,7 @@ int cell_getters_check(boost::document& c) {
 		std::cerr << "Test cell_getters_check Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
-	}   
+	}
 }
 
 
@@ -380,7 +380,7 @@ int cell_formula_check(boost::document& c) {
 }
 
 
-// TODO: Fix in a day. Not able to find the fix. :/ 
+// TODO: Fix in a day. Not able to find the fix. :/
 int cell_reset_check(boost::document& c) {
 	try {
 		boost::sheet s1 = c["Anurag"];
@@ -421,7 +421,7 @@ int check_row_and_column_class(boost::document& c) {
 	try {
 
 		boost::sheet s1 = c["Anurag"];
-		
+
 		boost::row r = s1.get_row(3);
 		r[4] = "Anurag";
 		BOOST_REQUIRE(s1[4][3].get_string() == "Anurag");
@@ -445,7 +445,7 @@ int check_for_sheet_and_row_scope(boost::document& c) {
 		boost::row r = s.get_row(10);
 		r[20] = "Hello world";
 		boost::column k = s.get_column(20);
-		
+
 		s = c[0]; // ... new sheet is used instead of the old one
 		// s is now out of scope.
 		// if r and c had raw pointers of s,
@@ -459,14 +459,14 @@ int check_for_sheet_and_row_scope(boost::document& c) {
 		std::cerr << "Test check_for_sheet_and_row_scope Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
-	}   
+	}
 }
 
 
 int use_row_iterator(boost::document& c) {
 	try {
-		boost::sheet s1 = c["Anurag"];     
-		boost::row r = s1.get_row(3);   
+		boost::sheet s1 = c["Anurag"];
+		boost::row r = s1.get_row(3);
 		for(auto k = r.begin(); k != r.begin() + 20; k++) {
 		  *k = 1;
 		}
@@ -489,7 +489,7 @@ int row_stl_functionality(boost::document& c) {
 		for (auto it = r.begin(); it != end; ++it) {
 			sum += (*it).get_value();
 		}
-		std::cout << "#sum " << sum << std::endl; 
+		std::cout << "#sum " << sum << std::endl;
 		BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
 		return 0;
 	}
@@ -523,12 +523,11 @@ int row_iterator_caching(boost::document& c) {
 
 
 int test_main(int argc, char *argv[]) {
-   
 //#ifdef BOOST_DOCUMENT_HAS_MS
-//    boost::document b("Excel_Test1.xlsx");  
+//    boost::document b("Excel_Test1.xlsx");
 //    boost::document d("Excel_Test2.xlsx");
 //    boost::document c("Excel_Test3.xlsx");
-//#elif defined(BOOST_DOCUMENT_HAS_LIBRE)   
+//#elif defined(BOOST_DOCUMENT_HAS_LIBRE)
 	boost::document b("Test1.ods");
 	boost::document c("Test2.ods");
 	boost::document d("Test3.ods");
@@ -536,13 +535,14 @@ int test_main(int argc, char *argv[]) {
 //#endif
 
 	int rv = 0;
-	
+
 	// Sanity Checks
 	rv += negative_try_opening_null();
 	rv += negative_try_exporting_null();
 	rv += negative_try_closing_null();
 	rv += negative_closing_unopened_document(b);
 	rv += negative_absurd_path_opening();
+
 
 	// Permissions related checks
 	rv += negative_opening_file_without_permission(d);
@@ -554,8 +554,8 @@ int test_main(int argc, char *argv[]) {
 
 	rv += negative_absurd_get_sheet_string(b);
 	rv += negative_absurd_get_sheet_index(b);
-	
-	rv += negative_get_invalid_cell(b); 
+
+	rv += negative_get_invalid_cell(b);
 
 	// Positive Checks
 	rv += exporting_to_pdf(b);
@@ -580,14 +580,14 @@ int test_main(int argc, char *argv[]) {
 	//  iterator checks
 	rv += check_row_and_column_class(c);
 	rv += check_for_sheet_and_row_scope(c);
-	
+
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
 	rv += row_iterator_caching(c);
-
+	
 	if (rv > 0) {
 		std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
-	} 
+	}
 	return rv;
 }
 

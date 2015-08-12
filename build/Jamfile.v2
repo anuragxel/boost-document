@@ -31,7 +31,7 @@ if ! ( $(OO_SDK_OUT) )
 }
 
 # extern libraries, could be found in specified directories
-lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal 
+lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal
     :   # No source files after first `:` means that this is an extern library
     :
         # Portable way to specify library search paths
@@ -77,23 +77,23 @@ local LIBRE_REQUIREMENTS =
         # Portable way to specify include folders
         <target-os>linux:<include>"$(OO_SDK_OUT)/include"
         <target-os>linux:<include>"/usr/lib/libreoffice/sdk/include"
-        
+
         <target-os>windows:<include>"$(OO_SDK_OUT)\\include"
         <target-os>windows:<include>"C:\\Program Files (x86)\\LibreOffice 4\\sdk\\include"
 
         # Linux specific defines for OpenOffice
         <target-os>linux:<define>UNX <define>GCC <define>LINUX <define>CPPU_ENV=gcc3 <define>HAVE_GCC_VISIBILITY_FEATURE
-        
+
         # Disabling some of the GCC warnings that occur in OpenOffice/LibreOffice headers
         <toolset>gcc:<cxxflags>"-Wno-long-long -Wno-variadic-macros -Wno-pedantic"
 
         <toolset>gcc:<cxxflags>-std=c++11
-	<toolset>clang:<cxxflags>"-std=c++11 -stdlib=libc++" 
+	      <toolset>clang:<cxxflags>"-std=c++11 -stdlib=libc++"
         # This makes boost/document depend and link with boost_system and boost_filesystem
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem
 
-        # This makes boost/document depend and link with extern libraries 
+        # This makes boost/document depend and link with extern libraries
         <target-os>linux:<library>uno_cppuhelpergcc3
         <target-os>linux:<library>uno_cppu
         <target-os>linux:<library>uno_salhelpergcc3
@@ -108,7 +108,7 @@ local LIBRE_REQUIREMENTS =
 # Specific target to check OpenOffice avalability
 exe has_libre_suit : ../build/has_libre_suit.cpp : $(LIBRE_REQUIREMENTS) ;
 # Do not build that target without explicit request
-explicit has_libre_suit ; 
+explicit has_libre_suit ;
 
 # All the flags and options for MS Office are stored in this variable
 local MS_DEFINES = <define>BOOST_DOCUMENT_HAS_MS ;
@@ -141,7 +141,7 @@ project boost/document
         # <library> propagates dependency automatically, describing other requirements:
         <link>shared:<define>BOOST_ALL_DYN_LINK=1                       # tell source we're building dll's
         <link>static:<define>BOOST_All_STATIC_LINK=1                    # tell source we're building static lib's
-        
+
         # We have some issues with the following code, that propogates defines to projects:
         #[ check-target-builds ../build//has_libre_suit : $(LIBRE_DEFINES) ]   # if we have has_oo_suit, then define BOOST_DOCUMENT_HAS_LIBRE
         #[ check-target-builds ../build//has_ms_suit : $(MS_DEFINES) ]   # if we have has_ms_suit, then define BOOST_DOCUMENT_HAS_MS
