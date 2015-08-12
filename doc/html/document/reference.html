@@ -44,7 +44,9 @@
 <a name="header.boost.document.cell_hpp"></a>Header &lt;<a href="http://www.boost.org/doc/libs/1_57_0/boost/document/cell.hpp" target="_top">boost/document/cell.hpp</a>&gt;</h4></div></div></div>
 <pre class="synopsis"><span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span>
   <span class="keyword">class</span> <a class="link" href="../boost/cell.html" title="Class cell">cell</a><span class="special">;</span>
-  <span class="keyword">bool</span> <a name="boost.operator_idp27863584"></a><span class="keyword">operator</span><span class="special">&gt;</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> lhs<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cell</span> <span class="special">&amp;</span> rhs<span class="special">)</span><span class="special">;</span>
+
+  <span class="comment">// Compares the cell with a string assuming that the cell contains a string. Method is outside class because it take cell as the second operand. </span>
+  <span class="keyword">bool</span> <a name="boost.operator_idp25854384"></a><span class="keyword">operator</span><span class="special">&gt;</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">&amp;</span> lhs<span class="special">,</span> <span class="keyword">const</span> <span class="identifier">cell</span> <span class="special">&amp;</span> rhs<span class="special">)</span><span class="special">;</span>
 <span class="special">}</span></pre>
 </div>
 <div class="section">

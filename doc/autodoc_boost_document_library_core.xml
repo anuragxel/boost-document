@@ -2,29 +2,29 @@
 <library-reference id="document_library_reference"><title>Document Library Reference</title><header name="boost/document/cell.hpp">
 <namespace name="boost">
 <class name="cell"><method-group name="public member functions">
-<method name="set_formula"><type>void</type><parameter name="s"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="set_string"><type>void</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="set_value"><type>void</type><parameter name="x"><paramtype>double</paramtype></parameter></method>
-<method name="reset"><type>void</type></method>
-<method name="get_formula" cv="const"><type>std::string</type></method>
-<method name="get_string" cv="const"><type>std::string</type></method>
-<method name="get_value" cv="const"><type>double</type></method>
-<method name="get_row_index" cv="const"><type>std::size_t</type></method>
-<method name="get_column_index" cv="const"><type>std::size_t</type></method>
-<method name="empty" cv="const"><type>bool</type></method>
-<method name="get_content_type" cv="const"><type>boost::cell_content_type::type</type></method>
-<method name="operator&lt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="operator&gt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="operator=="><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></method>
-<method name="operator=="><type>bool</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></method>
+<method name="set_formula"><type>void</type><parameter name="s"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Sets a formula in the cell. </purpose></method>
+<method name="set_string"><type>void</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Sets a string in the cell. </purpose></method>
+<method name="set_value"><type>void</type><parameter name="x"><paramtype>double</paramtype></parameter><purpose>Sets a double in the cell. </purpose></method>
+<method name="reset"><type>void</type><purpose>Resets the contents of the cell. </purpose></method>
+<method name="get_formula" cv="const"><type>std::string</type><purpose>Gets the formula in the cell. </purpose></method>
+<method name="get_string" cv="const"><type>std::string</type><purpose>Gets the string present in the cell. </purpose></method>
+<method name="get_value" cv="const"><type>double</type><purpose>Gets the value present in the cell. </purpose></method>
+<method name="get_row_index" cv="const"><type>std::size_t</type><purpose>Gets the row index of the cell. </purpose></method>
+<method name="get_column_index" cv="const"><type>std::size_t</type><purpose>Gets the column index of the cell. </purpose></method>
+<method name="empty" cv="const"><type>bool</type><purpose>Returns whether the cell is empty or not as a boolean. </purpose></method>
+<method name="get_content_type" cv="const"><type>boost::cell_content_type::type</type><purpose>Given the cell content, returns the type of cell content currently present in it in the. form of boost::cell_content_type::type enum which can be of the following values, EMPTY,STRING,VALUE,FORMULA,ERROR. </purpose></method>
+<method name="operator&lt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Compares the cell with a string assuming that the cell contains a string. </purpose></method>
+<method name="operator&gt;"><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Compares the cell with a string assuming that the cell contains a string. </purpose></method>
+<method name="operator=="><type>bool</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>Compares the cell with a string assuming that the cell contains a string. </purpose></method>
+<method name="operator=="><type>bool</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter><purpose>Compares the cell with another cell. </purpose></method>
 </method-group>
-<constructor specifiers="explicit"><parameter name="impl"><paramtype>const std::shared_ptr&lt; cell_interface &gt;</paramtype></parameter></constructor>
-<constructor><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></constructor>
-<copy-assignment><type>cell &amp;</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter></copy-assignment>
-<copy-assignment><type>cell &amp;</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter></copy-assignment>
-<copy-assignment><type>cell &amp;</type><parameter name="x"><paramtype>double</paramtype></parameter></copy-assignment>
-<destructor/>
-</class><function name="operator&gt;"><type>bool</type><parameter name="lhs"><paramtype>const std::string &amp;</paramtype></parameter><parameter name="rhs"><paramtype>const cell &amp;</paramtype></parameter></function>
+<constructor specifiers="explicit"><parameter name="impl"><paramtype>const std::shared_ptr&lt; cell_interface &gt;</paramtype></parameter><description><para>The default constructor which takes in the corresponding cell_interface for operation. Follows the pimpl idiom to support MS and LibreOffice. </para></description></constructor>
+<constructor><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter><purpose>The copy constructor of the cell. </purpose></constructor>
+<copy-assignment><type>cell &amp;</type><parameter name="c"><paramtype>const cell &amp;</paramtype></parameter><purpose>The assignment operator of the cell class. Makes all operations non shallow with respect to the internal cells. </purpose></copy-assignment>
+<copy-assignment><type>cell &amp;</type><parameter name="str"><paramtype>const std::string &amp;</paramtype></parameter><purpose>The overloaded = operator sets a string in the cell. </purpose></copy-assignment>
+<copy-assignment><type>cell &amp;</type><parameter name="x"><paramtype>double</paramtype></parameter><purpose>The overloaded = operator sets a double in the cell. </purpose></copy-assignment>
+<destructor><purpose>Default Destructor. Does nothing. </purpose></destructor>
+</class><function name="operator&gt;"><type>bool</type><parameter name="lhs"><paramtype>const std::string &amp;</paramtype></parameter><parameter name="rhs"><paramtype>const cell &amp;</paramtype></parameter><purpose>Compares the cell with a string assuming that the cell contains a string. Method is outside class because it take cell as the second operand. </purpose></function>
 </namespace>
 </header>
 <header name="boost/document/column.hpp">

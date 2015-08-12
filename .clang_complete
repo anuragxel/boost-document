@@ -1,0 +1,6 @@
+./include/
+./include/boost/
+./include/boost/document
+./include/boost/document/detail
+./include/boost/document/detail/libre_api
+./include/boost/document/detail/ms_api

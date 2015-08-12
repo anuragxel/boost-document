@@ -21,7 +21,7 @@
 
 
 namespace boost {
-	
+
 	template<typename Value> class column_iter;
 
 	typedef column_iter<boost::cell> column_iterator;
