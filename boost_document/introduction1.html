@@ -84,18 +84,19 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">document</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">char</span> <span class="special">**</span><span class="identifier">argv</span><span class="special">)</span> <span class="special">{</span>
-    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
-    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
-    <span class="identifier">doc</span><span class="special">.</span><span class="identifier">export_document</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">CSV</span><span class="special">);</span>
-    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+  <span class="identifier">boost</span><span class="special">::</span><span class="identifier">document</span> <span class="identifier">doc</span><span class="special">(</span><span class="string">"/foo/bar/file.ods"</span><span class="special">);</span>
+  <span class="identifier">doc</span><span class="special">.</span><span class="identifier">open_document</span><span class="special">();</span>
+  <span class="identifier">doc</span><span class="special">.</span><span class="identifier">export_document</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">document_file_format</span><span class="special">::</span><span class="identifier">CSV</span><span class="special">);</span>
+  <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
 <p>
     </p>
 <p>
-      Important thing to note here is the enum document_file_format which has three
-      values, PDF, CSV and XML which it can accept. The exported file would reside
-      in the same folder as the original file. Also, note the ommision of the <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">close_document</span><span class="special">()</span></code> which would happen automatically.
+      Important thing to note here is the <code class="computeroutput"><span class="keyword">enum</span></code>
+      document_file_format which has three values, PDF, CSV and XML which it can
+      accept. The exported file would reside in the same folder as the original file.
+      Also, note the ommision of the <code class="computeroutput"><span class="identifier">doc</span><span class="special">.</span><span class="identifier">close_document</span><span class="special">()</span></code> which would happen automatically.
     </p>
 <p>
       We would also like to make some changes to our sheets in the document and get
@@ -130,6 +131,8 @@
     <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
+<p>
+    </p>
 <p>
       <code class="computeroutput"><span class="identifier">sheet_count</span><span class="special">()</span></code>
       method provides the number of sheets present in the document. Sheet instances
@@ -302,10 +305,22 @@
 </pre>
 <p>
     </p>
+<div class="tip"><table border="0" summary="Tip">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="http://www.boost.org/doc/libs/1_57_0/doc/src/images/tip.png"></td>
+<th align="left">Tip</th>
+</tr>
+<tr><td align="left" valign="top"><p>
+        One should use the STL functionality over the iterators carefully as the
+        copy constructors and the assignment operators do not behave as we expect
+        at times.
+      </p></td></tr>
+</table></div>
 <p>
-      We can similarly work with columns also. The tutorial now ends having covered
-      the basic ideas to be presented in the Library. If you have any suggestions
-      to the interface or the tutorial, do not hesistate to contact the authors.
+      The iterators themselves are random-access iterators in nature. We can similarly
+      work with columns also. The tutorial now ends having covered the basic ideas
+      to be presented in the Library. If you have any suggestions to the interface
+      or the tutorial, do not hesistate to contact the authors.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
