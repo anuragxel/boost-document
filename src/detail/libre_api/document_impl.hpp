@@ -24,18 +24,18 @@
 
 #include "sheet_impl.hpp"
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
 
 class libre_document: public document_interface {
-	protected:	
+	protected:
 	boost::filesystem::path doc_path_;
 	bool is_file_opened;
-	
+
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent > xComponent_;
-	
+
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheets > xSheets_;
 	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument > xSheetDoc_;
-	
+
 	void get_sheets() {
 		if(this->xSheets_ == NULL) {
  			if(this->xSheetDoc_ == NULL) {
@@ -49,7 +49,7 @@ class libre_document: public document_interface {
 		boost::doc::libre_functions::set_bootstrap_offapi();
 		if(fpath.empty() or fpath == "") {
 			boost::throw_exception(document_exception(
-            		"Error: No path given."));	
+            		"Error: No path given."));
 		}
 		this->doc_path_ = boost::filesystem::system_complete(fpath);
 		this->xComponent_ = NULL;
@@ -60,7 +60,7 @@ class libre_document: public document_interface {
 
 	void create() {
 		if(! this->is_file_opened) {
-			this->xComponent_ =  boost::doc::libre_functions::create_libre(this->doc_path_);	
+			this->xComponent_ =  boost::doc::libre_functions::create_libre(this->doc_path_);
 			this->is_file_opened = true;
 			this->save();
 		}
@@ -82,10 +82,10 @@ class libre_document: public document_interface {
 		}
 		else {
 			boost::throw_exception(document_exception(
-            		"Error: Trying to close unopened file."));	
+            		"Error: Trying to close unopened file."));
 		}
  	}
- 	
+
  	void save() {
  		if(! this->is_file_opened) {
 			boost::throw_exception(document_exception(
@@ -101,7 +101,7 @@ class libre_document: public document_interface {
 		}
 		boost::doc::libre_functions::save_libre(boost::filesystem::system_complete(fpath), this->xComponent_);
  	}
- 	
+
  	void export_as(boost::document_file_format::type format) {
  		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_);
  	}

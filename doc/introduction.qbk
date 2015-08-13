@@ -6,32 +6,32 @@
 
 [section:introduction Motivation]
 
-[warning This is not an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement. The intention is to submit the library to a formal review and get included as an official library, if community think that it is interesting!]
+[warning This is not an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement. The intention is to submit the library to a formal review and get it included as an official library, if the community thinks that it is interesting!]
 
-Boost.Document library is meant to simplify tasks related to manipulation of Office Documents in general and Spreadsheet Documents in particular. All the Current Office API's, be it LibreOffice/OpenOffice or MS Excel are not intuitive to use at all and the effort to write applications which use such API's distracts the developer from performing the core problems at hand. The idea here is to provide a simple, cross-platform and usable interface for developers to use to make their own applications which involve manipulating Excel/OpenOffice/LibreOffice sheets. Such a library will have many takers such as Students/Professors in academia, Banking/CRM softwares etc.
+Boost.Document library is meant to simplify tasks related to manipulation of Office Documents in general and Spreadsheet Documents in particular. All the Current Office API's, for example LibreOffice/OpenOffice or MS Excel are not intuitive to use at all and the effort to write applications which use such API's prove to be an averse diversion from the core problems at hand. The idea here is to provide a simple, cross-platform and usable interface for developers to use to make their own applications involving manipulating Excel/OpenOffice/LibreOffice sheets. Such a library will find applications in various fields such as Students/Professors in academia, Banking/CRM softwares etc.
 
 [endsect]
 
 [section:introduction How to Set up?]
 
-The document library facilitates the usage of the Document Automation API of Microsoft and/or the API's of Libreoffice in a very easy to use and intuitive manner. However, some amount of work needs to be done before the library can be compiled using Boost.Build and used.
+The document library facilitates the usage of the Document Automation API of Microsoft and/or the API's of Libreoffice in a very easy-to-use and intuitive manner. However, some amount of work needs to be done before the library can be compiled using Boost.Build and used.
 
 [section Using Microsoft Office]
 
 You would need to install Microsoft Office 2003 or above as certain features are not available in Office'97. Also, Visual Studio would be recommended as the Library has been tested to compile using Visual Studio on Windows and uses the Visual Studio included header files.
-If these prerequisities are satisfied, one needs to open a shell at `boost_document_lib\build` and run '..\\..\\..\\b2' to compile the library. This shall work only on Windows and not on Linux.
+If these prerequisities are satisfied, one needs to open a shell at `boost_document_lib\build` and run '..\\..\\..\\b2' to compile the library. This shall work only on Windows and not Linux.
 
 [endsect]
 
 [section Using Libre Office]
 
-You would need to atleast install Libre Office 4 and the Libre Office SDK at least with the default folder configuration. Expected folder path of Libreoffice is `C:\Program Files (x86)\LibreOffice 4\` on Windows and `/usr/lib/libreoffice/` on Linux.
+You would minimally need to install Libre Office 4 and the Libre Office SDK with the basic default folder configuration. Expected folder path of Libreoffice is `C:\Program Files (x86)\LibreOffice 4\` on Windows and `/usr/lib/libreoffice/` on Linux.
 
 [section On Linux]
 
 # Install SDK using variant of the following command `sudo apt-get install libreoffice-dev`.
 
-# On the terminal, Go to `/usr/lib/libreoffice/sdk`.
+# On the terminal, use `cd /usr/lib/libreoffice/sdk`to go to the particular folder.
 
 # Set the appropriate environment variables using `source setsdkenv_unix.sh`
 
@@ -76,21 +76,21 @@ You would need to atleast install Libre Office 4 and the Libre Office SDK at lea
 
 [section:introduction Tutorial]
 
-The tutorial aims to present some basic ideas and usage of the library and would end with real life examples so that the use of the library is apparent. It is hopeful that the followed style is easy to follow. The term document refers to spreadsheet documents in general unless explicitly defined.
+This tutorial aims to present some basic ideas about usage of the library and will end with some important applications to illustrate the use of the library. It is hopeful that the followed style is easy to follow. The term document refers to spreadsheet documents in general unless explicitly defined.
 
-Firstly, to use the library in your C++ code, one would need to add the following header in your code.
+Firstly, to use the library in your C++ code, you would need to add the following header.
 
 ```
 #include <boost/document.hpp>
 ```
 
-One can also include the different headers separately, in `<boost/document/*.hpp>`, the above header merely includes all the headers. All the types and classes fall in the namespace boost and using namespace aliases might be useful for clean coding.
+You can also include the different headers separately, in `<boost/document/*.hpp>`, the above header merely includes all the headers. All the types and classes fall in the namespace boost and using namespace aliases might be useful for clean coding.
 
 Firstly, we would need to declare a variable for the document by specifying the file path, specifically as boost::filesystem::path type. So, we can write,
 ```
     boost::document d("/foo/bar/file.ods");
 ```
-Or use a path variable to achieve the same thing,
+Or use a path variable to achieve the same thing:
 
 ```
     boost::filesystem::path p("/foo/bar/file.ods");
@@ -99,14 +99,14 @@ Or use a path variable to achieve the same thing,
 
 We would like to do something interesting with our document variable now. So, let's open it and export it as a CSV file.
 
-[tip To Perform virtually nearly anything with the document, you would need to open it first and then close it. Closing however happens automatically when the variable goes out of scope, during the destruction sequence of the object and hence need not be explicitly carried out.]
+[tip To Perform nearly anything with the document, you would need to open it first and then close it. Closing however happens automatically when the variable goes out of scope, during the destruction sequence of the object and hence need not be explicitly carried out.]
 
 [import ../examples/basic.cpp]
 [basic_example]
 
-Important thing to note here is the `enum` document_file_format which has three values, PDF, CSV and XML which it can accept. The exported file would reside in the same folder as the original file. Also, note the ommision of the `doc.close_document()` which would happen automatically.
+Important thing to note here is the `enum` document_file_format has three values, PDF, CSV and XML which it can accept. The exported file would reside in the same folder as the original file. Also, note the ommision of the `doc.close_document()` which would happen automatically.
 
-We would also like to make some changes to our sheets in the document and get some information about them. There are various methods provided in the document class for the same. For example, the following examples prints out the names of all the sheets, after getting an instance by their indices. The sheet class is a wrapper over the actual sheet of the document and acts like a reference to the same.
+We would also like to make some changes to our sheets in the document and get some information about them. There are various methods provided in the document class for the same. For example, the following examples print out the names of all the sheets, after getting an instance by their indices. The sheet class is a wrapper over the actual sheet of the document and acts like a reference to the same.
 
 [warning Sheets are zero indexed irrespective of implementation details. Same goes for cells, rows and columns.]
 
@@ -121,11 +121,11 @@ Moving on, we would like to save our files after we have edited them programmati
 [import ../examples/save_doc.cpp]
 [save_doc_example]
 
-Point to note here is that, the program would crash if there is no sheet "Anurag" present. We can also use `doc.get_sheet("Anurag")` for an exception being raised.
+An important point here, is that the program would crash if there is no sheet "Anurag" present. We can also use `doc.get_sheet("Anurag")` for an exception being raised.
 
-There are other sheet methods which can be used, checking the reference would be a good idea.
+There are other sheet methods which can be used so checking the reference would be a good idea.
 
-Now, to use the cells there are multiple ways, all of which come with their own advantages and disadvantages. One could use the `get_cell(std::size_t row,std::size_t column)` method, or the `[]` operators. The following example would illustrate effectively. We would also understand the various intricacies of cell usage. The example is a mix of many styles and must not be used as a good coding example, it is only to illustrate the capabilities of the library.
+Now, there are multiple ways to use the cells, all of which come with their own advantages and disadvantages. One could use the `get_cell(std::size_t row,std::size_t column)` method, or the `[]` operators. The following example would illustrate this effectively. We would also understand the various intricacies of cell usage. The example is a mix of many styles and is only being used to illustrate the capabilities of the library.
 
 [warning Cells are zero indexed irrespective of implementation details.]
 
@@ -134,15 +134,15 @@ Now, to use the cells there are multiple ways, all of which come with their own 
 
 The `get_cell()` method expects the row number and the column number of the cell, in zero indexed format. A lot of people are more accustomed with the alphanumeric index (Eg. "A2" or "F5") which have been provided too as `[]` operators.
 
-Method like `empty()` returns a `bool` telling whether the cell is empty or not. `get_content_type()` returns an enum value which can be either EMPTY,STRING,VALUE,FORMULA or ERROR.
+Method like `empty()` returns a `bool` indicating whether the cell is empty or not. `get_content_type()` returns an enum value which can be either EMPTY, STRING, VALUE, FORMULA or ERROR.
 
-The user can use `set_formula()` or `set_string()` or `set_value()` methods, or can use the `=` operators which sets a value for doubles passed and sets a string for std::string passed. Likewise, `get_value()`, `get_formula()` and `get_string()` are also provided.
+The user can use `set_formula()` or `set_string()` or `set_value()` methods, or the `=` operators which sets a value for doubles passed and sets a string for std::string passed. Likewise, `get_value()`, `get_formula()` and `get_string()` are also provided.
 
 The explicit function calls instead of the `[]` operator provide the safety of exceptions. Having a look at the cell class reference document would help in aligning your coding style with the library usage.
 
 [warning The cells are a reference to the actual cells in the spreadsheet. Assignment operator must be carefully used.]
 
-Assignment of a cell with another cell holding some instance would result in copying of the contents of the cell to the former. This should be used very carefully.
+Assignment of a cell with another cell holding some instance would result in copying of the contents of the cell to the former. Hence, this should be used very carefully.
 
 Documents thus act like a 3D matrix, the first dimension being the sheet name/sheet index, the second and third being the column and row index of the cell respectively.
 
@@ -168,7 +168,7 @@ The library uses either Libre Office API or Microsoft Office API as the underlay
     d.close_document();
 ```
 
-We can perform other simple operations to the document like this, See the Reference of document header file.
+We can also perform other simple operations to the document like this, See the Reference of document header file.
 
 A document needs to be opened first to manipulate it. It may or may not be closed explicitly as the destruction automatically triggers a close if it is open. However, closing and reopening causes buggy behaviour right now and thus should be avoided. The interface is designed to accomodate all the differences between the API's and thus uniform behaviour can be expected irregardless of the base.
 
@@ -202,7 +202,7 @@ There are various ways of getting a cell from a sheet or a document. The `[]` op
 ```
 [warning Cells are zero indexed irrespective of the underlaying API!]
 
-Certain cell operations are also supported currently, such as setting and getting strings, doubles and formulas. For Example,
+Certain cell operations are also supported currently, such as setting and getting strings, doubles and formulas. For example,
 
 ```
     if(c1.get_content_type() == boost::cell_content_type::EMPTY) {

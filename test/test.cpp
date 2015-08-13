@@ -536,13 +536,13 @@ int test_main(int argc, char *argv[]) {
 
 	int rv = 0;
 
+
 	// Sanity Checks
 	rv += negative_try_opening_null();
 	rv += negative_try_exporting_null();
 	rv += negative_try_closing_null();
 	rv += negative_closing_unopened_document(b);
 	rv += negative_absurd_path_opening();
-
 
 	// Permissions related checks
 	rv += negative_opening_file_without_permission(d);
@@ -552,6 +552,7 @@ int test_main(int argc, char *argv[]) {
 	b.open_document();
 	c.open_document();
 
+	
 	rv += negative_absurd_get_sheet_string(b);
 	rv += negative_absurd_get_sheet_index(b);
 
@@ -577,14 +578,14 @@ int test_main(int argc, char *argv[]) {
 	rv += negative_cell_index_check(c);
 	rv += cell_comparison_check(c);
 
-	//  iterator checks
+	// iterator checks
 	rv += check_row_and_column_class(c);
 	rv += check_for_sheet_and_row_scope(c);
 
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
 	rv += row_iterator_caching(c);
-	
+
 	if (rv > 0) {
 		std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
 	}

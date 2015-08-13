@@ -86,9 +86,13 @@ local LIBRE_REQUIREMENTS =
 
         # Disabling some of the GCC warnings that occur in OpenOffice/LibreOffice headers
         <toolset>gcc:<cxxflags>"-Wno-long-long -Wno-variadic-macros -Wno-pedantic"
-
         <toolset>gcc:<cxxflags>-std=c++11
-	      <toolset>clang:<cxxflags>"-std=c++11 -stdlib=libc++"
+        <toolset>gcc:<cxxflags>-Wall
+
+	      <toolset>clang:<cxxflags>-std=c++11
+        <toolset>clang:<cxxflags>-stdlib=libstdc++
+        <toolset>clang:<cxxflags>-Wall
+        #<toolset>clang:<cxxflags>--enable-dbgutil
         # This makes boost/document depend and link with boost_system and boost_filesystem
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem

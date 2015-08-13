@@ -16,7 +16,6 @@
 
 #include <boost/document/sheet.hpp>
 
-
 namespace boost {
 
 	 namespace detail {
