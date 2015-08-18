@@ -90,9 +90,8 @@ local LIBRE_REQUIREMENTS =
         <toolset>gcc:<cxxflags>-Wall
 
 	      <toolset>clang:<cxxflags>-std=c++11
-        <toolset>clang:<cxxflags>-stdlib=libstdc++
+        <toolset>clang:<cxxflags>-stdlib=libc++
         <toolset>clang:<cxxflags>-Wall
-        #<toolset>clang:<cxxflags>--enable-dbgutil
         # This makes boost/document depend and link with boost_system and boost_filesystem
         <library>/boost/system//boost_system
         <library>/boost/filesystem//boost_filesystem

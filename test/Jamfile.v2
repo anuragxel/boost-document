@@ -18,8 +18,10 @@ project
         <toolset>gcc:<cxxflags>-Wextra
         <toolset>gcc:<cxxflags>-Wno-uninitialized
         <toolset>gcc:<cxxflags>-std=c++11
-        <toolset>clang:<cxxflags>"-std=c++11 -stdlib=libstdc++"
-        <toolset>clang:<linkflags>"-lc++"
+
+        <toolset>clang:<cxxflags>-std=c++11
+        <toolset>clang:<cxxflags>-stdlib=libc++
+        <toolset>clang:<linkflags>-lc++
     ;
 
 test-suite document_tests
