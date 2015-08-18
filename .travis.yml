@@ -14,7 +14,6 @@ os:
     - linux
 
 env:
-    - CXX_STANDARD=c++98
     - CXX_STANDARD=c++0x
 
 before_install:
