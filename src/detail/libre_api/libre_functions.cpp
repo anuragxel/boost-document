@@ -270,13 +270,13 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
     }
 
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
-    xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
+    xPropSet->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xComponentContext;
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
 
     Reference < XComponentLoader > xComponentLoader(
         xMultiComponentFactoryServer->createInstanceWithContext(
-             OUString::createFromAscii("com.sun.star.frame.Desktop" ),
+             OUString::createFromAscii("com.sun.star.frame.Desktop"),
              xComponentContext ), UNO_QUERY );
 
     try {
