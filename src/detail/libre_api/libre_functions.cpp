@@ -9,7 +9,7 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #ifdef _WIN32
-#define OFFAPI "C:\\Program Files\\LibreOffice 4\\program\\types\\offapi.rdb"    
+#define OFFAPI "C:\\Program Files\\LibreOffice 4\\program\\types\\offapi.rdb"
 #elif _WIN64
 #define OFFAPI "C:\\Program Files (x86)\\LibreOffice 4\\program\\types\\offapi.rdb"
 #elif __linux__
@@ -132,23 +132,23 @@ OUString get_new_doc_url_from_ext(const std::string extension) {
 //! component ojects act as the client and request the server to perform
 //! actions for them. The OfficeServiceManager of type XMultiServiceFactory
 //! is sufficient for scripting purposes.
-//::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> 
+//::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>
 Reference< XMultiServiceFactory > connect_to_libre_server() {
     // create the initial component context
-    Reference< XComponentContext > rComponentContext = 
+    Reference< XComponentContext > rComponentContext =
                  ::cppu::defaultBootstrap_InitialComponentContext();
     // retrieve the servicemanager from the context
-    Reference< XMultiComponentFactory > rServiceManager = 
+    Reference< XMultiComponentFactory > rServiceManager =
                  rComponentContext->getServiceManager();
     // instantiate a sample service with the servicemanager.
     Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
           OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
     // Query for the XUnoUrlResolver interface
-    try { 
+    try {
         Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
         rInstance = rResolver->resolve( OUString::createFromAscii(
             "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
-        Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY); 
+        Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
         return rOfficeServiceManager;
     }
     catch(Exception &e) {
@@ -158,17 +158,17 @@ Reference< XMultiServiceFactory > connect_to_libre_server() {
     return NULL;
 }
 
-//! \fn The C++ Language Bindings need to be bootstrapped 
+//! \fn The C++ Language Bindings need to be bootstrapped
 //!        to the offapi.rdb file of the StarOffice backend.
-//! 
+//!
 //! Setting up the bootstrapping and the parameters.
-//! Important for Open Office server communication. 
+//! Important for Open Office server communication.
 //! UNO & cppuhelper needs this to be run at least once.
 void set_bootstrap_offapi() {
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath(
-        OUString::createFromAscii(OFFAPI), 
+        OUString::createFromAscii(OFFAPI),
         sDocPathUrl);
     osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
     rtl::Bootstrap::set(
@@ -194,7 +194,7 @@ void set_bootstrap_offapi() {
 //!        given. Assumes file path is a valid one.
 Reference< XComponent > get_xComponent_from_path(
             const boost::filesystem::path& inputPath) {
-        
+
     Reference< XMultiServiceFactory > rOfficeServiceManager;
     rOfficeServiceManager = connect_to_libre_server();
 
@@ -205,7 +205,7 @@ Reference< XComponent > get_xComponent_from_path(
     //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
         OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-    
+
     //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
     Reference< XComponent > xComponent;
@@ -243,18 +243,18 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
     if(!boost::filesystem::exists(path)) {
         boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
     }
- 
-    OUString conString = OUString("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
+
+    OUString conString = OUString::createFromAscii("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager");
 
     Reference< XComponentContext > xComponentContext(::cppu::defaultBootstrap_InitialComponentContext());
-    
+
     Reference< XMultiComponentFactory > xMultiComponentFactoryClient(
         xComponentContext->getServiceManager() );
     Reference< XInterface > xInterface =
         xMultiComponentFactoryClient->createInstanceWithContext(
             OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver"),
             xComponentContext );
-    
+
     Reference< XUnoUrlResolver > resolver( xInterface, UNO_QUERY );
     try {
         xInterface = Reference< XInterface >(
@@ -273,23 +273,23 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
     xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
     Reference< XMultiComponentFactory > xMultiComponentFactoryServer(
         xComponentContext->getServiceManager() );
-    
+
     Reference < XComponentLoader > xComponentLoader(
         xMultiComponentFactoryServer->createInstanceWithContext(
-             OUString("com.sun.star.frame.Desktop" ),
-             xComponentContext ), UNO_QUERY );     
+             OUString::createFromAscii("com.sun.star.frame.Desktop" ),
+             xComponentContext ), UNO_QUERY );
 
     try {
         Sequence < ::com::sun::star::beans::PropertyValue > frameProperties(1);
         frameProperties[0].Name = OUString::createFromAscii("Hidden");
         frameProperties[0].Value <<= (sal_Bool)true;
         Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-            get_url_from_path(path), 
-            OUString::createFromAscii("_default"), 
+            get_url_from_path(path),
+            OUString::createFromAscii("_default"),
             0,
             frameProperties
         );
-        Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();    
+        Reference< XComponent >::query( xMultiComponentFactoryClient )->dispose();
         if( !xComponentLoader.is() ){
                 boost::throw_exception(document_exception(
                     "XComponentloader not successfully instantiated"));
@@ -305,17 +305,17 @@ void open_libre(const boost::filesystem::path& path, Reference < XComponent> x) 
 //! \fn Exports document using Calc/Excel given in
 //!        the file path and the file format. Default
 //!        format is PDF.
-void export_libre(const boost::filesystem::path& inputPath, 
+void export_libre(const boost::filesystem::path& inputPath,
                                         boost::document_file_format::type format,
                                         Reference < XComponent > xComponent) {
     if( !xComponent.is() ) {
         boost::throw_exception(document_exception(
             "Error: Unable to load Document for exporting. Check Permissions."));
     }
-    // Creating the output path in the 
+    // Creating the output path in the
     // same location as the input file path
     // And the filter. Right now works with docs
-    // and calc. 
+    // and calc.
     boost::filesystem::path outputPath(inputPath);
     std::string filter;
     if(format == boost::document_file_format::PDF) {
@@ -326,13 +326,13 @@ void export_libre(const boost::filesystem::path& inputPath,
         // to improve the API
         Sequence < ::com::sun::star::beans::PropertyValue > pdfProperties(2);
         pdfProperties[0].Name = OUString::createFromAscii("FilterName");
-        pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str()); 
+        pdfProperties[0].Value <<= OUString::createFromAscii(filter.c_str());
         pdfProperties[1].Name = OUString::createFromAscii("Overwrite");
         pdfProperties[1].Value <<= (sal_Bool)true;
 
         try {
             Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-            xStorable->storeToURL(boost::doc::libre_functions::get_url_from_path(outputPath), pdfProperties);  
+            xStorable->storeToURL(boost::doc::libre_functions::get_url_from_path(outputPath), pdfProperties);
         }
         catch(Exception& e) {
             boost::throw_exception(document_exception(
@@ -343,7 +343,7 @@ void export_libre(const boost::filesystem::path& inputPath,
 
     else if(format == boost::document_file_format::CSV) {
         outputPath.replace_extension(".csv");
-        filter = "Text - txt - csv (StarCalc)"; 
+        filter = "Text - txt - csv (StarCalc)";
         Sequence < ::com::sun::star::beans::PropertyValue > properties(3);
         properties[0].Name = OUString::createFromAscii("FilterName");
         properties[0].Value <<= OUString::createFromAscii(filter.c_str());
@@ -353,7 +353,7 @@ void export_libre(const boost::filesystem::path& inputPath,
         properties[2].Value <<= (sal_Bool)true;
         try {
             Reference < XStorable > xStorable(xComponent,UNO_QUERY);
-            xStorable->storeToURL(get_url_from_path(outputPath), properties);  
+            xStorable->storeToURL(get_url_from_path(outputPath), properties);
         }
         catch(Exception& e) {
             boost::throw_exception(document_exception(
@@ -369,18 +369,18 @@ void close_libre(
         const boost::filesystem::path &inputPath,
         bool save,
         Reference < XComponent > xComponent) {
-    
+
     if(!boost::filesystem::exists(inputPath)) {
         boost::throw_exception(document_exception(
             "Error: Path is empty or does not exist."));
     }
 
     Reference < XModel > xModel(xComponent, UNO_QUERY);
-    if(xModel != NULL) { 
+    if(xModel != NULL) {
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         if(xStorable != NULL && xModifiable != NULL && save == true) {
-            xStorable->storeToURL(get_url_from_path(inputPath), 
+            xStorable->storeToURL(get_url_from_path(inputPath),
                 Sequence < ::com::sun::star::beans::PropertyValue >());
         }
         Reference < XCloseable > xCloseable(xComponent,UNO_QUERY);
@@ -394,8 +394,8 @@ void close_libre(
         }
         else { // No xClosable. Use dispose to handle this.
                 // Unreachable Condition. Hopefully. :)
-        //Reference < XComponent > xDisposeable(xModel, UNO_QUERY);  
-            xComponent->dispose(); 
+        //Reference < XComponent > xDisposeable(xModel, UNO_QUERY);
+            xComponent->dispose();
         }
     }
 }
@@ -403,15 +403,15 @@ void close_libre(
 
 //! \fn saves document using Calc/Excel given in
 //!        the file path.
-void save_libre(const boost::filesystem::path& inputPath, 
+void save_libre(const boost::filesystem::path& inputPath,
                                             Reference < XComponent > xComponent) {
     Reference < XModel > xModel(xComponent, UNO_QUERY);
-    if(xModel != NULL) { 
+    if(xModel != NULL) {
         Reference < XModifiable > xModifiable(xComponent, UNO_QUERY);
         Reference < XStorable > xStorable(xComponent,UNO_QUERY);
         try {
             if(xStorable != NULL && xModifiable != NULL) {
-                xStorable->storeToURL(get_url_from_path(inputPath), 
+                xStorable->storeToURL(get_url_from_path(inputPath),
                     Sequence < ::com::sun::star::beans::PropertyValue >());
             }
         }
@@ -437,7 +437,7 @@ Reference< XComponent > create_libre(
     //get the desktop service using createInstance returns an XInterface type
     Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
         OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-    
+
     //query for the XComponentLoader interface
     Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
     Reference< XComponent > xComponent;
