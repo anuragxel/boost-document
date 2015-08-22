@@ -63,10 +63,10 @@ namespace boost {
 		> {
 		protected:
 		typename boost::conditional<
-        	boost::is_const<Cell>::value,
-        	std::shared_ptr<const sheet_interface>,
-        	std::shared_ptr<sheet_interface>
-    	>::type r_;
+        		boost::is_const<Cell>::value,
+        		std::shared_ptr<const sheet_interface>,
+        		std::shared_ptr<sheet_interface>
+    		>::type r_;
 
 		std::size_t cell_no_;
 		mutable boost::optional<boost::cell> current_cell_;

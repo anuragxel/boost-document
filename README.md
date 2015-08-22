@@ -21,7 +21,7 @@ Master branch:  | [![Build Status](https://travis-ci.org/anuragxel/boost-documen
 For Libre Office Users
 ======================
 
-Compilers tested on - MSVC 12.0 and GCC 4.9
+Compilers tested on - MSVC 12.0 and GCC 4.6.\*
 
 To install this library, you need to perform the following steps -
 
