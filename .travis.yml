@@ -92,7 +92,8 @@ after_success:
 
     # Sending data to Coveralls
     - cd $PROJECT_DIR
-    - rvm use 1.8.7
+    - sudo apt-get install -y ruby
+    - rvm use 1.9.3
     - gem install coveralls-lcov
     - which -a ruby
     - gem --version
