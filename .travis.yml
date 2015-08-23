@@ -93,4 +93,7 @@ after_success:
     # Sending data to Coveralls
     - cd $PROJECT_DIR
     - gem install coveralls-lcov
+    - which -a ruby
+    - gem --version
+    - ruby --version
     - coveralls-lcov -v coverals/coverage.info
