@@ -37,7 +37,7 @@ before_install:
     - soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" &
 
     # Files, which coverage results must be ignored (files from other projects). Example: - IGNORE_COVERAGE='*/boost/progress.hpp */filesystem/src/path.cpp'
-    - IGNORE_COVERAGE="*/$PROJECT_TO_TEST/../filesystem/src/*" "*/$OO_SDK_OUT/include/*"
+    - IGNORE_COVERAGE="*/$PROJECT_TO_TEST/../filesystem/src/* */$OO_SDK_OUT/include/*"
 
 
     # From this point and below code is same for all the Boost libs
