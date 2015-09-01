@@ -57,7 +57,7 @@ class libre_cell : public cell_interface {
 	double get_value() const {
 		return boost::doc::libre_cell_func::get_value(this->xCell_);
 	}
- 
+
 	bool empty() const {
 		if(boost::doc::libre_cell_func::get_content_type(this->xCell_) == boost::cell_content_type::type::EMPTY) {
 			return true;
@@ -66,7 +66,7 @@ class libre_cell : public cell_interface {
 	}
 
 	void reset() {
-		boost::doc::libre_cell_func::set_cell_value(this->xCell_, "");
+		boost::doc::libre_cell_func::reset(this->xCell_);
 	}
 
 	std::size_t get_row_index() const {

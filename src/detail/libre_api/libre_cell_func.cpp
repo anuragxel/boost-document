@@ -25,6 +25,8 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 
+#include <com/sun/star/text/XText.hpp>
+
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
@@ -37,6 +39,7 @@ using namespace com::sun::star::bridge;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::table;
+using namespace com::sun::star::text;
 
 using namespace rtl;
 using namespace cppu;
@@ -60,13 +63,27 @@ Reference < XCell > get_cell(Reference <XSpreadsheet> xSheet,int i, int j) {
         boost::throw_exception(document_exception(o.pData->buffer));
     }
 }
- 
+
 //! \fn Sets Cell value as string str. the enum value of the cell
 //!     changes to CellContentType_STRING
 //!
 void set_cell_value(Reference< XCell > xCell, const std::string& str) {
     try {
         xCell->setFormula(OUString::createFromAscii(str.c_str()));
+    }
+    catch(Exception& e) {
+        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+        boost::throw_exception(document_exception(o.pData->buffer));
+    }
+}
+
+//! \fn Sets Cell value as string str. the enum value of the cell
+//!     changes to CellContentType_STRING
+//!
+void reset(Reference< XCell > xCell) {
+    try {
+	Reference< XText > xText(xCell, UNO_QUERY);
+	xText->setString(OUString());
     }
     catch(Exception& e) {
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
@@ -87,7 +104,7 @@ void set_cell_value(Reference< XCell > xCell, float x) {
     }
 }
 
-//! \fn Gets the cell content type of the cell. Returns the boost enum value 
+//! \fn Gets the cell content type of the cell. Returns the boost enum value
 //!     depending upon the Internal OO enum.
 //!
 boost::cell_content_type::type get_content_type(Reference < XCell > xCell) {
@@ -107,7 +124,7 @@ boost::cell_content_type::type get_content_type(Reference < XCell > xCell) {
 std::string get_string(Reference < XCell > xCell) {
  try {
         OString s = OUStringToOString( xCell->getFormula(), RTL_TEXTENCODING_ASCII_US );
-        return std::string(s.pData->buffer); 
+        return std::string(s.pData->buffer);
     }
     catch(Exception& e) {
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
@@ -121,7 +138,7 @@ std::string get_string(Reference < XCell > xCell) {
 std::string get_formula(Reference < XCell > xCell) {
  try {
         OString s = OUStringToOString( xCell->getFormula(), RTL_TEXTENCODING_ASCII_US );
-        return std::string(s.pData->buffer); 
+        return std::string(s.pData->buffer);
     }
     catch(Exception& e) {
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
@@ -130,7 +147,7 @@ std::string get_formula(Reference < XCell > xCell) {
 }
 
 
-//! \fn Gets the float value of the cell if 
+//! \fn Gets the float value of the cell if
 //!     it is present.
 //!
 double get_value(Reference < XCell > xCell) {

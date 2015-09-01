@@ -24,6 +24,9 @@ project
         <toolset>clang:<linkflags>-lc++
     ;
 
+#local SOURCES = test ../examples/basic ../examples/cell_basic ../examples/save_doc ../examples/sheet_names ;
+local SOURCES = test ;
+
 test-suite document_tests
-  : [ run test.cpp ]
+  : [ run $(SOURCES).cpp ]
   ;

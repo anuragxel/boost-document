@@ -4,9 +4,11 @@
 //[cell_basic_example
 
 #include <boost/document.hpp>
+#include <iostream>
+#include <string>
 
 int main(int argc, char **argv) {
-    boost::document doc("/foo/bar/file.ods");
+    boost::document doc("../test/Test2.ods");
     doc.open_document();
     boost::sheet s = doc.get_sheet("Anurag");
 

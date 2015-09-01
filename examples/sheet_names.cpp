@@ -4,9 +4,11 @@
 //[sheet_names_example
 
 #include <boost/document.hpp>
+#include <iostream>
+#include <string>
 
 int main(int argc, char **argv) {
-    boost::document doc("/foo/bar/file.ods");
+    boost::document doc("../test/Test1.ods");
     doc.open_document();
     std::size_t count = doc.sheet_count();
     for(int i = 0 ; i < count; i++) {

@@ -380,15 +380,14 @@ int cell_formula_check(boost::document& c) {
 }
 
 
-// TODO: Fix in a day. Not able to find the fix. :/
 int cell_reset_check(boost::document& c) {
 	try {
 		boost::sheet s1 = c["Anurag"];
 		s1[2][2] = 14.6;
 		s1[2][2].reset();
-		BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::EMPTY);
+		BOOST_REQUIRE(s1[2][2].get_content_type() == boost::cell_content_type::EMPTY);
 		s1[2][4] = "=C3+C4";
-		s1[2][3].reset();
+		s1[2][4].reset();
 		BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::EMPTY);
 		return 0;
 	}
@@ -574,7 +573,7 @@ int test_main(int argc, char *argv[]) {
 	rv += cell_type_check(c);
 	rv += cell_getters_check(c);
 	rv += cell_formula_check(c);
-	//rv += cell_reset_check(c);
+	rv += cell_reset_check(c);
 	rv += negative_cell_index_check(c);
 	rv += cell_comparison_check(c);
 

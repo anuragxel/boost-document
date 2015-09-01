@@ -25,6 +25,8 @@ namespace boost { namespace doc { namespace libre_cell_func {
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, const std::string& str);
 void set_cell_value(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell, float x);
 
+void reset(::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > xCell);
+
 std::string get_string(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell);
 std::string get_formula(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell);
 double get_value(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell);
