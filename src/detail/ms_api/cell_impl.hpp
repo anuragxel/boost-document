@@ -7,7 +7,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>
@@ -15,7 +14,7 @@
 
 #include <boost/document/detail/ms_api/ms_cell_func.hpp>
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
 
 class ms_cell : public cell_interface {
 
@@ -23,7 +22,7 @@ class ms_cell : public cell_interface {
 	IDispatch* cell_ptr_;
 	std::size_t row_, column_;
 	public:
-	
+
 	ms_cell(IDispatch* cell_ptr,std::size_t row,std::size_t column) {
 		cell_ptr_ = cell_ptr;
 		row_ = row;
@@ -58,7 +57,7 @@ class ms_cell : public cell_interface {
 	double get_value() {
 		return boost::doc::ms_cell_func::get_value(cell_ptr_);
 	}
- 
+
 	bool empty() {
 		if(boost::doc::ms_cell_func::get_content_type(cell_ptr_) == boost::cell_content_type::EMPTY) {
 			return true;

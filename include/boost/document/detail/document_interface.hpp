@@ -6,8 +6,6 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
-
 #include <boost/filesystem.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 
@@ -33,7 +31,7 @@ namespace boost {
 		virtual void delete_sheet(std::size_t index) = 0;
 		virtual std::size_t sheet_count() = 0;
 		virtual ~document_interface() {}
-	};	
+	};
 } // namespace boost
 
 #endif

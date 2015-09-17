@@ -7,8 +7,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/pointer_cast.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
 
 #include <boost/document/sheet.hpp>
@@ -110,33 +112,33 @@ class libre_document: public document_interface {
 		get_sheets();
 		std::string new_str(str);
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::insert_sheet_by_name(this->xSheets_,new_str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet(const std::string& str) {
 		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_name(this->xSheets_,str);
 		std::string new_str(str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet(std::size_t index) {
  		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_index(this->xSheets_,(int)index);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
  	}
 
  	boost::sheet get_sheet_unchecked(const std::string& str) {
 		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_name_unchecked(this->xSheets_,str);
 		std::string new_str(str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,new_str)));
  	}
 
  	boost::sheet get_sheet_unchecked(std::size_t index) {
  		get_sheets();
 		com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > new_sheet = boost::doc::libre_sheet_func::get_sheet_by_index_unchecked(this->xSheets_,(int)index);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::libre_sheet>(this->xComponent_,new_sheet,index)));
  	}
 
 
@@ -165,8 +167,8 @@ class libre_document: public document_interface {
 
 };
 
-std::shared_ptr<document_interface> open_libre_instance() {
-	return std::dynamic_pointer_cast<document_interface>(std::make_shared<boost::detail::libre_document>());
+boost::shared_ptr<document_interface> open_libre_instance() {
+	return boost::dynamic_pointer_cast<document_interface>(boost::make_shared<boost::detail::libre_document>());
 }
 
 }} // namespace boost::detail

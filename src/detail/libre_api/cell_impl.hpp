@@ -7,7 +7,6 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>

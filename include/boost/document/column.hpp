@@ -6,7 +6,6 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
 
 #include <boost/document/cell.hpp>
 
@@ -14,7 +13,8 @@
 #include <boost/document/detail/document_exception.hpp>
 
 #include <boost/optional.hpp>
-
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/conditional.hpp>
 
@@ -34,11 +34,11 @@ namespace boost {
 	//! with this class.
 	class column {
 		protected:
-		std::shared_ptr<sheet_interface> obj_;
+		boost::shared_ptr<sheet_interface> obj_;
 		std::size_t column_;
 		public:
 		typedef column_iterator iterator;
-		column(std::shared_ptr<sheet_interface> obj, std::size_t column) : obj_(obj), column_(column) {}
+		column(boost::shared_ptr<sheet_interface> obj, std::size_t column) : obj_(obj), column_(column) {}
 
 		boost::cell get_cell(std::size_t row) {
 			return obj_->get_cell(row,column_);
@@ -71,8 +71,8 @@ namespace boost {
 
 		typename boost::conditional<
         	boost::is_const<Cell>::value,
-        	std::shared_ptr<const sheet_interface>,
-        	std::shared_ptr<sheet_interface>
+        	boost::shared_ptr<const sheet_interface>,
+        	boost::shared_ptr<sheet_interface>
     	>::type r_;
 
 		std::size_t cell_no_;
@@ -83,7 +83,7 @@ namespace boost {
 
 		friend class boost::iterator_core_access;
 
-		column_iter(std::shared_ptr<sheet_interface> r, std::size_t num, std::size_t column) : r_(r), cell_no_(num), column_(column)
+		column_iter(boost::shared_ptr<sheet_interface> r, std::size_t num, std::size_t column) : r_(r), cell_no_(num), column_(column)
 		{}
 
 		void increment() { ++this->cell_no_; }

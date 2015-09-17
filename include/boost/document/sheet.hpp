@@ -6,27 +6,28 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
 
 #include <boost/document/cell.hpp>
 #include <boost/document/column.hpp>
 #include <boost/document/row.hpp>
 
-#include <boost/document/detail/sheet_interface.hpp>
 
+#include <boost/document/detail/sheet_interface.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <utility>
 #include <cctype>
 
 namespace boost {
-	
-	//! \brief This is the main class interface to be 
+
+	//! \brief This is the main class interface to be
 	//!        exposed to the library user.
 	//!
 	class sheet {
 	private:
-		std::shared_ptr<sheet_interface> pimpl_;
+		boost::shared_ptr<sheet_interface> pimpl_;
 
 		boost::cell cell_from_string(const char* str, std::size_t length) {
 			std::size_t row = 0;
@@ -51,7 +52,7 @@ namespace boost {
 					}
 				}
 				else {
-					if(!alph) { // doesn't start with alphabet 
+					if(!alph) { // doesn't start with alphabet
 						boost::throw_exception(document_exception(
 							"Invalid index error: index must start with letters, followed by numbers"));
 					}
@@ -73,8 +74,8 @@ namespace boost {
 		}
 	public:
 		//! \brief The Constructor.
-		//!        Creates a new document object.  
-		explicit sheet(const std::shared_ptr<sheet_interface> impl) : pimpl_(impl) {
+		//!        Creates a new document object.
+		explicit sheet(const boost::shared_ptr<sheet_interface> impl) : pimpl_(impl) {
 
 		}
 		//! \brief Gets the sheet name
@@ -95,13 +96,13 @@ namespace boost {
 			pimpl_->rename_sheet(str);
 		}
 
-		//! Returns the maximum 
+		//! Returns the maximum
 		//! number of rows
 		std::size_t max_row() const {
 			return pimpl_->max_row();
 		}
 
-		//! Returns the maximum 
+		//! Returns the maximum
 		//! number of columns
 		std::size_t max_column() const {
 			return pimpl_->max_column();
@@ -157,7 +158,7 @@ namespace boost {
 		boost::cell operator[](const char* str) {
 		    return cell_from_string(str, std::strlen(str));
 		}
-		
+
 		//! \brief Destructor
 		//!        Closes Unsaved Documents.
 		~sheet() {

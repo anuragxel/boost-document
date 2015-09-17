@@ -6,10 +6,9 @@
 //	(See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //		  http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
 #include <boost/filesystem.hpp>
-
-
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_interface.hpp>
@@ -19,15 +18,15 @@
 namespace boost {
 
 	 namespace detail {
-		std::shared_ptr<document_interface> open_instance();
+		boost::shared_ptr<document_interface> open_instance();
 	}
 	//! \brief This is the main class interface to be
 	//!		exposed to the library user.
 	//!
 	class document {
 	private:
-		std::shared_ptr<document_interface> pimpl_;
-		std::shared_ptr<document_interface> init() {
+		boost::shared_ptr<document_interface> pimpl_;
+		boost::shared_ptr<document_interface> init() {
  	   		return boost::detail::open_instance();
 		}
 	public:

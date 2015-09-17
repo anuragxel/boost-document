@@ -6,7 +6,8 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include <boost/document/detail/document_interface.hpp>
 
@@ -16,9 +17,9 @@
 #include "ms_api/document_impl.hpp"
 #endif
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
 
-std::shared_ptr<document_interface> open_instance() {
+boost::shared_ptr<document_interface> open_instance() {
 
 #ifdef BOOST_DOCUMENT_HAS_LIBRE
     return open_libre_instance();

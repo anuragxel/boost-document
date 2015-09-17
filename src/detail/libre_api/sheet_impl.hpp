@@ -7,8 +7,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/pointer_cast.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
 
 
@@ -30,7 +32,7 @@ class libre_sheet: public sheet_interface {
 
 protected:
 	::com::sun::star::uno::Reference < com::sun::star::lang::XComponent > xComponent_;
-	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;	
+	::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet > xSheet_;
 	std::size_t index;
 	std::string name;
 
@@ -75,18 +77,18 @@ public:
 	std::size_t max_column() {
 		return 1024;
 	}
- 
+
 	boost::cell get_cell(std::size_t row, std::size_t column) {
 		if( row > max_row() || column > max_column() ) {
 			boost::throw_exception(document_exception("Error: Invalid Indices Provided."));
 		}
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = boost::doc::libre_cell_func::get_cell(this->xSheet_,(int)row,(int)column);
-		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
+		return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
 	boost::cell get_cell_unchecked(std::size_t row, std::size_t column) {
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition((int)row, (int)column);
-		return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::libre_cell>(xCell,row,column)));
+		return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
  	~libre_sheet() {

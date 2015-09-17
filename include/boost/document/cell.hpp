@@ -6,11 +6,13 @@
 //    (See accompanying file ../../../../../LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#include <memory>
+
 #include <boost/document/detail/cell_interface.hpp>
 #include <boost/document/detail/cell_content_type.hpp>
 
 #include <boost/operators.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 namespace boost {
 
@@ -20,13 +22,13 @@ namespace boost {
 //	, equality_comparable<cell> {
 	{
 	protected:
-		std::shared_ptr<cell_interface> pimpl_;
+		boost::shared_ptr<cell_interface> pimpl_;
 	public:
 
 		//! The default constructor which takes in
 		//! the corresponding cell_interface for operation.
 		//! Follows the pimpl idiom to support MS and LibreOffice.
-		explicit cell(const std::shared_ptr<cell_interface> impl)
+		explicit cell(const boost::shared_ptr<cell_interface> impl)
 		: pimpl_(impl)
 		{}
 

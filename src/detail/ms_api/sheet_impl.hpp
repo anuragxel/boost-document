@@ -7,8 +7,11 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
 
+
+#include <boost/shared_ptr.hpp>
+#include <boost/pointer_cast.hpp>
+#include <boost/make_shared.hpp>
 #include <boost/filesystem.hpp>
 
 
@@ -44,7 +47,7 @@ namespace boost {
 				this->sheet_ptr_ = sheet_ptr;
 				this->name = str;
 				this->index = (std::size_t)boost::doc::ms_sheet::get_sheet_index(this->sheet_ptr_);
-				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_); 
+				boost::doc::ms_sheet::activate_sheet(this->sheet_ptr_);
 			}
 
 			std::string sheet_name() {
@@ -69,19 +72,19 @@ namespace boost {
 				}
 				IDispatch* cell_ptr;
 				boost::doc::ms_cell_func::get_cell(this->sheet_ptr_,row + 1,column + 1,cell_ptr);
-				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
+				return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
 			}
 
 			boost::cell get_cell_unchecked(std::size_t row,std::size_t column) {
 				IDispatch* cell_ptr;
 				boost::doc::ms_cell_func::get_cell_unchecked(this->sheet_ptr_,row + 1,column + 1,cell_ptr);
-				return boost::cell(std::dynamic_pointer_cast<cell_interface>(std::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
+				return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::ms_cell>(cell_ptr,row,column)));
 			}
 
 			std::size_t max_row() {
 				return 1024;
 			}
-			
+
 			std::size_t max_column() {
 				return 1024;
 			}

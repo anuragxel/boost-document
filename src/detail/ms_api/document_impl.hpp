@@ -7,7 +7,10 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
-#include <memory>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/pointer_cast.hpp>
+#include <boost/make_shared.hpp>
 
 #include <windows.h>
 #include <ole2.h>
@@ -27,12 +30,12 @@
 
 #include "sheet_impl.hpp"
 
-namespace boost { namespace detail { 
+namespace boost { namespace detail {
 
 class ms_document: public document_interface {
 protected:
 	boost::filesystem::path doc_path_;
-	bool is_file_opened;	
+	bool is_file_opened;
 	CLSID clsid_;
 	IDispatch *appl_ptr_;
 	IDispatch *book_ptr_;
@@ -72,10 +75,10 @@ public:
 		}
 		else {
 			boost::throw_exception(document_exception(
-            		"Error: Trying to close unopened file."));	
+            		"Error: Trying to close unopened file."));
 		}
  	}
- 	
+
  	void save() {
  		if(!this->is_file_opened) {
 			boost::throw_exception(document_exception(
@@ -83,7 +86,7 @@ public:
 		}
 		boost::doc::ms_functions::save_ms(this->doc_path_, this->appl_ptr_, this->book_ptr_);
  	}
- 	
+
  	void save_as(const boost::filesystem::path& fpath) {
  		if(!this->is_file_opened) {
 			boost::throw_exception(document_exception(
@@ -91,7 +94,7 @@ public:
 		}
 		boost::doc::ms_functions::save_ms(boost::filesystem::system_complete(fpath), this->appl_ptr_, this->book_ptr_);
  	}
- 	
+
  	void export_as(boost::document_file_format::type format) {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
@@ -111,7 +114,7 @@ public:
 		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::insert_new_sheet(this->sheets_ptr_, str, sheet_ptr);
 		std::string new_str(str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr, new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr, new_str)));
 	}
 
 	boost::sheet get_sheet(const std::string& str) {
@@ -125,7 +128,7 @@ public:
 		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::get_sheet_by_name(this->sheets_ptr_, str, sheet_ptr);
 		std::string new_str(str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
 	}
 
 	boost::sheet get_sheet(std::size_t index) {
@@ -136,9 +139,9 @@ public:
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		IDispatch* sheet_ptr; 
+		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, (int)index + 1, sheet_ptr);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
 	boost::sheet get_sheet_unchecked(const std::string& str) {
@@ -148,16 +151,16 @@ public:
 		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::get_sheet_by_name(this->sheets_ptr_, str, sheet_ptr);
 		std::string new_str(str);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr,new_str)));
 	}
 
 	boost::sheet get_sheet_unchecked(std::size_t index) {
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		IDispatch* sheet_ptr; 
+		IDispatch* sheet_ptr;
 		boost::doc::ms_sheet::get_sheet_by_index(this->sheets_ptr_, (int)index + 1, sheet_ptr);
-		return boost::sheet(std::dynamic_pointer_cast<sheet_interface>(std::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
+		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
 	std::size_t sheet_count() const {
@@ -204,8 +207,8 @@ public:
 
 };
 
-std::shared_ptr<document_interface> open_ms_instance() {
-	return std::dynamic_pointer_cast<document_interface>(std::make_shared<boost::detail::ms_document>());
+boost::shared_ptr<document_interface> open_ms_instance() {
+	return boost::dynamic_pointer_cast<document_interface>(boost::make_shared<boost::detail::ms_document>());
 }
 
 }} // namespace boost::detail
