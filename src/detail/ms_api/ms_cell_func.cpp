@@ -15,6 +15,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_exception.hpp>
@@ -32,7 +33,7 @@ std::string get_cell_str(int row, int column) {
 		result += (char)(column%26 + 'A');
 		column /= 26;
 	}
-	result += std::to_string(row);
+	result += boost::lexical_cast<std::string>(row);
 	return result;
 }
 

@@ -17,6 +17,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/ms_api/ms_functions.hpp>
@@ -59,12 +60,12 @@ int get_filetype_from_file_ext(const std::string extension) {
 		return 42;
 	}
 }
-//! \fn Returns a string of type BSTR to be used 
+//! \fn Returns a string of type BSTR to be used
 //!     in all the COM API calls.
 //!
-//! Important to remember remember to delete the  
+//! Important to remember remember to delete the
 //! BSTR later. (BSTR is a pointer to another MS String type)
-//! Either do delete [] ptr or VariantClear(&variant) as 
+//! Either do delete [] ptr or VariantClear(&variant) as
 //! appropriate.
 BSTR string_to_BSTR(const std::string& str) {
 	int wslen = ::MultiByteToWideChar(CP_ACP, 0 ,str.c_str(), str.length(), NULL, 0);
@@ -76,9 +77,9 @@ BSTR string_to_BSTR(const std::string& str) {
 //! \fn Returns a string of type std::string
 //!     given a BSTR used in all the COM API calls.
 //!
-//! Important to remember remember to delete the  
+//! Important to remember remember to delete the
 //! BSTR later. (BSTR is a pointer to another MS String type)
-//! Either do delete [] ptr or VariantClear(&variant) as 
+//! Either do delete [] ptr or VariantClear(&variant) as
 //! appropriate.
 std::string BSTR_to_string(const BSTR bstr) {
 	int wslen = ::SysStringLen(bstr);
@@ -112,7 +113,7 @@ void auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLEST
     hr = pDisp->GetIDsOfNames(IID_NULL, &ptName, 1, LOCALE_USER_DEFAULT, &dispID);
     if(FAILED(hr)) {
 		boost::throw_exception(document_exception(
-			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  std::to_string((int)hr)));
+			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + ") failed w/err " +  boost::lexical_cast<std::string>((int)hr)));
     }
 	std::vector<VARIANT> pArgs(cArgs + 1);
 	for (int i = 0; i<cArgs; i++) {
@@ -128,7 +129,7 @@ void auto_wrap_helper(int autoType, VARIANT *pvResult, IDispatch *pDisp, LPOLEST
 	if (FAILED(hr)) {
 		boost::throw_exception(document_exception(
 			"Error: IDispatch::GetIDsOfNames(" + std::string(szName) + "=" +
-			std::to_string((int)dispID) + ") failed w/err " + std::to_string((int)hr)));
+			boost::lexical_cast<std::string>((int)dispID) + ") failed w/err " + boost::lexical_cast<std::string>((int)hr)));
 	}
 	va_end(marker);
 }
@@ -157,7 +158,7 @@ void get_application_pointer(CLSID clsid, IDispatch*& appl_ptr) {
 	}
 }
 
-//! \fn Sets the visibility of the 
+//! \fn Sets the visibility of the
 //!     Application GUI.
 //!
 void set_visibility(IDispatch *appl_ptr) {
@@ -174,7 +175,7 @@ void unset_visibility(IDispatch *appl_ptr) {
 }
 
 //! \fn Suppress Warnings that are displayed as user
-//!     dialog while performing certain methods. 
+//!     dialog while performing certain methods.
 //!     Takes the default action provided in the
 //!     dialog box.
 void supress_warnings(IDispatch *appl_ptr,bool sure) {
@@ -190,7 +191,7 @@ void supress_warnings(IDispatch *appl_ptr,bool sure) {
 }
 
 //! \fn Call application to quit
-//!     and release the application 
+//!     and release the application
 //!     pointer.
 void close_app(IDispatch*& appl_ptr) {
 	// Application.Quit()
@@ -199,7 +200,7 @@ void close_app(IDispatch*& appl_ptr) {
 }
 
 //! \fn Opens the file in the file path
-//!     and attaches the book_pointer. 
+//!     and attaches the book_pointer.
 void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch*& book_ptr) {
 	if (!boost::filesystem::exists(fpath)) {
 		boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
@@ -224,17 +225,17 @@ void open_ms(const boost::filesystem::path& fpath, IDispatch *appl_ptr,IDispatch
 }
 
 //! \fn Saves the file in the given file path.
-//!     If there is an existing file, it deletes 
+//!     If there is an existing file, it deletes
 //!     the file and then saves it.
 //!     Saves in the required format depending on the
 //!     extension of the given file path.
 void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	IDispatch*& book_ptr) {
-	
+
 	boost::detail::com_variant vt_file_name(inputPath);
-	
+
 	boost::detail::com_variant vt_format(get_filetype_from_file_ext(inputPath.extension().string()));
-	
+
 	supress_warnings(appl_ptr, true);
 
 	if (boost::filesystem::exists(inputPath)) {
@@ -242,17 +243,17 @@ void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 	}
 
 	// Reverse order of params is important.
-	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2, 
+	auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"SaveAs", 2,
 		vt_format.native(),
 		vt_file_name.native()
 		);
-	
+
 	supress_warnings(appl_ptr, false);
-	
+
 }
 
 //! \fn Exports the file in the filepath
-//!     and file format given, replacing 
+//!     and file format given, replacing
 //!     the extension as appropriate.
 //!
 //!     Calls ExportAsFixedFormat for PDF, normal
@@ -265,7 +266,7 @@ void save_ms(const boost::filesystem::path &inputPath, IDispatch* appl_ptr,
 //!     appropriately.
 void export_ms(const boost::filesystem::path& fpath,
 	boost::document_file_format::type format, IDispatch* appl_ptr,
-	IDispatch*& book_ptr) {	
+	IDispatch*& book_ptr) {
 	if (!boost::filesystem::exists(fpath)) {
 		boost::throw_exception(document_exception(
 			"Error: Path is empty or does not exist."));
@@ -273,13 +274,13 @@ void export_ms(const boost::filesystem::path& fpath,
 	boost::filesystem::path out_path(fpath);
 	if (format == boost::document_file_format::PDF) {
 		out_path.replace_extension(".pdf");
-		
+
 		boost::detail::com_variant vt_file_name(out_path);
-		
+
 		boost::detail::com_variant vt_format(0);
-		
+
 		// Reverse order of params is important.
-		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2, 
+		auto_wrap_helper(DISPATCH_METHOD, NULL, book_ptr, L"ExportAsFixedFormat", 2,
 			vt_file_name.native(),
 			vt_format.native());
 	}
@@ -293,10 +294,10 @@ void export_ms(const boost::filesystem::path& fpath,
 	}
 }
 
-//! \fn Closes the specific document   
-//!     being accessed and releases 
+//! \fn Closes the specific document
+//!     being accessed and releases
 //!     the book_ptr.
-void close_ms(const boost::filesystem::path& inp_path, bool save, 
+void close_ms(const boost::filesystem::path& inp_path, bool save,
 		IDispatch* appl_ptr, IDispatch*& book_ptr) {
 
 	if (!boost::filesystem::exists(inp_path)) {
@@ -312,9 +313,9 @@ void close_ms(const boost::filesystem::path& inp_path, bool save,
 	}
 }
 
-//! \fn Creates a new Document at the 
+//! \fn Creates a new Document at the
 //!     file path given.
-void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr, 
+void create_ms(const boost::filesystem::path& path, IDispatch *appl_ptr,
 	IDispatch*& book_ptr) {
 	// Create a new Workbook. (i.e. Application.Workbooks.Add)
 	// Get the Workbooks collection
