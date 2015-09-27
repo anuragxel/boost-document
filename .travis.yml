@@ -25,6 +25,9 @@ before_install:
     # or by - BRANCH_TO_TEST=$TRAVIS_BRANCH or just directly specify it
     - BRANCH_TO_TEST=$TRAVIS_BRANCH
 
+    # Files, which coverage results must be ignored (files from other projects). Example: - IGNORE_COVERAGE='*/boost/progress.hpp */filesystem/src/path.cpp'
+    - IGNORE_COVERAGE='/$PROJECT_TO_TEST/../filesystem/src/*'
+
     # Installing all the LibreOffice SDK stuff
     # Following lines are the only difference from original file from https://svn.boost.org/trac/boost/wiki/TravisCoverals
     - sudo apt-get update -qq
@@ -35,9 +38,6 @@ before_install:
     - cd $OO_SDK_OUT
     - /usr/lib/libreoffice/sdk/bin/cppumaker -Gc -BUCR -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb
     - soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" &
-
-    # Files, which coverage results must be ignored (files from other projects). Example: - IGNORE_COVERAGE='*/boost/progress.hpp */filesystem/src/path.cpp'
-    - IGNORE_COVERAGE="$PROJECT_TO_TEST/../filesystem/src/* $OO_SDK_OUT/include/*"
 
 
     # From this point and below code is same for all the Boost libs
