@@ -71,7 +71,9 @@ class libre_document: public document_interface {
 	void open() {
 		if(! this->is_file_opened) {
 			this->xComponent_ = boost::doc::libre_functions::get_xComponent_from_path(this->doc_path_);
-			boost::doc::libre_functions::open_libre(this->doc_path_,this->xComponent_);
+			if(!boost::filesystem::exists(this->doc_path_)) {
+		        boost::throw_exception(document_exception("Error: Path is empty or does not exist."));
+		    }
 			this->is_file_opened = true;
 		}
  	}
