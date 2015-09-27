@@ -14,7 +14,8 @@
 namespace boost { namespace doc { namespace libre_functions {
 
 	std::string convert_extension_to_pdf_filter(const std::string extension);
-	::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> connect_to_libre_server();
+	//::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> connect_to_libre_server();
+	::com::sun::star::uno::Reference<com::sun::star::frame::XComponentLoader> connect_to_libre_server();
 	void set_bootstrap_offapi();
 	::rtl::OUString get_url_from_path(const boost::filesystem::path& path);
 	::com::sun::star::uno::Reference< com::sun::star::lang::XComponent> create_libre(const boost::filesystem::path& path);

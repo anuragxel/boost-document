@@ -125,31 +125,26 @@ OUString get_new_doc_url_from_ext(const std::string extension) {
     }
 }
 
-//! \fn Helper which returns the OfficeServiceManager
+//! \fn Helper which returns the XComponentLoader
 //!        if connection is established.
 //!
 //! The StartOffice Backend uses a client server model in which document
 //! component ojects act as the client and request the server to perform
-//! actions for them. The OfficeServiceManager of type XMultiServiceFactory
-//! is sufficient for scripting purposes.
-//::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>
-Reference< XMultiServiceFactory > connect_to_libre_server() {
+//! actions for them.
+Reference < XComponentLoader > connect_to_libre_server() {
     // create the initial component context
-    Reference< XComponentContext > rComponentContext =
-                 ::cppu::defaultBootstrap_InitialComponentContext();
+    Reference< XComponentContext > rComponentContext( ::cppu::bootstrap() );
     // retrieve the servicemanager from the context
-    Reference< XMultiComponentFactory > rServiceManager =
-                 rComponentContext->getServiceManager();
+    Reference< XMultiComponentFactory > rServiceManager (
+                 rComponentContext->getServiceManager() );
     // instantiate a sample service with the servicemanager.
     Reference< XInterface > rInstance =  rServiceManager->createInstanceWithContext(
-          OUString::createFromAscii("com.sun.star.bridge.UnoUrlResolver" ),rComponentContext );
+          OUString::createFromAscii("com.sun.star.frame.Desktop"), rComponentContext );
     // Query for the XUnoUrlResolver interface
     try {
-        Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
-        rInstance = rResolver->resolve( OUString::createFromAscii(
-            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager") );
-        Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
-        return rOfficeServiceManager;
+        Reference < XComponentLoader > xComponentLoader(
+            rInstance, UNO_QUERY );
+        return xComponentLoader;
     }
     catch(Exception &e) {
         boost::throw_exception(document_exception(
@@ -195,19 +190,12 @@ void set_bootstrap_offapi() {
 Reference< XComponent > get_xComponent_from_path(
             const boost::filesystem::path& inputPath) {
 
-    Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = connect_to_libre_server();
-
-    if(!rOfficeServiceManager.is()) {
-        boost::throw_exception(document_exception(
-              "Error: LibreOffice Server is not running.\n"));
-    }
-    //get the desktop service using createInstance returns an XInterface type
-    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
-        OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-
     //query for the XComponentLoader interface
-    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
+    Reference< XComponentLoader > rComponentLoader = connect_to_libre_server();
+    if(rComponentLoader == NULL) {
+        boost::throw_exception(document_exception(
+            "Error: XComponentloader not successfully instantiated"));
+    }
     Reference< XComponent > xComponent;
 
     //get an instance of the spreadsheet
@@ -359,20 +347,13 @@ void save_libre(const boost::filesystem::path& inputPath,
 Reference< XComponent > create_libre(
         const boost::filesystem::path& inputPath) {
 
-    Reference< XMultiServiceFactory > rOfficeServiceManager;
-    rOfficeServiceManager = connect_to_libre_server();
-
-    if(!rOfficeServiceManager.is()) {
-        boost::throw_exception(document_exception(
-              "Error: LibreOffice Server is not running.\n"));
-    }
-    //get the desktop service using createInstance returns an XInterface type
-    Reference< XInterface  > Desktop = rOfficeServiceManager->createInstance(
-        OUString::createFromAscii( "com.sun.star.frame.Desktop" ));
-
     //query for the XComponentLoader interface
-    Reference< XComponentLoader > rComponentLoader (Desktop, UNO_QUERY);
+    Reference< XComponentLoader > rComponentLoader = connect_to_libre_server();
     Reference< XComponent > xComponent;
+    if(rComponentLoader == NULL) {
+        boost::throw_exception(document_exception(
+            "Error: XComponentloader not successfully instantiated"));
+    }
 
     //get an instance of the spreadsheet
     try {
