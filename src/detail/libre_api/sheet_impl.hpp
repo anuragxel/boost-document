@@ -37,16 +37,16 @@ protected:
 	std::string name;
 
 public:
-	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
-		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::size_t& index) {
+	libre_sheet(const ::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
+		const ::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::size_t index) {
 		this->xComponent_ = xComponent;
 		this->xSheet_ = xSheet;
 		this->index = index;
 		this->name = boost::doc::libre_sheet_func::get_sheet_name(this->xSheet_);
 	}
 
-	libre_sheet(::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
-		::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet, std::string& str) {
+	libre_sheet(const ::com::sun::star::uno::Reference < com::sun::star::lang::XComponent >& xComponent,
+		const ::com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xSheet,const std::string& str) {
 		this->xComponent_ = xComponent;
 		this->xSheet_ = xSheet;
 		this->index = (std::size_t)boost::doc::libre_sheet_func::get_sheet_index(this->xSheet_);

@@ -22,7 +22,7 @@ class libre_cell : public cell_interface {
 	std::size_t row_, column_;
 	::com::sun::star::uno::Reference < com::sun::star::table::XCell > xCell_;
 	public:
-	libre_cell(::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, std::size_t& row, std::size_t& column) {
+	libre_cell(const ::com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, std::size_t row, std::size_t column) {
 		this->xCell_ = xCell;
 		this->row_ = row;
 		this->column_ = column;
@@ -58,7 +58,7 @@ class libre_cell : public cell_interface {
 	}
 
 	bool empty() const {
-		if(boost::doc::libre_cell_func::get_content_type(this->xCell_) == boost::cell_content_type::type::EMPTY) {
+		if(boost::doc::libre_cell_func::get_content_type(this->xCell_) == boost::cell_content_type::EMPTY) {
 			return true;
 		}
 		return false;

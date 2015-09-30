@@ -193,7 +193,6 @@ int working_on_multiple_documents(boost::document& b, boost::document& c) {
 	try {
 		b.export_document(boost::document_file_format::CSV);
 		c.export_document(boost::document_file_format::PDF);
-		std::cout << "Test working_on_multiple_documents Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -208,7 +207,6 @@ int get_valid_sheets(boost::document& b, boost::document& c) {
 	try {
 		boost::sheet s1 = c.get_sheet("Anurag"); // 1
 		boost::sheet s2 = b.get_sheet(0); // "Sheet1"
-		std::cout << "Test get_valid_sheets Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -224,7 +222,6 @@ int rename_valid_sheet(boost::document& b) {
 		s1.rename_sheet("Sheet2");
 		BOOST_REQUIRE(s1.sheet_name() == "Sheet2");
 		s1.rename_sheet("Anurag"); // Rename Back. :P
-		std::cout << "Test rename_valid_sheets Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -237,7 +234,6 @@ int rename_valid_sheet(boost::document& b) {
 int get_valid_sheet_count(boost::document& b) {
 	try {
 		BOOST_REQUIRE(b.sheet_count() == 2);
-		std::cout << "Test get_valid_sheet_count Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -251,7 +247,6 @@ int insert_new_sheet(boost::document& b) {
 	try {
 		boost::sheet s1 = b.insert_sheet("Vatika");
 		BOOST_REQUIRE(b.sheet_count() == 3);
-		std::cout << "Test insert_new_sheet Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -265,7 +260,6 @@ int delete_new_sheet(boost::document& b) {
 	try {
 		b.delete_sheet("Vatika");
 		BOOST_REQUIRE(b.sheet_count() == 2);
-		std::cerr << "Test delete_new_sheet Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -286,7 +280,6 @@ int get_valid_cell_and_set_values(boost::document& b) {
 		c = "Shell";
 		boost::cell c1 = s.get_cell(0,1);
 		c1 = 2.0;
-		std::cout << "Test get_valid_cell_and_set_values Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -322,7 +315,6 @@ int negative_cell_index_check(boost::document& c) {
 		return 1;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test negative_cell_index_check Passed." << std::endl;
 		return 0;
 	}
 }
@@ -551,7 +543,7 @@ int test_main(int argc, char *argv[]) {
 	b.open_document();
 	c.open_document();
 
-	
+
 	rv += negative_absurd_get_sheet_string(b);
 	rv += negative_absurd_get_sheet_index(b);
 
@@ -592,4 +584,3 @@ int test_main(int argc, char *argv[]) {
 }
 
 #endif
-
