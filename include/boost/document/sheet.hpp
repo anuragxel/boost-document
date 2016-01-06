@@ -29,7 +29,12 @@ namespace boost {
 	private:
 		boost::shared_ptr<sheet_interface> pimpl_;
 
-		boost::cell cell_from_string(const char* str, std::size_t length) {
+		//! \brief The function takes the string representation
+		//!        of the index which is of the form [a-Z]+[0-9]+
+		//!        and parses it to obtain the row and the
+		//!        column values and with it, the cell instance
+		//!        corresponding to the index.
+		boost::cell cell_idx_from_string(const char* str, std::size_t length) {
 			std::size_t row = 0;
 			std::size_t column = 0;
 			bool numbers = false; // initially no numbers
@@ -96,71 +101,72 @@ namespace boost {
 			pimpl_->rename_sheet(str);
 		}
 
-		//! Returns the maximum
-		//! number of rows
+		//! \brief Returns the maximum
+		//!        number of rows
 		std::size_t max_row() const {
 			return pimpl_->max_row();
 		}
 
-		//! Returns the maximum
-		//! number of columns
+		//! \brief Returns the maximum
+		//!        number of columns
 		std::size_t max_column() const {
 			return pimpl_->max_column();
 		}
 
-		//! Gets the cell instance
-		//! which can be manipulated.
+		//! \brief Gets the cell instance
+		//!        corresponding to the row and column
+		//!        which can be manipulated.
 		boost::cell get_cell(std::size_t row, std::size_t column) {
 			return pimpl_->get_cell(row,column);
 		}
 
 
-		//! Gets a row instance
-		//!	which can be iterated
-		//! over
+		//! \brief Gets a row instance
+		//!	       which can be iterated
+		//!        over
 		boost::row get_row(std::size_t i) {
 			return boost::row(pimpl_,i);
 		}
 
 
-		//! Gets a column instance
-		//!	which can be iterated
-		//! over
+		//! \brief Gets a column instance
+		//!	       which can be iterated
+		//!        over
 		boost::column get_column(std::size_t i) {
 			return boost::column(pimpl_,i);
 		}
 
-		//! Gets the column instance
-		//! which can be manipulated.
-		//! No Exception Handling.
+		//! \brief Gets the column instance
+		//!        which can be manipulated.
+		//!        No Exception Handling.
 		boost::column operator[](std::size_t i) {
 			return boost::column(pimpl_,i);
 		}
 
 
-		//! Gets the column instance
-		//! which can be manipulated.
-		//! No Exception Handling.
+		//! \brief Gets the column instance
+		//!        which can be manipulated.
+		//!        No Exception Handling.
 		boost::column operator[](int i) {
 			return boost::column(pimpl_,(std::size_t)i);
 		}
 
-		//! Gets the cell instance
-		//! which can be manipulated.
-		//! No Exception Handling.
+		//! \brief Gets the cell instance
+		//!        which can be manipulated.
+		//!        No Exception Handling.
 		boost::cell operator[](const std::string& str) {
-			return cell_from_string(str.data(),str.length());
+			return cell_idx_from_string(str.data(),str.length());
 		}
 
-		//! Gets the cell instance
-		//! which can be manipulated.
-		//! No Exception Handling.
+		//! \brief Gets the cell instance
+		//!        which can be manipulated.
+		//!        No Exception Handling.
 		boost::cell operator[](const char* str) {
-		    return cell_from_string(str, std::strlen(str));
+		    return cell_idx_from_string(str, std::strlen(str));
 		}
 
 		//! \brief Destructor
-		//!        Closes Unsaved Documents.
+		//!        Sheet instance is destroyed.
 		~sheet() {
 		}
 	};
