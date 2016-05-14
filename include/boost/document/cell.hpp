@@ -32,7 +32,7 @@ namespace boost {
 		//! The default constructor which takes in
 		//! the corresponding cell_interface for operation.
 		//! Follows the pimpl idiom to support MS and LibreOffice.
-		explicit const_cell(const boost::shared_ptr<cell_interface> impl)
+		explicit const_cell(const boost::shared_ptr<cell_interface>& impl)
 		: pimpl_(impl)
 		{}
 
@@ -103,9 +103,9 @@ namespace boost {
  		{}
 
 		//! \brief The copy constructor of the cell.
-		cell(const cell& c)
+		/*cell(const cell& c)
 		: pimpl_(c.pimpl_)
-		{}
+		{}*/
 
 		//! \brief The assignment operator of the cell class.
 		//!        Makes all operations non shallow

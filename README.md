@@ -36,7 +36,8 @@ On Linux
 
 	cd ~/libreoffice_sdk           # The folder name may vary
 
-	cppumaker -Gc -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb         # Add -BUCR after -Gc if neccessary. You can also run an example in sdk directory for the same effect.
+	# types.rdb was earlier available in /usr/lib/ure/share/misc/types.rdb (pre-libreoffice 5)
+	cppumaker -Gc -O"$OO_SDK_OUT/include/" /usr/lib/libreoffice/program/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb   # Add -BUCR after -Gc if neccessary. You can also run an example in sdk directory for the same effect.
 
 	cd boost_1_57_0/libs/ 	# The folder name may vary, it is your boost directory which you downloaded from sourceforge.
 
