@@ -161,11 +161,26 @@ int negative_get_invalid_cell(boost::document& d) {
 
 
 // Postive Tests
+int create_and_save_document() {
+	try{
+		boost::document a("create_test1.ods");
+		a.create_document();
+		a.save_document();
+		a.save_as_document("create_test2.ods");
+		a.close_document();
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test create_and_save_document Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
 int exporting_to_pdf(boost::document& b) {
 	try {
 
 		b.export_document(boost::document_file_format::PDF);
-		std::cout << "Test exporting_to_pdf Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -178,7 +193,6 @@ int exporting_to_pdf(boost::document& b) {
 int exporting_to_csv(boost::document& b) {
 	try {
 		b.export_document(boost::document_file_format::CSV);
-		std::cout << "Test exporting_to_csv Passed." << std::endl;
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -550,6 +564,7 @@ int test_main(int argc, char *argv[]) {
 	rv += negative_get_invalid_cell(b);
 
 	// Positive Checks
+	rv += create_and_save_document();
 	rv += exporting_to_pdf(b);
 	rv += exporting_to_csv(b);
 	rv += working_on_multiple_documents(b,c);
