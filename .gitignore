@@ -26,3 +26,8 @@
 *.exe
 *.out
 *.app
+
+# Extras, text that's generated for instance
+test/Test1.csv
+test/Test1.pdf
+test/Test2.pdf

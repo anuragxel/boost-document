@@ -76,7 +76,7 @@ namespace boost {
 		//!        cell content currently present in it in the.
 		//!        form of boost::cell_content_type::type enum
 		//!        which can be of the following values,
-		//!		   EMPTY,STRING,VALUE,FORMULA,ERROR.
+		//!		     EMPTY,STRING,VALUE,FORMULA,ERROR.
 		boost::cell_content_type::type get_content_type() const {
 			return impl().get_content_type();
 		}
@@ -92,19 +92,19 @@ namespace boost {
 	protected:
 		cell_interface& impl() {
         	return *pimpl_;
-     	}
+    }
 	public:
 
 		//! The default constructor which takes in
 		//! the corresponding cell_interface for operation.
 		//! Follows the pimpl idiom to support MS and LibreOffice.
-		explicit cell(std::shared_ptr<cell_interface> pimpl)
+		explicit cell(boost::shared_ptr<cell_interface> pimpl)
 	 	: const_cell(pimpl)
  		{}
 
 		//! \brief The copy constructor of the cell.
 		/*cell(const cell& c)
-		: pimpl_(c.pimpl_)
+		: const_cell(static_cast<const const_cell&> c) // initialization of base class
 		{}*/
 
 		//! \brief The assignment operator of the cell class.
