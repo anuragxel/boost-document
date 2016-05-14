@@ -257,34 +257,34 @@ int get_valid_sheet_count(boost::document& b) {
 	}
 }
 
-int insert_new_sheet(boost::document& b) {
+int insert_delete_sheet_name(boost::document& b) {
 	try {
 		boost::sheet s1 = b.insert_sheet("Vatika");
 		BOOST_REQUIRE(b.sheet_count() == 3);
-		return 0;
-	}
-	catch(boost::document_exception& e) {
-		std::cerr << "Test insert_new_sheet Failed." << std::endl;
-		std::cerr << e.what() << std::endl;
-		return 1;
-	}
-}
-
-int delete_new_sheet(boost::document& b) {
-	try {
 		b.delete_sheet("Vatika");
 		BOOST_REQUIRE(b.sheet_count() == 2);
 		return 0;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test delete_new_sheet Failed." << std::endl;
+		std::cerr << "Test insert_delete_sheet_name Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 }
 
-
-
+int delete_sheet_index(boost::document& b) {
+	try {
+		boost::sheet s1 = b.insert_sheet("Vatika");
+		auto idx = s1.sheet_index();
+		b.delete_sheet(idx);
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test delete_sheet_index Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
 
 
 int get_valid_cell_and_set_values(boost::document& b) {
@@ -376,6 +376,7 @@ int cell_formula_check(boost::document& c) {
 		BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
 		BOOST_REQUIRE(s1[2][4].get_value() < 19.75 && s1[2][4].get_value() > 19.73);
 		BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::FORMULA);
+		BOOST_REQUIRE(s1[2][4].get_formula() == "=C3+D3");
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -392,7 +393,7 @@ int cell_reset_check(boost::document& c) {
 		s1[2][2] = 14.6;
 		s1[2][2].reset();
 		BOOST_REQUIRE(s1[2][2].get_content_type() == boost::cell_content_type::EMPTY);
-		s1[2][4] = "=C3+C4";
+		s1[2][4].set_formula("=C3+C4");
 		s1[2][4].reset();
 		BOOST_REQUIRE(s1[2][4].get_content_type() == boost::cell_content_type::EMPTY);
 		return 0;
@@ -571,8 +572,8 @@ int test_main(int argc, char *argv[]) {
 	rv += get_valid_sheets(b,c);
 	rv += rename_valid_sheet(c);
 	rv += get_valid_sheet_count(c);
-	rv += insert_new_sheet(c);
-	rv += delete_new_sheet(c);
+	rv += insert_delete_sheet_name(c);
+	//rv += delete_sheet_index(b);
 
 	// Cell related checks
 	rv += get_valid_cell_and_set_values(b);

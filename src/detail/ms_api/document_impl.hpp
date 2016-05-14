@@ -193,7 +193,7 @@ public:
 		if (!this->sheets_ptr_) {
 			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
-		boost::doc::ms_sheet::delete_sheet_by_index(this->sheets_ptr_,(int)index+1); // Excel Sheets are 1-indexed. Boost.Document sheets are zero-indexed.
+		boost::doc::ms_sheet::delete_sheet_by_index(this->sheets_ptr_,(int)index + 1); // Excel Sheets are 1-indexed. Boost.Document sheets are zero-indexed.
 	}
 
  	~ms_document() {

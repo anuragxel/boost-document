@@ -26,7 +26,7 @@ before_install:
     - BRANCH_TO_TEST=$TRAVIS_BRANCH
 
     # Files, which coverage results must be ignored (files from other projects). Example: - IGNORE_COVERAGE='*/boost/progress.hpp */filesystem/src/path.cpp'
-    - IGNORE_COVERAGE='/$PROJECT_TO_TEST/../filesystem/src/*'
+    - IGNORE_COVERAGE='/$PROJECT_TO_TEST/../filesystem/src/* /home/travis/boost-local/libs/filesystem/src/* '
 
     # Installing all the LibreOffice SDK stuff
     # Following lines are the only difference from original file from https://svn.boost.org/trac/boost/wiki/TravisCoverals
@@ -36,8 +36,11 @@ before_install:
     - source setsdkenv_unix.sh
     - mkdir $OO_SDK_OUT/
     - cd $OO_SDK_OUT
-    - /usr/lib/libreoffice/sdk/bin/cppumaker -Gc -BUCR -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb
     
+    ## TODO: Write a "robust" IF to detect version and call
+    ## the appropriate cppumaker command : path/types.rdb --> /usr/lib/libreoffice/program/types.rdb
+    - /usr/lib/libreoffice/sdk/bin/cppumaker -Gc -BUCR -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb
+
 
     # From this point and below code is same for all the Boost libs
     # Cloning Boost libraries (fast nondeep cloning)

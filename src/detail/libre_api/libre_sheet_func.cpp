@@ -84,10 +84,10 @@ Reference< XSpreadsheetDocument > get_xSheetDoc(
       OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
       boost::throw_exception(document_exception(o.pData->buffer));
     }
-} 
+}
 
-//! \fn Internal Function which returns all 
-//!     the sheets of the spreadsheet.Uses 
+//! \fn Internal Function which returns all
+//!     the sheets of the spreadsheet.Uses
 //!     XSpreadsheets interface to do so.
 Reference< XSpreadsheets > get_sheets_of_document(
             Reference < XSpreadsheetDocument > xSheetDoc) {
@@ -103,7 +103,7 @@ Reference< XSpreadsheets > get_sheets_of_document(
 
 
 //! \fn Gets the sheet Reference by name of the sheet
-//!     provided. Raises an exception otherwise. Uses 
+//!     provided. Raises an exception otherwise. Uses
 //!     XSpreadsheets interface to do so.
 Reference < XSpreadsheet > get_sheet_by_name(
             Reference< XSpreadsheets > xSheets,
@@ -112,8 +112,8 @@ Reference < XSpreadsheet > get_sheet_by_name(
         boost::throw_exception(document_exception(
             "Error: Sheet Name Not Specified.."));
     }
-    try { 
-        Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str())); 
+    try {
+        Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str()));
         Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
         return xSheet;
     }
@@ -124,12 +124,12 @@ Reference < XSpreadsheet > get_sheet_by_name(
 }
 
 //! \fn Gets the sheet Reference by name of the sheet
-//!     provided, no exception handling. Uses 
+//!     provided, no exception handling. Uses
 //!     XSpreadsheets interface to do so.
 Reference < XSpreadsheet > get_sheet_by_name_unchecked(
             Reference< XSpreadsheets > xSheets,
                 const std::string& sheetName) {
-    Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str())); 
+    Any xSheetAny = xSheets->getByName(OUString::createFromAscii(sheetName.c_str()));
     Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
     return xSheet;
 }
@@ -137,15 +137,15 @@ Reference < XSpreadsheet > get_sheet_by_name_unchecked(
 
 
 //! \fn Gets the sheet Reference by name of the sheet
-//!     provided. Raises an exception otherwise. 
-//!     Uses XIndexAccess Interface to do so 
+//!     provided. Raises an exception otherwise.
+//!     Uses XIndexAccess Interface to do so
 //!     which acts as the indexing gateway.
 Reference < XSpreadsheet > get_sheet_by_index(
             Reference< XSpreadsheets > xSheets,
             int index) {
     try {
-        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
-        Any xSheetAny = xSheetsByIndex->getByIndex( (short)index ); 
+        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);
+        Any xSheetAny = xSheetsByIndex->getByIndex( (short)index );
         Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
         return xSheet;
     }
@@ -157,14 +157,14 @@ Reference < XSpreadsheet > get_sheet_by_index(
 
 
 //! \fn Returns the sheet Reference by providing the index
-//!     of the sheet, no exception handling. 
-//!     Uses XIndexAccess Interface to do so 
+//!     of the sheet, no exception handling.
+//!     Uses XIndexAccess Interface to do so
 //!     which acts as the indexing gateway.
 Reference < XSpreadsheet > get_sheet_by_index_unchecked(
             Reference< XSpreadsheets > xSheets,
             int index) {
-    Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
-    Any xSheetAny = xSheetsByIndex->getByIndex( (short)index ); 
+    Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);
+    Any xSheetAny = xSheetsByIndex->getByIndex( (short)index );
     Reference < XSpreadsheet > xSheet(xSheetAny, UNO_QUERY);
     return xSheet;
 }
@@ -188,12 +188,12 @@ void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName)
 }
 
 //! \fn Gets the sheet count of the document
-//!     as an integer. Uses XIndexAccess Interface to do so 
+//!     as an integer. Uses XIndexAccess Interface to do so
 //!     which acts as the indexing gateway and
-//!     hence provides the count. 
+//!     hence provides the count.
 int get_sheet_count(Reference< XSpreadsheets > xSheets) {
     try {
-        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);  
+        Reference< XIndexAccess > xSheetsByIndex (xSheets, UNO_QUERY);
         return xSheetsByIndex->getCount();
     }
     catch( Exception &e ){
@@ -203,7 +203,7 @@ int get_sheet_count(Reference< XSpreadsheets > xSheets) {
 }
 
 
-//! \fn Returns the sheet Reference after inserting 
+//! \fn Returns the sheet Reference after inserting
 //!     it at 1st pos with name sheetName.
 //!     Uses XSpreadsheets Interface to do so.
 Reference < XSpreadsheet >  insert_sheet_by_name(Reference< XSpreadsheets> xSheets,std::string sheetName) {
@@ -242,7 +242,7 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
 void delete_sheet_by_index(Reference< XSpreadsheets > xSheets,int index) {
     try {
         Reference < XIndexContainer > xIndexContainer(xSheets, UNO_QUERY);
-        xIndexContainer->removeByIndex(index);
+        xIndexContainer->removeByIndex((short)index);
     }
     catch( Exception &e ){
         OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
