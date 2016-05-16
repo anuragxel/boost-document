@@ -3,6 +3,11 @@
 #ifndef _LIBRE_CELL_FUNC_CPP
 #define _LIBRE_CELL_FUNC_CPP
 
+//          Copyright Anurag Ghosh 2015.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -50,6 +55,14 @@ using ::rtl::OUStringToOString;
 
 namespace boost { namespace doc { namespace libre_cell_func {
 
+//! \fn Helper function to throw an unwrapped
+//!     exception
+//!
+void throw_document_exception(Exception& e) {
+    OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+    boost::throw_exception(document_exception(o.pData->buffer));
+}
+
 //! \fn Returns an XCell Reference by the position
 //!     with Exception Handling.
 //!
@@ -58,9 +71,8 @@ Reference < XCell > get_cell(Reference <XSpreadsheet> xSheet,int i, int j) {
         Reference< XCell > xCell = xSheet->getCellByPosition(i, j);
         return xCell;
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -71,9 +83,8 @@ void set_cell_value(Reference< XCell > xCell, const std::string& str) {
     try {
         xCell->setFormula(OUString::createFromAscii(str.c_str()));
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -85,9 +96,8 @@ void reset(Reference< XCell > xCell) {
 	Reference< XText > xText(xCell, UNO_QUERY);
 	xText->setString(OUString());
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -98,9 +108,8 @@ void set_cell_value(Reference< XCell > xCell, float x) {
     try {
         xCell->setValue(x);
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -126,9 +135,8 @@ std::string get_string(Reference < XCell > xCell) {
         OString s = OUStringToOString( xCell->getFormula(), RTL_TEXTENCODING_ASCII_US );
         return std::string(s.pData->buffer);
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -140,9 +148,8 @@ std::string get_formula(Reference < XCell > xCell) {
         OString s = OUStringToOString( xCell->getFormula(), RTL_TEXTENCODING_ASCII_US );
         return std::string(s.pData->buffer);
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 
@@ -154,9 +161,8 @@ double get_value(Reference < XCell > xCell) {
  try {
         return xCell->getValue();
     }
-    catch(Exception& e) {
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+    catch( Exception &e ){
+        throw_document_exception(e);
     }
 }
 

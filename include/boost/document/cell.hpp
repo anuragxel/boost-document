@@ -102,11 +102,6 @@ namespace boost {
 	 	: const_cell(pimpl)
  		{}
 
-		//! \brief The copy constructor of the cell.
-		/*cell(const cell& c)
-		: const_cell(static_cast<const const_cell&> c) // initialization of base class
-		{}*/
-
 		//! \brief The assignment operator of the cell class.
 		//!        Makes all operations non shallow
 		//!        with respect to the internal cells.

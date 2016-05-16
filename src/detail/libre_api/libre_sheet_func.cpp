@@ -3,6 +3,11 @@
 #ifndef _LIBRE_SHEET_FUNC_CPP
 #define _LIBRE_SHEET_FUNC_CPP
 
+//          Copyright Anurag Ghosh 2015.
+// Distributed under the Boost Software License, Version 1.0.
+//    (See accompanying file LICENSE_1_0.txt or copy at
+//          http://www.boost.org/LICENSE_1_0.txt)
+
 #include <string>
 #include <iostream>
 #include <cstdlib>
@@ -67,6 +72,14 @@ using ::rtl::OUStringToOString;
 
 namespace boost { namespace doc { namespace libre_sheet_func {
 
+//! \fn Helper function to throw an unwrapped
+//!     exception
+//!
+void throw_document_exception(Exception& e) {
+    OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
+    boost::throw_exception(document_exception(o.pData->buffer));
+}
+
 //! \fn Returns the XSpreadsheetDocument interface
 //!     which will be later used to find the XSpreadsheets
 //!     interface.
@@ -81,8 +94,7 @@ Reference< XSpreadsheetDocument > get_xSheetDoc(
         return xSheetDoc;
     }
     catch( Exception &e ){
-      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-      boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -96,8 +108,7 @@ Reference< XSpreadsheets > get_sheets_of_document(
         return xSheets;
     }
     catch( Exception &e ){
-      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-      boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -118,8 +129,7 @@ Reference < XSpreadsheet > get_sheet_by_name(
         return xSheet;
     }
     catch( Exception &e ){
-      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-      boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -150,9 +160,8 @@ Reference < XSpreadsheet > get_sheet_by_index(
         return xSheet;
     }
     catch( Exception &e ){
-      OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-      boost::throw_exception(document_exception(o.pData->buffer));
-   }
+        throw_document_exception(e);
+    }
 }
 
 
@@ -182,8 +191,7 @@ void rename_sheet(Reference< XSpreadsheet > xSheet,const std::string& sheetName)
         xName->setName(OUString::createFromAscii(sheetName.c_str()));
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -197,8 +205,7 @@ int get_sheet_count(Reference< XSpreadsheets > xSheets) {
         return xSheetsByIndex->getCount();
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -216,8 +223,7 @@ Reference < XSpreadsheet >  insert_sheet_by_name(Reference< XSpreadsheets> xShee
         return get_sheet_by_name(xSheets, sheetName);
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -232,8 +238,7 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
         xSheets->removeByName(OUString::createFromAscii(str.c_str()));
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -245,8 +250,7 @@ void delete_sheet_by_index(Reference< XSpreadsheets > xSheets,int index) {
         xIndexContainer->removeByIndex((short)index);
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -260,8 +264,7 @@ std::string get_sheet_name(Reference< XSpreadsheet > xSheet) {
         return std::string(o.pData->buffer);
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
@@ -276,8 +279,7 @@ int get_sheet_index(Reference< XSpreadsheet > xSheet) {
         return r.Sheet;
     }
     catch( Exception &e ){
-        OString o = OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US );
-        boost::throw_exception(document_exception(o.pData->buffer));
+        throw_document_exception(e);
     }
 }
 
