@@ -246,8 +246,16 @@ void delete_sheet_by_name(Reference< XSpreadsheets > xSheets,std::string str) {
 //!     Uses XIndexContainer Interface to do so.
 void delete_sheet_by_index(Reference< XSpreadsheets > xSheets,int index) {
     try {
-        Reference < XIndexContainer > xIndexContainer(xSheets, UNO_QUERY);
-        xIndexContainer->removeByIndex((short)index);
+        // TODO: Doesn't work, find out why ?
+        //Reference < XIndexContainer > xIndexContainer(xSheets, UNO_QUERY);
+        //xIndexContainer->removeByIndex((short)index);
+
+        // TODO: Crude Hack. I get the sheet name
+        // and then delete the sheet by name (which works)
+        // Replace with a direct function call to removeByIndex
+        // or equivalent interface call.
+        Reference< XNamed > xName(get_sheet_by_index(xSheets, index), UNO_QUERY);
+        xSheets->removeByName(xName->getName());
     }
     catch( Exception &e ){
         throw_document_exception(e);

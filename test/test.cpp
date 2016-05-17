@@ -573,7 +573,7 @@ int test_main(int argc, char *argv[]) {
 	rv += rename_valid_sheet(c);
 	rv += get_valid_sheet_count(c);
 	rv += insert_delete_sheet_name(c);
-	//rv += delete_sheet_index(b);
+	rv += delete_sheet_index(b);
 
 	// Cell related checks
 	rv += get_valid_cell_and_set_values(b);
