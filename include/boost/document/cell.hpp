@@ -160,24 +160,34 @@ namespace boost {
 		void reset() {
 			impl().reset();
 		}
-
-		//! \brief Compares the cell with a string assuming
-		//!        that the cell contains a string.
+//---------------------------------------------
+//---------------------------------------------
+// Cell Comparisons
+//---------------------------------------------
+//---------------------------------------------
 		inline bool operator<(const std::string& str) {
 			return impl().get_string() < str;
 		}
 
-
-		//! \brief Compares the cell with a string assuming
-		//!        that the cell contains a string.
 		inline bool operator>(const std::string& str) {
 			return impl().get_string() > str;
 		}
 
-		//! \brief Compares the cell with a string assuming
-		//!        that the cell contains a string.
 		inline bool operator==(const std::string& str) {
 			return impl().get_string() == str;
+		}
+
+
+		inline bool operator<(double val) {
+			return impl().get_value() < val;
+		}
+
+		inline bool operator>(double val) {
+			return impl().get_value() > val;
+		}
+
+		inline bool operator==(double val) {
+			return impl().get_value() == val;
 		}
 
 		//! \brief Compares the cell with another
@@ -194,6 +204,40 @@ namespace boost {
 					case boost::cell_content_type::ERROR:
 					case boost::cell_content_type::EMPTY:
 						return true;
+				}
+			}
+			return false;
+		}
+
+		inline bool operator>(const const_cell& c) {
+			if(impl().get_content_type() == c.get_content_type()) {
+				switch(impl().get_content_type()) {
+					case boost::cell_content_type::STRING:
+						return impl().get_string() > c.get_string();
+					case boost::cell_content_type::VALUE:
+						return impl().get_value() > c.get_value();
+					case boost::cell_content_type::FORMULA:
+						return impl().get_formula() > c.get_formula();
+					case boost::cell_content_type::ERROR:
+					case boost::cell_content_type::EMPTY:
+						return false;
+				}
+			}
+			return false;
+		}
+
+		inline bool operator<(const const_cell& c) {
+			if(impl().get_content_type() == c.get_content_type()) {
+				switch(impl().get_content_type()) {
+					case boost::cell_content_type::STRING:
+						return impl().get_string() < c.get_string();
+					case boost::cell_content_type::VALUE:
+						return impl().get_value() < c.get_value();
+					case boost::cell_content_type::FORMULA:
+						return impl().get_formula() < c.get_formula();
+					case boost::cell_content_type::ERROR:
+					case boost::cell_content_type::EMPTY:
+						return false;
 				}
 			}
 			return false;
