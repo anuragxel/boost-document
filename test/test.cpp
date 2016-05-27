@@ -405,18 +405,76 @@ int cell_reset_check(boost::document& c) {
 	}
 }
 
-int cell_comparison_check(boost::document& c) {
+int cell_string_comparison_check(boost::document& c) {
 	try {
 		boost::sheet s1 = c["Anurag"];
 		s1[2][2] = "Anurag";
 		BOOST_REQUIRE(s1[2][2] == "Anurag");
 		BOOST_REQUIRE(s1[2][2] > "Aaaaaa");
 		BOOST_REQUIRE("Vatika" > s1[2][2]);
+		BOOST_REQUIRE("Vatika" != s1[2][2]);
+		BOOST_REQUIRE("Aaaaaa" < s1[2][2]);
 		BOOST_REQUIRE(s1[2][2] < "Poland");
+		s1[2][3] = "Anurag";
+		BOOST_REQUIRE(s1[2][2] == s1[2][3]);
+		s1[2][3] = "Vatika";
+		BOOST_REQUIRE(s1[2][2] < s1[2][3]);
 		return 0;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test cell_comparison_check Failed." << std::endl;
+		std::cerr << "Test cell_string_comparison_check Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
+int cell_value_comparison_check(boost::document& c) {
+	try {
+		boost::sheet s1 = c["Anurag"];
+		s1[2][2] = 1.56;
+		BOOST_REQUIRE(s1[2][2] >= 1.55 && s1[2][2] <= 1.57);
+		BOOST_REQUIRE(3.00 > s1[2][2]);
+		BOOST_REQUIRE(3.00 != s1[2][2]);
+		BOOST_REQUIRE(s1[2][2] < 3.00);
+		BOOST_REQUIRE(s1[2][2] != 3.00 && s1[2][2] >= 1.00);
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test cell_value_comparison_check Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
+int cell_formula_comparison_check(boost::document& c) {
+	try {
+		boost::sheet s1 = c["Anurag"];
+		s1[2][2] = 1.00; // C3
+		s1[2][3] = 0.56; // D3
+		s1[2][4] = "=C3+D3";
+		s1[2][5] = "=C3+D3";
+		BOOST_REQUIRE(s1[2][4] >= 1.55 && s1[2][4] <= 1.57);
+		BOOST_REQUIRE(1.00 < s1[2][4]);
+		BOOST_REQUIRE(s1[2][5] == s1[2][4]);
+		BOOST_REQUIRE(s1[2][4] < 3.00);
+		BOOST_REQUIRE(s1[2][4] <= 3.00 && s1[2][4] > 1.00);
+		BOOST_REQUIRE(s1[2][4] == "=C3+D3");
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test cell_formula_comparison_check Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
+
+int cell_generic_comparison_check(boost::document& c) {
+	try {
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test cell_generic_comparison_check Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
@@ -583,7 +641,12 @@ int test_main(int argc, char *argv[]) {
 	rv += cell_formula_check(c);
 	rv += cell_reset_check(c);
 	rv += negative_cell_index_check(c);
-	rv += cell_comparison_check(c);
+
+	// Comparison's check
+	rv += cell_string_comparison_check(c);
+	rv += cell_value_comparison_check(c);
+	rv += cell_formula_comparison_check(c);
+	rv += cell_generic_comparison_check(c);
 
 	// iterator checks
 	rv += check_row_and_column_class(c);
