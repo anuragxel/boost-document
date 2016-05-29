@@ -86,58 +86,57 @@ namespace boost {
 		// Cell Comparisons
 		//---------------------------------------------
 		//---------------------------------------------
-				inline bool operator<(const std::string& str) {
+				inline bool operator<(const std::string& str) const {
 					return impl().get_string() < str;
 				}
 
-				inline bool operator<=(const std::string& str) {
+				inline bool operator<=(const std::string& str) const {
 					return impl().get_string() <= str;
 				}
 
-				inline bool operator>(const std::string& str) {
+				inline bool operator>(const std::string& str) const {
 					return impl().get_string() > str;
 				}
 
-				inline bool operator>=(const std::string& str) {
+				inline bool operator>=(const std::string& str) const {
 					return impl().get_string() >= str;
 				}
 
-
-				inline bool operator==(const std::string& str) {
+				inline bool operator==(const std::string& str) const {
 					return impl().get_string() == str;
 				}
 
-				inline bool operator!=(const std::string& str) {
+				inline bool operator!=(const std::string& str) const {
 					return impl().get_string() != str;
 				}
 
-				inline bool operator<(double val) {
+				inline bool operator<(double val) const {
 					return impl().get_value() < val;
 				}
 
-				inline bool operator<=(double val) {
+				inline bool operator<=(double val) const {
 					return impl().get_value() <= val;
 				}
 
-				inline bool operator>(double val) {
+				inline bool operator>(double val) const {
 					return impl().get_value() > val;
 				}
 
-				inline bool operator>=(double val) {
+				inline bool operator>=(double val) const {
 					return impl().get_value() >= val;
 				}
 
-				inline bool operator==(double val) {
+				inline bool operator==(double val) const {
 					return impl().get_value() == val;
 				}
 
-				inline bool operator!=(double val) {
+				inline bool operator!=(double val) const {
 					return impl().get_value() != val;
 				}
 
 				//! \brief Compares the cell with another
 				//!        cell
-				inline bool operator==(const const_cell& c) {
+				inline bool operator==(const const_cell& c) const {
 					if(impl().get_content_type() == c.get_content_type()) {
 						switch(impl().get_content_type()) {
 							case boost::cell_content_type::STRING:
@@ -154,24 +153,7 @@ namespace boost {
 					return false;
 				}
 
-				inline bool operator>(const const_cell& c) {
-					if(impl().get_content_type() == c.get_content_type()) {
-						switch(impl().get_content_type()) {
-							case boost::cell_content_type::STRING:
-								return impl().get_string() > c.get_string();
-							case boost::cell_content_type::VALUE:
-								return impl().get_value() > c.get_value();
-							case boost::cell_content_type::FORMULA:
-								return impl().get_formula() > c.get_formula();
-							case boost::cell_content_type::ERROR:
-							case boost::cell_content_type::EMPTY:
-								return false;
-						}
-					}
-					return false;
-				}
-
-				inline bool operator<(const const_cell& c) {
+				inline bool operator<(const const_cell& c) const {
 					if(impl().get_content_type() == c.get_content_type()) {
 						switch(impl().get_content_type()) {
 							case boost::cell_content_type::STRING:
@@ -186,6 +168,20 @@ namespace boost {
 						}
 					}
 					return false;
+				}
+
+				inline bool operator!=(const const_cell& c) const {
+					return !(*this==c);
+				}
+
+				inline bool operator>(const const_cell& c) const {
+					return !(*this<c);
+				}
+				inline bool operator<=(const const_cell& c) const {
+					return (*this<c) || (*this==c);
+				}
+				inline bool operator>=(const const_cell& c) const {
+					return (*this>c) || (*this==c);
 				}
 
 	}; // class const_cell
