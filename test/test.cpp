@@ -437,6 +437,7 @@ int cell_value_comparison_check(boost::document& c) {
 		BOOST_REQUIRE(3.00 != s1[2][2]);
 		BOOST_REQUIRE(s1[2][2] < 3.00);
 		BOOST_REQUIRE(s1[2][2] != 3.00 && s1[2][2] >= 1.00);
+		BOOST_REQUIRE(1.00 < s1[2][2]);
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -459,6 +460,9 @@ int cell_formula_comparison_check(boost::document& c) {
 		BOOST_REQUIRE(s1[2][4] < 3.00);
 		BOOST_REQUIRE(s1[2][4] <= 3.00 && s1[2][4] > 1.00);
 		BOOST_REQUIRE(s1[2][4] == "=C3+D3");
+		BOOST_REQUIRE("=C3+D4" != s1[2][5]);
+		BOOST_REQUIRE("=C3+D3" == s1[2][5]);
+		BOOST_REQUIRE(1.55 <= s1[2][5]);
 		return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -471,6 +475,19 @@ int cell_formula_comparison_check(boost::document& c) {
 
 int cell_generic_comparison_check(boost::document& c) {
 	try {
+		boost::sheet s1 = c["Anurag"];
+		s1[2][2] = 1.00; // C3
+		s1[2][3] = "Vatika"; // D3
+		BOOST_REQUIRE(s1[2][3] != 1.45);
+		BOOST_REQUIRE(s1[2][2] == s1[2][2]);
+		BOOST_REQUIRE(!(s1[2][2] != s1[2][2]));
+		BOOST_REQUIRE(s1[2][2] != s1[2][3]);
+		BOOST_REQUIRE(s1[2][2] <= s1[2][3]);
+		BOOST_REQUIRE(s1[2][3] > s1[2][2]);
+		BOOST_REQUIRE(s1[2][2] == 1.00); // but needn't work every time, because comparison of doubles.
+		// specimen here
+		s1[2][2] = 3.14159;
+		BOOST_REQUIRE(!(3.14159 == s1[2][2]));
 		return 0;
 	}
 	catch(boost::document_exception& e) {
