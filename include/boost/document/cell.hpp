@@ -142,32 +142,38 @@ namespace boost {
 							case boost::cell_content_type::STRING:
 								return impl().get_string() == c.get_string();
 							case boost::cell_content_type::VALUE:
-								return impl().get_value() == c.get_value();
 							case boost::cell_content_type::FORMULA:
-								return impl().get_formula() == c.get_formula();
+							// get the value instead
+							// ie. we evaluate the value derived from the formula
+								return impl().get_value() == c.get_value();
 							case boost::cell_content_type::ERROR:
 							case boost::cell_content_type::EMPTY:
 								return true;
 						}
 					}
-					return false;
+					return false; // if the types are not equal
 				}
 
 				inline bool operator<(const const_cell& c) const {
-					if(impl().get_content_type() == c.get_content_type()) {
-						switch(impl().get_content_type()) {
-							case boost::cell_content_type::STRING:
-								return impl().get_string() < c.get_string();
-							case boost::cell_content_type::VALUE:
-								return impl().get_value() < c.get_value();
-							case boost::cell_content_type::FORMULA:
-								return impl().get_formula() < c.get_formula();
-							case boost::cell_content_type::ERROR:
-							case boost::cell_content_type::EMPTY:
+					// Cells are partially ordered, however we
+					// enforce the EMPTY < VALUE < TEXT constraint
+					// to make all cells comparable.
+					if (impl().get_content_type() != c.get_content_type()) {
+        			return impl().get_content_type() < c.get_content_type();
+    			}
+					switch(impl().get_content_type()) {
+						case boost::cell_content_type::STRING:
+							return impl().get_string() < c.get_string();
+						case boost::cell_content_type::VALUE:
+						case boost::cell_content_type::FORMULA:
+							// get the value instead
+							// ie. we evaluate the value derived from the formula
+							return impl().get_value() < c.get_value();
+						case boost::cell_content_type::ERROR:
+						case boost::cell_content_type::EMPTY:
 								return false;
-						}
 					}
-					return false;
+					return false; // not reacheable
 				}
 
 				inline bool operator!=(const const_cell& c) const {

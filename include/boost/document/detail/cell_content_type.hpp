@@ -7,13 +7,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 namespace boost {
-	
+
 	//! \brief Cell Content Type
 	//!        Currently present in Cell.
 	//!
 	struct cell_content_type {
 		enum type {
-			EMPTY,STRING,VALUE,FORMULA,ERROR
+			EMPTY,VALUE,STRING,FORMULA,ERROR
 		};
 	};
 } // namespace boost
