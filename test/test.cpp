@@ -7,11 +7,13 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
+#include <limits>
+#include <algorithm>
+#include <iterator>
+#include <functional>
 #include <boost/filesystem.hpp>
 #include <boost/document.hpp>
 #include <boost/test/minimal.hpp>
-#include <limits>
-
 
 // Negative Tests
 int negative_try_opening_null() {
@@ -106,11 +108,6 @@ int negative_closing_file_without_permission(boost::document& d) {
 	}
 }
 
-
-
-
-
-
 // Sheet Related Tests.
 int negative_absurd_get_sheet_string(boost::document& d) {
 	try {
@@ -134,10 +131,6 @@ int negative_absurd_get_sheet_index(boost::document& d) {
    }
 }
 
-
-
-
-
 // Cell Related Tests
 int negative_get_invalid_cell(boost::document& d) {
 	try{
@@ -150,13 +143,6 @@ int negative_get_invalid_cell(boost::document& d) {
 		return 0;
    }
 }
-
-
-
-
-
-
-
 
 // Postive Tests
 int create_and_save_document() {
@@ -476,13 +462,17 @@ int cell_generic_comparison_check(boost::document& c) {
 		boost::sheet s1 = c["Anurag"];
 		s1[2][2] = 1.00; // C3
 		s1[2][3] = "Vatika"; // D3
+		s1[2][4] = 1.44;
+		BOOST_REQUIRE(s1[2][2] != s1[2][4]);
+		BOOST_REQUIRE(s1[2][2] < s1[2][4]);
+		BOOST_REQUIRE(s1[2][2] <= s1[2][4]);
+		// different types involved
 		BOOST_REQUIRE(s1[2][3] != 1.45);
 		BOOST_REQUIRE(s1[2][2] == s1[2][2]);
 		BOOST_REQUIRE(!(s1[2][2] != s1[2][2]));
 		BOOST_REQUIRE(s1[2][2] != s1[2][3]);
 		BOOST_REQUIRE(s1[2][2] <= s1[2][3]);
 		BOOST_REQUIRE(s1[2][3] > s1[2][2]);
-		BOOST_REQUIRE(s1[2][2] == 1.00);
 		s1[2][2] = 3.14159;
 		BOOST_REQUIRE(3.14159 == s1[2][2] || 3.14158 <= s1[2][2] || 3.14160 >= s1[2][2]);
 		return 0;
@@ -567,7 +557,6 @@ int row_stl_functionality(boost::document& c) {
 		for (auto it = r.begin(); it != end; ++it) {
 			sum += (*it).get_value();
 		}
-		std::cout << "#sum " << sum << std::endl;
 		BOOST_REQUIRE(sum < 50.1 && sum > 49.9);
 		return 0;
 	}
@@ -575,6 +564,27 @@ int row_stl_functionality(boost::document& c) {
 		std::cerr << "Test row_stl_functionality Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
+	}
+}
+
+int row_sort_test(boost::document& c) {
+	try {
+			boost::sheet s1 = c["Anurag"];
+			boost::row r = s1.get_row(3);
+			std::random_device rnd_device;
+			std::mt19937 mersenne_engine(rnd_device());
+			std::uniform_real_distribution<double> dist(1,50);
+			auto gen = std::bind(dist, mersenne_engine);
+			std::generate(r.begin(), r.begin() + 50, gen);
+			boost::row_iterator end(r.begin() + 50);
+			std::sort(r.begin(), end);
+			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
+			return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
 	}
 }
 
@@ -668,6 +678,7 @@ int test_main(int argc, char *argv[]) {
 
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
+	/*rv += row_sort_test(c);*/
 	rv += row_iterator_caching(c);
 
 	if (rv > 0) {

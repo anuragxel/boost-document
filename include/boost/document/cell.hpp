@@ -13,6 +13,7 @@
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/variant.hpp>
 
 namespace boost {
 
@@ -248,12 +249,61 @@ namespace boost {
 				case boost::cell_content_type::FORMULA:
 					set_formula(c.get_formula());
 					break;
-				case boost::cell_content_type::ERROR:
 				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					reset(); // because the assigned cell is bad, clear the original cell
 					break;
 			}
 			return *this;
 		}
+
+/*
+		// To complete implementation deep-copy of cells
+		// we implement a simple swap function,
+		// swap(a,b) {
+		//    tmp = a;
+		//    a = b;
+		//    b = a;
+		// }
+		void swap(cell& b) {
+				// Essentially
+				// temp = *this
+				boost::variant<double, std::string> temp;
+				boost::cell_content_type::type type = impl().get_content_type();
+				switch(type) {
+					case boost::cell_content_type::STRING:
+						temp = impl().get_string();
+						break;
+					case boost::cell_content_type::VALUE:
+						temp = impl().get_value();
+						break;
+					case boost::cell_content_type::FORMULA:
+						temp = impl().get_formula();
+						break;
+					case boost::cell_content_type::EMPTY:
+					case boost::cell_content_type::ERROR:
+						break;
+				}
+				*this = b;
+				// Essentially
+				// b = temp
+				switch(type) {
+					case boost::cell_content_type::STRING:
+						b = boost::get<std::string>(temp);
+						break;
+					case boost::cell_content_type::VALUE:
+						b = boost::get<double>(temp);
+						break;
+					case boost::cell_content_type::FORMULA:
+						b = boost::get<std::string>(temp);
+						break;
+					case boost::cell_content_type::EMPTY:
+					case boost::cell_content_type::ERROR:
+						b.reset();
+						break;
+				}
+		}
+*/
 
 		//! \brief The overloaded = operator sets a string
 		//!        in the cell.
@@ -377,6 +427,20 @@ namespace boost {
 		return (lhs<rhs) || (lhs==rhs);
 	}
 
+	/*inline void swap(cell& lhs, cell& rhs) {
+			std::cout << "outside swap" << std::endl;
+			lhs.swap(rhs);
+	}*/
+
 } // namespace boost
 
+/*
+namespace std {
+		template<>
+		inline void swap<boost::cell>(boost::cell& lhs, boost::cell& rhs) {
+				cout << "special swap" << endl;
+				lhs.swap(rhs);
+		}
+} // namespace std
+*/
 #endif
