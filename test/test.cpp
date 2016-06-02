@@ -8,11 +8,9 @@
 
 #include <iostream>
 #include <boost/filesystem.hpp>
-
 #include <boost/document.hpp>
-
 #include <boost/test/minimal.hpp>
-
+#include <limits>
 
 
 // Negative Tests
@@ -484,10 +482,9 @@ int cell_generic_comparison_check(boost::document& c) {
 		BOOST_REQUIRE(s1[2][2] != s1[2][3]);
 		BOOST_REQUIRE(s1[2][2] <= s1[2][3]);
 		BOOST_REQUIRE(s1[2][3] > s1[2][2]);
-		BOOST_REQUIRE(s1[2][2] == 1.00); // but needn't work every time, because comparison of doubles.
-		// specimen here
+		BOOST_REQUIRE(s1[2][2] == 1.00);
 		s1[2][2] = 3.14159;
-		BOOST_REQUIRE(!(3.14159 == s1[2][2]));
+		BOOST_REQUIRE(3.14159 == s1[2][2] || 3.14158 <= s1[2][2] || 3.14160 >= s1[2][2]);
 		return 0;
 	}
 	catch(boost::document_exception& e) {
