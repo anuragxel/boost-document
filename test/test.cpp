@@ -567,8 +567,47 @@ int row_stl_functionality(boost::document& c) {
 	}
 }
 
-int row_sort_test(boost::document& c) {
+int cell_swap_test(boost::document& c) {
 	try {
+		using std::swap;
+		boost::sheet s1 = c["Anurag"];
+		s1[2][2] = "Anurag";
+		s1[2][3] = "Vatika";
+		swap(s1[2][2], s1[2][3]);
+		BOOST_REQUIRE(s1[2][3] == "Anurag" && s1[2][2] == "Vatika" && s1[2][3].get_content_type() == boost::cell_content_type::STRING);
+		s1[2][2] = "=C2+D2";
+		s1[2][3] = "=C2+D3";
+		swap(s1[2][2], s1[2][3]);
+		BOOST_REQUIRE(s1[2][3] == "=C2+D2" && s1[2][2] == "=C2+D3" && s1[2][2].get_content_type() == boost::cell_content_type::FORMULA);
+		s1[2][2] = "=C2+D2";
+		s1[2][3] = "Vatika";
+		swap(s1[2][2], s1[2][3]);
+		BOOST_REQUIRE(s1[2][2] == "Vatika" && s1[2][3] == "=C2+D2" &&
+					s1[2][3].get_content_type() == boost::cell_content_type::FORMULA &&
+				  s1[2][2].get_content_type() == boost::cell_content_type::STRING);
+		s1[2][2] = 1.23;
+		s1[2][3] = 2.13;
+		swap(s1[2][2], s1[2][3]);
+		BOOST_REQUIRE(s1[2][3] <= 1.24 && s1[2][3] >= 1.22
+									&& s1[2][2] >= 2.12 && s1[2][2] <= 2.14);
+		s1[2][3] = 2.13;
+		s1[2][2].reset();
+		swap(s1[2][3],s1[2][2]);
+		BOOST_REQUIRE(s1[2][2] >= 2.12 && s1[2][2] <= 2.14 &&
+						s1[2][3].get_content_type() == boost::cell_content_type::EMPTY &&
+						s1[2][2].get_content_type() == boost::cell_content_type::VALUE);
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test cell_swap_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
+	}
+}
+
+int row_double_sort_test(boost::document& c) {
+	try {
+			using std::swap;
 			boost::sheet s1 = c["Anurag"];
 			boost::row r = s1.get_row(3);
 			std::random_device rnd_device;
@@ -587,6 +626,32 @@ int row_sort_test(boost::document& c) {
 			return 1;
 	}
 }
+
+int row_string_sort_test(boost::document& c) {
+	try {
+			using std::swap;
+			boost::sheet s1 = c["Anurag"];
+			boost::row r = s1.get_row(3);
+			std::random_device rnd_device;
+			std::mt19937 mersenne_engine(rnd_device());
+			std::uniform_real_distribution<double> dist(1,50);
+			auto gen = std::bind(dist, mersenne_engine);
+			std::generate(r.begin(), r.begin() + 50, gen);
+			for(int i = 0; i < 50; i++) {
+					r[i] = std::to_string(r[i].get_value());
+			}
+			boost::row_iterator end(r.begin() + 50);
+			std::sort(r.begin(), end);
+			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
+			return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
+	}
+}
+
 
 int row_iterator_caching(boost::document& c) {
 	try {
@@ -678,7 +743,9 @@ int test_main(int argc, char *argv[]) {
 
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
-	/*rv += row_sort_test(c);*/
+	rv += cell_swap_test(c);
+	/*rv += row_double_sort_test(c);
+	rv += row_string_sort_test(c);*/
 	rv += row_iterator_caching(c);
 
 	if (rv > 0) {

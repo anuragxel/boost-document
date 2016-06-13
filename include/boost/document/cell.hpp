@@ -15,6 +15,9 @@
 #include <boost/make_shared.hpp>
 #include <boost/variant.hpp>
 
+#include <iostream>
+#include <typeinfo>
+
 namespace boost {
 
 	class const_cell
@@ -284,54 +287,6 @@ namespace boost {
 			return *this;
 		}
 
-/*
-		// To complete implementation deep-copy of cells
-		// we implement a simple swap function,
-		// swap(a,b) {
-		//    tmp = a;
-		//    a = b;
-		//    b = a;
-		// }
-		void swap(cell& b) {
-				// Essentially
-				// temp = *this
-				boost::variant<double, std::string> temp;
-				boost::cell_content_type::type type = impl().get_content_type();
-				switch(type) {
-					case boost::cell_content_type::STRING:
-						temp = impl().get_string();
-						break;
-					case boost::cell_content_type::VALUE:
-						temp = impl().get_value();
-						break;
-					case boost::cell_content_type::FORMULA:
-						temp = impl().get_formula();
-						break;
-					case boost::cell_content_type::EMPTY:
-					case boost::cell_content_type::ERROR:
-						break;
-				}
-				*this = b;
-				// Essentially
-				// b = temp
-				switch(type) {
-					case boost::cell_content_type::STRING:
-						b = boost::get<std::string>(temp);
-						break;
-					case boost::cell_content_type::VALUE:
-						b = boost::get<double>(temp);
-						break;
-					case boost::cell_content_type::FORMULA:
-						b = boost::get<std::string>(temp);
-						break;
-					case boost::cell_content_type::EMPTY:
-					case boost::cell_content_type::ERROR:
-						b.reset();
-						break;
-				}
-		}
-*/
-
 		//! \brief The overloaded = operator sets a string
 		//!        in the cell.
 		cell& operator=(const std::string& str) {
@@ -454,20 +409,54 @@ namespace boost {
 		return !(lhs>rhs);
 	}
 
-	/*inline void swap(cell& lhs, cell& rhs) {
-			std::cout << "outside swap" << std::endl;
-			lhs.swap(rhs);
-	}*/
+	inline boost::variant<double, std::string> cell_to_variant(const boost::cell& a) {
+		boost::variant<double, std::string> temp;
+		switch(a.get_content_type()) {
+			case boost::cell_content_type::STRING:
+				temp = a.get_string();
+				break;
+			case boost::cell_content_type::VALUE:
+				temp = a.get_value();
+				break;
+			case boost::cell_content_type::FORMULA:
+				temp = a.get_formula();
+				break;
+			case boost::cell_content_type::EMPTY:
+			case boost::cell_content_type::ERROR:
+				break;
+		}
+		return temp;
+	}
+
+	inline void variant_to_cell(boost::cell& a,
+											 const boost::variant<double, std::string>& var,
+											 const boost::cell_content_type::type& t) {
+			switch(t) {
+				case boost::cell_content_type::STRING:
+					a = boost::get<std::string>(var);
+					break;
+				case boost::cell_content_type::VALUE:
+					a = boost::get<double>(var);
+					break;
+				case boost::cell_content_type::FORMULA:
+					a = boost::get<std::string>(var);
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					a.reset();
+					break;
+			}
+	}
+
+	inline void swap(cell lhs, cell rhs) {
+			boost::cell_content_type::type ltype = lhs.get_content_type();
+			boost::cell_content_type::type rtype = rhs.get_content_type();
+			boost::variant<double, std::string> lvalue = cell_to_variant(lhs);
+			boost::variant<double, std::string> rvalue = cell_to_variant(rhs);
+			variant_to_cell(rhs, lvalue, ltype);
+			variant_to_cell(lhs, rvalue, rtype);
+	}
 
 } // namespace boost
 
-/*
-namespace std {
-		template<>
-		inline void swap<boost::cell>(boost::cell& lhs, boost::cell& rhs) {
-				cout << "special swap" << endl;
-				lhs.swap(rhs);
-		}
-} // namespace std
-*/
 #endif
