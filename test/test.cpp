@@ -605,6 +605,30 @@ int cell_swap_test(boost::document& c) {
 	}
 }
 
+
+template<typename T>
+void insertion_sort(T& r, int len) {
+		for(int i=0; i<len; i++) {
+				int j = i;
+				while(j > 0 and r[j] < r[j-1]) {
+						swap(r[j],r[j-1]);
+						j--;
+				}
+		}
+}
+
+// Iterator based version
+/*template<typename T>
+void insertion_sort_iter(T& begin, T& end) {
+		for(int it=begin; it!=end; it++) {
+				int jt = it;
+				while(jt >  and r[j] < r[j-1]) {
+						swap(r[j],r[j-1]);
+						j--;
+				}
+		}
+}*/
+
 int row_double_sort_test(boost::document& c) {
 	try {
 			using std::swap;
@@ -612,11 +636,16 @@ int row_double_sort_test(boost::document& c) {
 			boost::row r = s1.get_row(3);
 			std::random_device rnd_device;
 			std::mt19937 mersenne_engine(rnd_device());
-			std::uniform_real_distribution<double> dist(1,50);
+			std::uniform_real_distribution<double> dist(1,5);
+			int len = 50;
 			auto gen = std::bind(dist, mersenne_engine);
-			std::generate(r.begin(), r.begin() + 50, gen);
-			boost::row_iterator end(r.begin() + 50);
-			std::sort(r.begin(), end);
+			std::generate(r.begin(), r.begin() + len, gen);
+			boost::row_iterator end(r.begin() + len);
+			// A simple insertion sort implementation
+			insertion_sort(r, len);
+			// std::stable_sort(r.begin(), end);
+			// std::sort(r.begin(), end);
+			std::cout << std::endl;
 			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
 			return 0;
 	}
@@ -636,17 +665,46 @@ int row_string_sort_test(boost::document& c) {
 			std::mt19937 mersenne_engine(rnd_device());
 			std::uniform_real_distribution<double> dist(1,50);
 			auto gen = std::bind(dist, mersenne_engine);
-			std::generate(r.begin(), r.begin() + 50, gen);
-			for(int i = 0; i < 50; i++) {
-					r[i] = std::to_string(r[i].get_value());
-			}
-			boost::row_iterator end(r.begin() + 50);
-			std::sort(r.begin(), end);
+			int len = 50;
+			std::generate(r.begin(), r.begin() + len, gen);
+			boost::row_iterator end(r.begin() + len);
+			// A simple insertion sort implementation
+			insertion_sort(r, len);
+			// std::sort(r.begin(), end);
+			// std::stable_sort(r.begin(), end);
 			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
 			return 0;
 	}
 	catch(boost::document_exception& e) {
 			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
+	}
+}
+
+int column_heterogenous_sort_test(boost::document& c) {
+	try {
+			using std::swap;
+			boost::sheet s1 = c["Anurag"];
+			boost::column cl = s1.get_column(3);
+			int len = 6;
+			cl[0] = "0qweqwe";
+			cl[1] = 100.1;
+			cl[2] = "1HelloWorld";
+			cl[3].reset();
+			cl[4] = 1.2;
+			cl[5] = 3132.0;
+			cl[6] = 0.0;
+			boost::column_iterator end(cl.begin() + len);
+			// A simple insertion sort implementation
+			insertion_sort(cl, len);
+			// std::sort(r.begin(), end);
+			// std::stable_sort(r.begin(), end);
+			BOOST_REQUIRE(std::is_sorted(cl.begin(),end));
+			return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test column_heterogenous_sort_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -744,8 +802,9 @@ int test_main(int argc, char *argv[]) {
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
 	rv += cell_swap_test(c);
-	/*rv += row_double_sort_test(c);
-	rv += row_string_sort_test(c);*/
+	rv += row_double_sort_test(c);
+	rv += row_string_sort_test(c);
+	rv += column_heterogenous_sort_test(c);
 	rv += row_iterator_caching(c);
 
 	if (rv > 0) {

@@ -20,6 +20,8 @@
 
 namespace boost {
 
+	class cell;
+
 	class const_cell
 	{
 	protected:
@@ -31,6 +33,8 @@ namespace boost {
 		const cell_interface& impl() const {
 			return *pimpl_;
 		}
+
+		friend class cell;
 
 	public:
 		//! The default constructor which takes in
@@ -221,22 +225,7 @@ namespace boost {
 				}
 
 				inline bool operator>(const const_cell& c) const {
-					if (impl().get_content_type() != c.get_content_type()) {
-        			return impl().get_content_type() > c.get_content_type();
-    			}
-					switch(impl().get_content_type()) {
-						case boost::cell_content_type::STRING:
-							return impl().get_string() > c.get_string();
-						case boost::cell_content_type::VALUE:
-						case boost::cell_content_type::FORMULA:
-							// get the value instead
-							// ie. we evaluate the value derived from the formula
-							return impl().get_value() > c.get_value();
-						case boost::cell_content_type::ERROR:
-						case boost::cell_content_type::EMPTY:
-								return false;
-					}
-					return false; // not reacheable
+					return (c<*this);
 				}
 
 				inline bool operator<=(const const_cell& c) const {
@@ -265,10 +254,37 @@ namespace boost {
 	 	: const_cell(pimpl)
  		{}
 
+		cell(const cell& c)
+		: const_cell(c.pimpl_)
+		{}
+
+		cell(const const_cell& c)
+		: const_cell(c.pimpl_)
+		{}
+
 		//! \brief The assignment operator of the cell class.
 		//!        Makes all operations non shallow
 		//!        with respect to the internal cells.
 		cell& operator=(const cell& c) {
+			switch(c.get_content_type()) {
+				case boost::cell_content_type::STRING:
+					set_string(c.get_string());
+					break;
+				case boost::cell_content_type::VALUE:
+					set_value(c.get_value());
+					break;
+				case boost::cell_content_type::FORMULA:
+					set_formula(c.get_formula());
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					reset(); // because the assigned cell is bad, clear the original cell
+					break;
+			}
+			return *this;
+		}
+
+		cell& operator=(const const_cell& c) {
 			switch(c.get_content_type()) {
 				case boost::cell_content_type::STRING:
 					set_string(c.get_string());
