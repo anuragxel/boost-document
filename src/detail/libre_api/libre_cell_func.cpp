@@ -93,8 +93,8 @@ void set_cell_value(Reference< XCell > xCell, const std::string& str) {
 //!
 void reset(Reference< XCell > xCell) {
     try {
-	Reference< XText > xText(xCell, UNO_QUERY);
-	xText->setString(OUString());
+	      Reference< XText > xText(xCell, UNO_QUERY);
+	      xText->setString(OUString());
     }
     catch( Exception &e ){
         throw_document_exception(e);
@@ -164,6 +164,30 @@ double get_value(Reference < XCell > xCell) {
     catch( Exception &e ){
         throw_document_exception(e);
     }
+}
+
+template<typename T> void set_cell_property(Reference < XCell > xCell,const OUString& prop, const T& val) {
+  try {
+    Reference < XPropertySet > xCellProps(xCell, UNO_QUERY);
+    Any propVal;
+    propVal <<= val;
+    xCellProps->setPropertyValue(prop, propVal);
+  }
+  catch( Exception &e ){
+      throw_document_exception(e);
+  }
+}
+
+void set_cell_style(Reference < XCell > xCell, const std::string& str) {
+    set_cell_property(xCell, OUString::createFromAscii("CellStyle"), OUString::createFromAscii(str.c_str()));
+}
+
+void set_cell_background_color(Reference < XCell > xCell, int val) {
+    set_cell_property(xCell, OUString::createFromAscii("CellBackColor"), val);
+}
+
+void set_cell_foreground_color(Reference < XCell > xCell, int val) {
+    set_cell_property(xCell, OUString::createFromAscii("CharColor"), val);
 }
 
 }}}

@@ -40,6 +40,22 @@ class libre_cell : public cell_interface {
 		boost::doc::libre_cell_func::set_cell_value(this->xCell_, x);
 	}
 
+	void reset() {
+		boost::doc::libre_cell_func::reset(this->xCell_);
+	}
+
+	void set_style(const std::string& str) {
+		boost::doc::libre_cell_func::set_cell_style(this->xCell_, str);
+	}
+
+	void set_foreground_color(int x) {
+		boost::doc::libre_cell_func::set_cell_foreground_color(this->xCell_, x);
+	}
+
+	void set_background_color(int x) {
+		boost::doc::libre_cell_func::set_cell_background_color(this->xCell_, x);
+	}
+
 	boost::cell_content_type::type get_content_type() const {
 		return boost::doc::libre_cell_func::get_content_type(this->xCell_);
 	}
@@ -62,10 +78,6 @@ class libre_cell : public cell_interface {
 			return true;
 		}
 		return false;
-	}
-
-	void reset() {
-		boost::doc::libre_cell_func::reset(this->xCell_);
 	}
 
 	std::size_t get_row_index() const {

@@ -33,5 +33,9 @@ double get_value(::com::sun::star::uno::Reference < ::com::sun::star::table::XCe
 
 boost::cell_content_type::type get_content_type(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell);
 
+void set_cell_style(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, const std::string& str);
+void set_cell_background_color(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, int val);
+void set_cell_foreground_color(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, int val);
+
 }}}
 #endif

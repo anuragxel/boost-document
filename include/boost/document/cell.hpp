@@ -341,6 +341,18 @@ namespace boost {
 			impl().reset();
 		}
 
+		void set_style(const std::string& str) {
+			impl().set_style(str);
+		}
+
+		void set_foreground_color(int color) {
+			impl().set_foreground_color(color);
+		}
+
+		void set_background_color(int color) {
+			impl().set_background_color(color);
+		}
+
 		//! \brief Default Destructor.
 		//!        Does nothing.
 		~cell() {
