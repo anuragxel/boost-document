@@ -163,7 +163,6 @@ int create_and_save_document() {
 
 int exporting_to_pdf(boost::document& b) {
 	try {
-
 		b.export_document(boost::document_file_format::PDF);
 		return 0;
 	}
@@ -324,6 +323,7 @@ int cell_type_check(boost::document& c) {
 		BOOST_REQUIRE(s1[1][1].get_content_type() == boost::cell_content_type::STRING);
 		s1[1][2] = 3.14;
 		BOOST_REQUIRE(s1[1][2].get_content_type() == boost::cell_content_type::VALUE);
+		s1[3][4].reset();
 		BOOST_REQUIRE(s1[3][4].empty() == true);
 		return 0;
 	}
@@ -710,7 +710,6 @@ int column_heterogenous_sort_test(boost::document& c) {
 	}
 }
 
-
 int row_iterator_caching(boost::document& c) {
 	try {
 		boost::sheet s1 = c["Anurag"];
@@ -732,6 +731,22 @@ int row_iterator_caching(boost::document& c) {
 	}
 }
 
+int cell_color_test(boost::document& c) {
+	try {
+		boost::sheet s1 = c["Anurag"];
+		boost::cell c1 = s1[0][0];
+		c1.set_foreground_color(0x800000);
+		c1.set_background_color(0x00800b);
+		c1.set_style("Heading1");
+		c.export_document(boost::document_file_format::PDF);
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test row_iterator_caching Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
 
 int test_main(int argc, char *argv[]) {
 //#ifdef BOOST_DOCUMENT_HAS_MS
@@ -806,6 +821,7 @@ int test_main(int argc, char *argv[]) {
 	rv += row_string_sort_test(c);
 	rv += column_heterogenous_sort_test(c);
 	rv += row_iterator_caching(c);
+	rv += cell_color_test(c);
 
 	if (rv > 0) {
 		std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;
