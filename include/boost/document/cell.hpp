@@ -9,6 +9,7 @@
 
 #include <boost/document/detail/cell_interface.hpp>
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
 
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
@@ -351,6 +352,18 @@ namespace boost {
 
 		void set_background_color(int color) {
 			impl().set_background_color(color);
+		}
+
+		void set_font_size(double val) {
+			impl().set_font_size(val);
+		}
+
+		void set_horizontal_alignment(boost::cell_horizontal_alignment::type t) {
+			impl().set_horizontal_alignment(t);
+		}
+
+		void set_vertical_alignment(boost::cell_vertical_alignment::type t) {
+			impl().set_vertical_alignment(t);
 		}
 
 		//! \brief Default Destructor.

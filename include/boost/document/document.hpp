@@ -68,6 +68,14 @@ namespace boost {
 		void export_document(boost::document_file_format::type format = boost::document_file_format::PDF) {
 			pimpl_->export_as(format);
 		}
+
+		//! \brief Exports document using Calc/Excel given in
+		//!		the file path and the file format. Default
+		//!		format is PDF.
+		void export_document(const boost::filesystem::path& path, boost::document_file_format::type format = boost::document_file_format::PDF) {
+			pimpl_->export_as(format);
+		}
+
 		//! \brief Inserts a sheet in the document
 		//!		and returns the sheet instance.
 		boost::sheet insert_sheet(const std::string& str) {

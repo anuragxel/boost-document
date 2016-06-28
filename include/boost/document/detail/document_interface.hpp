@@ -22,6 +22,7 @@ namespace boost {
 		virtual void save() = 0;
 		virtual void save_as(const boost::filesystem::path& path) = 0;
 		virtual void export_as(boost::document_file_format::type format) = 0;
+		virtual void export_as(const boost::filesystem::path& path, boost::document_file_format::type format) = 0;
 		virtual boost::sheet get_sheet(const std::string& sheet_name) = 0;
 		virtual boost::sheet get_sheet_unchecked(const std::string& sheet_name) = 0;
 		virtual boost::sheet get_sheet(std::size_t index) = 0;

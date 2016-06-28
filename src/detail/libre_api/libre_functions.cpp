@@ -227,7 +227,8 @@ Reference< XComponent > get_xComponent_from_path(
 //!        format is PDF.
 void export_libre(const boost::filesystem::path& inputPath,
                                         boost::document_file_format::type format,
-                                        Reference < XComponent > xComponent) {
+                                        Reference < XComponent > xComponent,
+                                      const boost::filesystem::path& outPath) {
     if( !xComponent.is() ) {
         boost::throw_exception(document_exception(
             "Error: Unable to load Document for exporting. Check Permissions."));
@@ -236,7 +237,7 @@ void export_libre(const boost::filesystem::path& inputPath,
     // same location as the input file path
     // And the filter. Right now works with docs
     // and calc.
-    boost::filesystem::path outputPath(inputPath);
+    boost::filesystem::path outputPath(outPath);
     std::string filter;
     if(format == boost::document_file_format::PDF) {
         outputPath.replace_extension(".pdf");

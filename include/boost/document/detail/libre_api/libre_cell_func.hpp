@@ -15,6 +15,7 @@
 #include <com/sun/star/table/XCell.hpp>
 
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
 
 
 namespace boost { namespace doc { namespace libre_cell_func {
@@ -36,6 +37,9 @@ boost::cell_content_type::type get_content_type(::com::sun::star::uno::Reference
 void set_cell_style(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, const std::string& str);
 void set_cell_background_color(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, int val);
 void set_cell_foreground_color(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, int val);
+void set_cell_font_size(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, double val);
+void set_cell_horizontal_alignment(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, boost::cell_horizontal_alignment::type t);
+void set_cell_vertical_alignment(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, boost::cell_vertical_alignment::type t);
 
 }}}
 #endif

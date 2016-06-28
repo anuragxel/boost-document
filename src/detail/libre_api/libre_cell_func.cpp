@@ -29,10 +29,14 @@
 
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
+#include <com/sun/star/table/CellHoriJustify.hpp>
+#include <com/sun/star/table/CellVertJustify.hpp>
 
 #include <com/sun/star/text/XText.hpp>
 
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 
 
@@ -153,7 +157,6 @@ std::string get_formula(Reference < XCell > xCell) {
     }
 }
 
-
 //! \fn Gets the float value of the cell if
 //!     it is present.
 //!
@@ -188,6 +191,40 @@ void set_cell_background_color(Reference < XCell > xCell, int val) {
 
 void set_cell_foreground_color(Reference < XCell > xCell, int val) {
     set_cell_property(xCell, OUString::createFromAscii("CharColor"), val);
+}
+
+void set_cell_font_size(Reference < XCell > xCell, double val) {
+    set_cell_property(xCell, OUString::createFromAscii("CharHeight"), (float)val);
+    set_cell_property(xCell, OUString::createFromAscii("CharHeightAsian"), (float)val);
+    set_cell_property(xCell, OUString::createFromAscii("CharHeightComplex"), (float)val);
+}
+
+void set_cell_horizontal_alignment(Reference < XCell > xCell, boost::cell_horizontal_alignment::type t) {
+    switch(t) {
+    case boost::cell_horizontal_alignment::LEFT :
+        set_cell_property(xCell, OUString::createFromAscii("HoriJustify"), CellHoriJustify_LEFT);
+        break;
+    case boost::cell_horizontal_alignment::CENTER :
+        set_cell_property(xCell, OUString::createFromAscii("HoriJustify"), CellHoriJustify_CENTER);
+        break;
+    case boost::cell_horizontal_alignment::RIGHT :
+        set_cell_property(xCell, OUString::createFromAscii("HoriJustify"), CellHoriJustify_RIGHT);
+        break;
+    }
+}
+
+void set_cell_vertical_alignment(Reference < XCell > xCell, boost::cell_vertical_alignment::type t) {
+    switch(t) {
+    case boost::cell_vertical_alignment::TOP :
+        set_cell_property(xCell, OUString::createFromAscii("VertJustify"), CellVertJustify_TOP);
+        break;
+    case boost::cell_vertical_alignment::CENTER :
+        set_cell_property(xCell, OUString::createFromAscii("VertJustify"), CellVertJustify_CENTER);
+        break;
+    case boost::cell_vertical_alignment::BOTTOM :
+        set_cell_property(xCell, OUString::createFromAscii("VertJustify"), CellVertJustify_BOTTOM);
+        break;
+    }
 }
 
 }}}

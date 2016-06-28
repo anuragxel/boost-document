@@ -10,7 +10,9 @@
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>
+
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
 
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
@@ -54,6 +56,18 @@ class libre_cell : public cell_interface {
 
 	void set_background_color(int x) {
 		boost::doc::libre_cell_func::set_cell_background_color(this->xCell_, x);
+	}
+
+	void set_font_size(double x) {
+		boost::doc::libre_cell_func::set_cell_font_size(this->xCell_, x);
+	}
+
+	void set_horizontal_alignment(boost::cell_horizontal_alignment::type t) {
+		boost::doc::libre_cell_func::set_cell_horizontal_alignment(this->xCell_, t);
+	}
+
+	void set_vertical_alignment(boost::cell_vertical_alignment::type t) {
+		boost::doc::libre_cell_func::set_cell_vertical_alignment(this->xCell_, t);
 	}
 
 	boost::cell_content_type::type get_content_type() const {
