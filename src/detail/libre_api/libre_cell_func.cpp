@@ -169,16 +169,17 @@ double get_value(Reference < XCell > xCell) {
     }
 }
 
-template<typename T> void set_cell_property(Reference < XCell > xCell,const OUString& prop, const T& val) {
-  try {
-    Reference < XPropertySet > xCellProps(xCell, UNO_QUERY);
-    Any propVal;
-    propVal <<= val;
-    xCellProps->setPropertyValue(prop, propVal);
-  }
-  catch( Exception &e ){
-      throw_document_exception(e);
-  }
+template<typename T>
+void set_cell_property(Reference < XCell > xCell,const OUString& prop, const T& val) {
+    try {
+        Reference < XPropertySet > xCellProps(xCell, UNO_QUERY);
+        Any propVal;
+        propVal <<= val;
+        xCellProps->setPropertyValue(prop, propVal);
+    }
+    catch( Exception &e ){
+        throw_document_exception(e);
+    }
 }
 
 void set_cell_style(Reference < XCell > xCell, const std::string& str) {

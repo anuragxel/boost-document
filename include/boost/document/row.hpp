@@ -24,7 +24,7 @@ namespace boost {
 	template<typename Value> class row_iter;
 
 	typedef row_iter<boost::cell> row_iterator;
-	typedef row_iter<const boost::cell> const_row_iterator;
+	typedef row_iter<boost::const_cell> const_row_iterator;
 
 	class row {
 		protected:
@@ -56,7 +56,8 @@ namespace boost {
 
 	};
 
-	template<typename Cell> class row_iter: public boost::iterator_facade<
+	template<typename Cell>
+	class row_iter: public boost::iterator_facade<
 		row_iter<Cell>,
 		Cell,
 		boost::random_access_traversal_tag

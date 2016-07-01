@@ -26,7 +26,7 @@ namespace boost {
 
 	typedef column_iter<boost::cell> column_iterator;
 
-	typedef column_iter<const boost::cell> const_column_iterator;
+	typedef column_iter<boost::const_cell> const_column_iterator;
 
 	//! \brief This is the class which
 	//! exposes a column of cells to work with.
@@ -62,7 +62,8 @@ namespace boost {
 
 	};
 
-	template<typename Cell> class column_iter: public boost::iterator_facade<
+	template<typename Cell>
+	class column_iter: public boost::iterator_facade<
 		column_iter<Cell>,
 		Cell,
 		boost::random_access_traversal_tag
