@@ -10,6 +10,8 @@
 #include <boost/document/detail/cell_interface.hpp>
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_data.hpp>
+
 
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
@@ -304,6 +306,25 @@ namespace boost {
 			return *this;
 		}
 
+		cell& operator=(const boost::cell_data& cdata) {
+			switch(cdata.type) {
+				case boost::cell_content_type::STRING:
+					set_string(boost::get<std::string>(cdata.value));
+					break;
+				case boost::cell_content_type::VALUE:
+					set_value(boost::get<double>(cdata.value));
+					break;
+				case boost::cell_content_type::FORMULA:
+					set_formula(boost::get<std::string>(cdata.value));
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					reset(); // because the assigned cell is bad, clear the original cell
+					break;
+			}
+			return *this;
+		}
+
 		//! \brief The overloaded = operator sets a string
 		//!        in the cell.
 		cell& operator=(const std::string& str) {
@@ -496,6 +517,68 @@ namespace boost {
 			boost::variant<double, std::string> rvalue = cell_to_variant(rhs);
 			variant_to_cell(rhs, lvalue, ltype);
 			variant_to_cell(lhs, rvalue, rtype);
+	}
+
+	cell_data::cell_data(cell const& c) {
+			type = c.get_content_type();
+			switch(type) {
+				case boost::cell_content_type::STRING:
+					value = c.get_string();
+					break;
+				case boost::cell_content_type::VALUE:
+					value = c.get_value();
+					break;
+				case boost::cell_content_type::FORMULA:
+					value = c.get_formula();
+					formula_val = c.get_value();
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					break;
+			}
+	}
+
+	bool operator<(cell_data lhs, cell rhs) {
+		// Cells are partially ordered, however we
+		// enforce the EMPTY < VALUE < TEXT constraint
+		// to make all cells comparable.
+		if (lhs.type != rhs.get_content_type()) {
+				return lhs.type < rhs.get_content_type();
+		}
+		switch(lhs.type) {
+			case boost::cell_content_type::STRING:
+				return boost::get<std::string>(lhs.value) < rhs.get_string();
+			case boost::cell_content_type::VALUE:
+				return boost::get<double>(lhs.value) < rhs.get_value();
+			case boost::cell_content_type::FORMULA:
+				// get the value instead
+				// ie. we evaluate the value derived from the formula
+				return lhs.formula_val < rhs.get_value();
+			case boost::cell_content_type::ERROR:
+			case boost::cell_content_type::EMPTY:
+					return false;
+		}
+		return false; // not reacheable
+	}
+
+	bool operator<(cell lhs, cell_data rhs) {
+		if (lhs.get_content_type() != rhs.type) {
+				return lhs.get_content_type() < rhs.type;
+		}
+		switch(lhs.get_content_type()) {
+			case boost::cell_content_type::STRING:
+				return lhs.get_string() < boost::get<std::string>(rhs.value);
+			case boost::cell_content_type::VALUE:
+				return lhs.get_value() < boost::get<double>(rhs.value);
+			case boost::cell_content_type::FORMULA:
+				// get the value instead
+				// ie. we evaluate the value derived from the formula
+				return lhs.get_value() < rhs.formula_val;
+			case boost::cell_content_type::ERROR:
+			case boost::cell_content_type::EMPTY:
+					return false;
+		}
+		return false; // not reacheable
 	}
 
 } // namespace boost
