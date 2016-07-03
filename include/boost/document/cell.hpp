@@ -519,7 +519,7 @@ namespace boost {
 			variant_to_cell(lhs, rvalue, rtype);
 	}
 
-	cell_data::cell_data(cell const& c) {
+	cell_data::cell_data(const cell& c) {
 			type = c.get_content_type();
 			switch(type) {
 				case boost::cell_content_type::STRING:
@@ -538,10 +538,7 @@ namespace boost {
 			}
 	}
 
-	bool operator<(cell_data lhs, cell rhs) {
-		// Cells are partially ordered, however we
-		// enforce the EMPTY < VALUE < TEXT constraint
-		// to make all cells comparable.
+	bool operator<(const cell_data& lhs, const cell& rhs) {
 		if (lhs.type != rhs.get_content_type()) {
 				return lhs.type < rhs.get_content_type();
 		}
@@ -551,8 +548,6 @@ namespace boost {
 			case boost::cell_content_type::VALUE:
 				return boost::get<double>(lhs.value) < rhs.get_value();
 			case boost::cell_content_type::FORMULA:
-				// get the value instead
-				// ie. we evaluate the value derived from the formula
 				return lhs.formula_val < rhs.get_value();
 			case boost::cell_content_type::ERROR:
 			case boost::cell_content_type::EMPTY:
@@ -561,7 +556,7 @@ namespace boost {
 		return false; // not reacheable
 	}
 
-	bool operator<(cell lhs, cell_data rhs) {
+	bool operator<(const cell& lhs, const cell_data& rhs) {
 		if (lhs.get_content_type() != rhs.type) {
 				return lhs.get_content_type() < rhs.type;
 		}
@@ -571,14 +566,65 @@ namespace boost {
 			case boost::cell_content_type::VALUE:
 				return lhs.get_value() < boost::get<double>(rhs.value);
 			case boost::cell_content_type::FORMULA:
-				// get the value instead
-				// ie. we evaluate the value derived from the formula
 				return lhs.get_value() < rhs.formula_val;
 			case boost::cell_content_type::ERROR:
 			case boost::cell_content_type::EMPTY:
 					return false;
 		}
 		return false; // not reacheable
+	}
+
+	bool operator==(const cell_data& lhs, const cell& rhs) {
+		if (lhs.type == rhs.get_content_type()) {
+			switch(lhs.type) {
+				case boost::cell_content_type::STRING:
+					return boost::get<std::string>(lhs.value) == rhs.get_string();
+				case boost::cell_content_type::VALUE:
+					return boost::get<double>(lhs.value) == rhs.get_value();
+				case boost::cell_content_type::FORMULA:
+					return lhs.formula_val == rhs.get_value();
+				case boost::cell_content_type::ERROR:
+				case boost::cell_content_type::EMPTY:
+					return true;
+			}
+		}
+		return false;
+	}
+
+	bool operator==(const cell& lhs, const cell_data& rhs) {
+			return rhs==lhs;
+	}
+
+	inline bool operator!=(const cell& lhs, const cell_data& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(const cell& lhs, const cell_data& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(const cell& lhs, const cell_data& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(const cell& lhs, const cell_data& rhs) {
+		return !(lhs>rhs);
+	}
+
+	inline bool operator!=(const cell_data& lhs, const cell& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(const cell_data& lhs, const cell& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(const cell_data& lhs, const cell& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(const cell_data& lhs, const cell& rhs) {
+		return !(lhs>rhs);
 	}
 
 } // namespace boost
