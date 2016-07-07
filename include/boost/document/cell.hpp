@@ -116,10 +116,6 @@ namespace boost {
 					return impl().get_string() == str;
 				}
 
-				inline bool operator!=(const std::string& str) const {
-					return !(*this==str);
-				}
-
 				inline bool operator>(const std::string& str) const {
 					if(impl().get_content_type() == boost::cell_content_type::FORMULA) {
 						return impl().get_string() > str;
@@ -130,13 +126,6 @@ namespace boost {
 					return impl().get_string() > str;
 				}
 
-				inline bool operator<=(const std::string& str) const {
-					return !(*this>str);
-				}
-
-				inline bool operator>=(const std::string& str) const {
-					return !(*this<str);
-				}
 
 				inline bool operator<(double val) const {
 					if(impl().get_content_type() == boost::cell_content_type::FORMULA) {
@@ -158,10 +147,6 @@ namespace boost {
 					return impl().get_value() == val;
 				}
 
-				inline bool operator!=(double val) const {
-					return !(*this==val);
-				}
-
 				inline bool operator>(double val) const {
 					if(impl().get_content_type() == boost::cell_content_type::FORMULA) {
 						return impl().get_value() > val;
@@ -170,14 +155,6 @@ namespace boost {
 							return impl().get_content_type() > boost::cell_content_type::VALUE;
 					}
 					return impl().get_value() > val;
-				}
-
-				inline bool operator<=(double val) const {
-					return !(*this>val);
-				}
-
-				inline bool operator>=(double val) const {
-					return !(*this<val);
 				}
 
 				//! \brief Compares the cell with another
@@ -222,20 +199,23 @@ namespace boost {
 					return false; // not reacheable
 				}
 
-				inline bool operator!=(const const_cell& c) const {
-					return !(*this==c);
-				}
-
 				inline bool operator>(const const_cell& c) const {
 					return (c<*this);
 				}
 
-				inline bool operator<=(const const_cell& c) const {
-					return !(*this>c);
+				template<typename T>
+				inline bool operator!=(const T& a) const {
+					return !(*this==a);
 				}
 
-				inline bool operator>=(const const_cell& c) const {
-					return !(*this<c);
+				template<typename T>
+				inline bool operator<=(const T& a) const {
+					return !(*this>a);
+				}
+
+				template<typename T>
+				inline bool operator>=(const T& a) const {
+					return !(*this<a);
 				}
 
 	}; // class const_cell
