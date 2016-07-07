@@ -16,7 +16,6 @@
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
-#include <boost/variant.hpp>
 
 #include <iostream>
 #include <typeinfo>
@@ -398,7 +397,7 @@ namespace boost {
 	//!        that the cell contains a string.
 	//!        Method is outside class because it
 	//!        take cell as the second operand.
-	inline bool operator<(const std::string& lhs, const cell& rhs) {
+	inline bool operator<(const std::string& lhs, const const_cell& rhs) {
 		if(rhs.get_content_type() == boost::cell_content_type::FORMULA) {
 			return lhs < rhs.get_string();
 		}
@@ -408,7 +407,7 @@ namespace boost {
 		return lhs < rhs.get_string();
 	}
 
-	inline bool operator==(const std::string& lhs, const cell& rhs) {
+	inline bool operator==(const std::string& lhs, const const_cell& rhs) {
 		if(rhs.get_content_type() == boost::cell_content_type::FORMULA) {
 			return lhs == rhs.get_string();
 		}
@@ -418,24 +417,7 @@ namespace boost {
 		return lhs == rhs.get_string();
 	}
 
-	inline bool operator!=(const std::string& lhs, const cell& rhs) {
-		return !(lhs==rhs);
-	}
-
-	inline bool operator>(const std::string& lhs, const cell& rhs) {
-		return rhs<lhs;
-	}
-
-	inline bool operator>=(const std::string& lhs, const cell& rhs) {
-		return !(lhs<rhs);
-	}
-
-
-	inline bool operator<=(const std::string& lhs, const cell& rhs) {
-		return !(lhs>rhs);
-	}
-
-	inline bool operator<(double lhs, const cell& rhs) {
+	inline bool operator<(double lhs, const const_cell& rhs) {
 		if(rhs.get_content_type() == boost::cell_content_type::FORMULA) {
 			return lhs < rhs.get_value();
 		}
@@ -445,7 +427,7 @@ namespace boost {
 		return lhs < rhs.get_value();
 	}
 
-	inline bool operator==(double lhs, const cell& rhs) {
+	inline bool operator==(double lhs, const const_cell& rhs) {
 		if(rhs.get_content_type() == boost::cell_content_type::FORMULA) {
 			return lhs == rhs.get_value();
 		}
@@ -455,71 +437,7 @@ namespace boost {
 		return lhs == rhs.get_value();
 	}
 
-	inline bool operator!=(double lhs, const cell& rhs) {
-		return !(lhs==rhs);
-	}
-
-	inline bool operator>(double lhs, const cell& rhs) {
-		return rhs<lhs;
-	}
-
-	inline bool operator>=(double lhs, const cell& rhs) {
-		return !(lhs<rhs);
-	}
-
-	inline bool operator<=(double lhs, const cell& rhs) {
-		return !(lhs>rhs);
-	}
-
-	inline boost::variant<double, std::string> cell_to_variant(const boost::cell& a) {
-		boost::variant<double, std::string> temp;
-		switch(a.get_content_type()) {
-			case boost::cell_content_type::STRING:
-				temp = a.get_string();
-				break;
-			case boost::cell_content_type::VALUE:
-				temp = a.get_value();
-				break;
-			case boost::cell_content_type::FORMULA:
-				temp = a.get_formula();
-				break;
-			case boost::cell_content_type::EMPTY:
-			case boost::cell_content_type::ERROR:
-				break;
-		}
-		return temp;
-	}
-
-	inline void variant_to_cell(boost::cell& a,
-											 const boost::variant<double, std::string>& var,
-											 const boost::cell_content_type::type& t) {
-			switch(t) {
-				case boost::cell_content_type::STRING:
-					a = boost::get<std::string>(var);
-					break;
-				case boost::cell_content_type::VALUE:
-					a = boost::get<double>(var);
-					break;
-				case boost::cell_content_type::FORMULA:
-					a = boost::get<std::string>(var);
-					break;
-				case boost::cell_content_type::EMPTY:
-				case boost::cell_content_type::ERROR:
-					a.reset();
-					break;
-			}
-	}
-
-	inline void swap(cell lhs, cell rhs) {
-			boost::cell_content_type::type ltype = lhs.get_content_type();
-			boost::cell_content_type::type rtype = rhs.get_content_type();
-			boost::variant<double, std::string> lvalue = cell_to_variant(lhs);
-			boost::variant<double, std::string> rvalue = cell_to_variant(rhs);
-			variant_to_cell(rhs, lvalue, ltype);
-			variant_to_cell(lhs, rvalue, rtype);
-	}
-
-	cell_data::cell_data(const cell& c) {
+	inline cell_data::cell_data(const cell& c) {
 			type = c.get_content_type();
 			switch(type) {
 				case boost::cell_content_type::STRING:
@@ -538,7 +456,13 @@ namespace boost {
 			}
 	}
 
-	bool operator<(const cell_data& lhs, const cell& rhs) {
+	inline void swap(cell lhs, cell rhs) {
+			cell_data temp(lhs);
+			lhs = rhs;
+			rhs = temp;
+	}
+
+	inline bool operator<(const cell_data& lhs, const const_cell& rhs) {
 		if (lhs.type != rhs.get_content_type()) {
 				return lhs.type < rhs.get_content_type();
 		}
@@ -556,7 +480,24 @@ namespace boost {
 		return false; // not reacheable
 	}
 
-	bool operator<(const cell& lhs, const cell_data& rhs) {
+	inline bool operator==(const cell_data& lhs, const const_cell& rhs) {
+		if (lhs.type == rhs.get_content_type()) {
+			switch(lhs.type) {
+				case boost::cell_content_type::STRING:
+					return boost::get<std::string>(lhs.value) == rhs.get_string();
+				case boost::cell_content_type::VALUE:
+					return boost::get<double>(lhs.value) == rhs.get_value();
+				case boost::cell_content_type::FORMULA:
+					return lhs.formula_val == rhs.get_value();
+				case boost::cell_content_type::ERROR:
+				case boost::cell_content_type::EMPTY:
+					return true;
+			}
+		}
+		return false;
+	}
+
+	inline bool operator<(const const_cell& lhs, const cell_data& rhs) {
 		if (lhs.get_content_type() != rhs.type) {
 				return lhs.get_content_type() < rhs.type;
 		}
@@ -574,56 +515,62 @@ namespace boost {
 		return false; // not reacheable
 	}
 
-	bool operator==(const cell_data& lhs, const cell& rhs) {
-		if (lhs.type == rhs.get_content_type()) {
-			switch(lhs.type) {
-				case boost::cell_content_type::STRING:
-					return boost::get<std::string>(lhs.value) == rhs.get_string();
-				case boost::cell_content_type::VALUE:
-					return boost::get<double>(lhs.value) == rhs.get_value();
-				case boost::cell_content_type::FORMULA:
-					return lhs.formula_val == rhs.get_value();
-				case boost::cell_content_type::ERROR:
-				case boost::cell_content_type::EMPTY:
-					return true;
-			}
-		}
-		return false;
-	}
-
-	bool operator==(const cell& lhs, const cell_data& rhs) {
+	inline bool operator==(const const_cell& lhs, const cell_data& rhs) {
 			return rhs==lhs;
 	}
 
-	inline bool operator!=(const cell& lhs, const cell_data& rhs) {
+	inline bool operator<(const cell_data& lhs, const cell_data& rhs) {
+			if (lhs.type != rhs.type) {
+					return lhs.type < rhs.type;
+			}
+			switch(lhs.type) {
+				case boost::cell_content_type::STRING:
+					return boost::get<std::string>(lhs.value) < boost::get<std::string>(rhs.value);
+				case boost::cell_content_type::VALUE:
+					return boost::get<double>(lhs.value) < boost::get<double>(rhs.value);
+				case boost::cell_content_type::FORMULA:
+					return lhs.formula_val < rhs.formula_val;
+				case boost::cell_content_type::ERROR:
+				case boost::cell_content_type::EMPTY:
+						return false;
+			}
+			return false; // not reacheable
+		}
+
+	inline bool operator==(const cell_data& lhs, const cell_data& rhs) {
+			if (lhs.type == rhs.type) {
+				switch(lhs.type) {
+					case boost::cell_content_type::STRING:
+						return boost::get<std::string>(lhs.value) == boost::get<std::string>(rhs.value);
+					case boost::cell_content_type::VALUE:
+						return boost::get<double>(lhs.value) == boost::get<double>(rhs.value);
+					case boost::cell_content_type::FORMULA:
+						return lhs.formula_val == rhs.formula_val;
+					case boost::cell_content_type::ERROR:
+					case boost::cell_content_type::EMPTY:
+						return true;
+				}
+			}
+			return false;
+	}
+
+	template<typename T, typename V>
+	inline bool operator!=(const T& lhs, const V& rhs) {
 		return !(lhs==rhs);
 	}
 
-	inline bool operator>(const cell& lhs, const cell_data& rhs) {
+	template<typename T, typename V>
+	inline bool operator>(const T& lhs, const V& rhs) {
 		return rhs<lhs;
 	}
 
-	inline bool operator>=(const cell& lhs, const cell_data& rhs) {
+	template<typename T, typename V>
+	inline bool operator>=(const T& lhs, const V& rhs) {
 		return !(lhs<rhs);
 	}
 
-	inline bool operator<=(const cell& lhs, const cell_data& rhs) {
-		return !(lhs>rhs);
-	}
-
-	inline bool operator!=(const cell_data& lhs, const cell& rhs) {
-		return !(lhs==rhs);
-	}
-
-	inline bool operator>(const cell_data& lhs, const cell& rhs) {
-		return rhs<lhs;
-	}
-
-	inline bool operator>=(const cell_data& lhs, const cell& rhs) {
-		return !(lhs<rhs);
-	}
-
-	inline bool operator<=(const cell_data& lhs, const cell& rhs) {
+	template<typename T, typename V>
+	inline bool operator<=(const T& lhs, const V& rhs) {
 		return !(lhs>rhs);
 	}
 
