@@ -73,7 +73,7 @@ namespace boost {
 		//!		the file path and the file format. Default
 		//!		format is PDF.
 		void export_document(const boost::filesystem::path& path, boost::document_file_format::type format = boost::document_file_format::PDF) {
-			pimpl_->export_as(format);
+			pimpl_->export_as(path, format);
 		}
 
 		//! \brief Inserts a sheet in the document

@@ -743,7 +743,7 @@ int cell_color_test(boost::document& c) {
 		c2.set_font_size(18);
 		c2.set_vertical_alignment(boost::cell_vertical_alignment::TOP);
 		c2.set_horizontal_alignment(boost::cell_horizontal_alignment::RIGHT);
-		c.export_document("Test2_style.pdf", boost::document_file_format::PDF); // to check the output, basically
+		c.export_document( boost::filesystem::path("Test2_style.pdf"), boost::document_file_format::PDF); // to check the output, basically
 		return 0;
 	}
 	catch(boost::document_exception& e) {

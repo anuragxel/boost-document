@@ -111,7 +111,7 @@ class libre_document: public document_interface {
  	}
 
 	void export_as(const boost::filesystem::path& fpath, boost::document_file_format::type format) {
- 		boost::doc::libre_functions::export_libre(fpath, format, this->xComponent_, this->doc_path_);
+ 		boost::doc::libre_functions::export_libre(this->doc_path_, format, this->xComponent_, fpath);
  	}
 
  	boost::sheet insert_sheet(const std::string& str) {
