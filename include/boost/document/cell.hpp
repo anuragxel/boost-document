@@ -227,6 +227,25 @@ namespace boost {
 		cell_interface& impl() {
         	return *pimpl_;
     }
+		template<typename T>
+		cell& assign(const T& c) {
+			switch(c.get_content_type()) {
+				case boost::cell_content_type::STRING:
+					set_string(c.get_string());
+					break;
+				case boost::cell_content_type::VALUE:
+					set_value(c.get_value());
+					break;
+				case boost::cell_content_type::FORMULA:
+					set_formula(c.get_formula());
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					reset(); // because the assigned cell is bad, clear the original cell
+					break;
+			}
+			return *this;
+		}
 	public:
 
 		//! The default constructor which takes in
@@ -248,41 +267,11 @@ namespace boost {
 		//!        Makes all operations non shallow
 		//!        with respect to the internal cells.
 		cell& operator=(const cell& c) {
-			switch(c.get_content_type()) {
-				case boost::cell_content_type::STRING:
-					set_string(c.get_string());
-					break;
-				case boost::cell_content_type::VALUE:
-					set_value(c.get_value());
-					break;
-				case boost::cell_content_type::FORMULA:
-					set_formula(c.get_formula());
-					break;
-				case boost::cell_content_type::EMPTY:
-				case boost::cell_content_type::ERROR:
-					reset(); // because the assigned cell is bad, clear the original cell
-					break;
-			}
-			return *this;
+			return assign(c);
 		}
 
 		cell& operator=(const const_cell& c) {
-			switch(c.get_content_type()) {
-				case boost::cell_content_type::STRING:
-					set_string(c.get_string());
-					break;
-				case boost::cell_content_type::VALUE:
-					set_value(c.get_value());
-					break;
-				case boost::cell_content_type::FORMULA:
-					set_formula(c.get_formula());
-					break;
-				case boost::cell_content_type::EMPTY:
-				case boost::cell_content_type::ERROR:
-					reset(); // because the assigned cell is bad, clear the original cell
-					break;
-			}
-			return *this;
+			return assign(c);
 		}
 
 		cell& operator=(const boost::cell_data& cdata) {

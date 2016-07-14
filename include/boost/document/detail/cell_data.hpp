@@ -9,7 +9,6 @@
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/variant.hpp>
 
-
 namespace boost {
 
   class cell;
@@ -20,8 +19,67 @@ namespace boost {
     explicit cell_data(const cell& c);
     boost::cell_content_type::type type;
     boost::variant<double, std::string> value;
-    double formula_val; // How else to handle ?
-	};
+    // Should be both EqualityComparable and LessThanComparable,
+    // but apparently it's not LessThanComparable
+    boost::variant<double, std::string> formula_val; // How else to handle ?
+
+  };
+
+  inline bool operator<(const boost::variant<double, std::string>& lhs, const std::string& rhs) {
+    return boost::get<std::string>(lhs) < rhs;
+  }
+
+  inline bool operator<(const boost::variant<double, std::string>& lhs, double rhs) {
+    return boost::get<double>(lhs) < rhs;
+  }
+
+  inline bool operator<(const std::string& lhs, const boost::variant<double, std::string>& rhs) {
+    return lhs < boost::get<std::string>(rhs);
+  }
+
+  inline bool operator<(double lhs, const boost::variant<double, std::string>& rhs) {
+    return lhs < boost::get<double>(rhs);
+  }
+
+  /*inline bool operator<(const boost::variant<double, std::string>& lhs, const boost::variant<double, std::string>& rhs) {
+      if(lhs.type() != rhs.type()) {
+          return lhs.type() < rhs.type();
+      }
+      if(lhs.which() == typeid(std::string)) {
+          return boost::get<std::string>(lhs) < boost::get<std::string>(rhs);
+      }
+      else if(lhs.which() == typeid(double)) {
+          return boost::get<double>(lhs) < boost::get<double>(rhs);
+      }
+  }*/
+
+  inline bool operator==(const boost::variant<double, std::string>& lhs, const std::string& rhs) {
+    return boost::get<std::string>(lhs) == rhs;
+  }
+
+  inline bool operator==(const boost::variant<double, std::string>& lhs, double rhs) {
+    return boost::get<double>(lhs) == rhs;
+  }
+
+  inline bool operator==(const std::string& lhs, const boost::variant<double, std::string>& rhs) {
+    return lhs == boost::get<std::string>(rhs);
+  }
+
+  inline bool operator==(double lhs, const boost::variant<double, std::string>& rhs) {
+    return lhs == boost::get<double>(rhs);
+  }
+
+  /*inline bool operator==(const boost::variant<double, std::string>& lhs, const boost::variant<double, std::string>& rhs) {
+      if(lhs.type() == rhs.type()) {
+          if(lhs.which() == typeid(std::string)) {
+              return boost::get<std::string>(lhs) < boost::get<std::string>(rhs);
+          }
+          else if(lhs.which() == typeid(double)) {
+              return boost::get<double>(lhs) < boost::get<double>(rhs);
+          }
+      }
+      return false;
+  }*/
 
 } // namespace boost
 
