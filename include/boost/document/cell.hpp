@@ -534,23 +534,83 @@ namespace boost {
 			return false;
 	}
 
-	template<typename T, typename V>
-	inline bool operator!=(const T& lhs, const V& rhs) {
+	inline bool operator!=(const std::string& lhs, const const_cell& rhs) {
 		return !(lhs==rhs);
 	}
 
-	template<typename T, typename V>
-	inline bool operator>(const T& lhs, const V& rhs) {
+	inline bool operator>(const std::string& lhs, const const_cell& rhs) {
 		return rhs<lhs;
 	}
 
-	template<typename T, typename V>
-	inline bool operator>=(const T& lhs, const V& rhs) {
+	inline bool operator>=(const std::string& lhs, const const_cell& rhs) {
 		return !(lhs<rhs);
 	}
 
-	template<typename T, typename V>
-	inline bool operator<=(const T& lhs, const V& rhs) {
+	inline bool operator<=(const std::string& lhs, const const_cell& rhs) {
+		return !(lhs>rhs);
+	}
+
+	inline bool operator!=(double lhs, const const_cell& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(double lhs, const const_cell& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(double lhs, const const_cell& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(double lhs, const const_cell& rhs) {
+		return !(lhs>rhs);
+	}
+
+	inline bool operator!=(const cell_data& lhs, const const_cell& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(const cell_data& lhs, const const_cell& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(const cell_data& lhs, const const_cell& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(const cell_data& lhs, const const_cell& rhs) {
+		return !(lhs>rhs);
+	}
+
+	inline bool operator!=(const const_cell& lhs, const cell_data& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(const const_cell& lhs, const cell_data& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(const const_cell& lhs, const cell_data& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(const const_cell& lhs, const cell_data& rhs) {
+		return !(lhs>rhs);
+	}
+
+	inline bool operator!=(const cell_data& lhs, const cell_data& rhs) {
+		return !(lhs==rhs);
+	}
+
+	inline bool operator>(const cell_data& lhs, const cell_data& rhs) {
+		return rhs<lhs;
+	}
+
+	inline bool operator>=(const cell_data& lhs, const cell_data& rhs) {
+		return !(lhs<rhs);
+	}
+
+	inline bool operator<=(const cell_data& lhs, const cell_data& rhs) {
 		return !(lhs>rhs);
 	}
 
