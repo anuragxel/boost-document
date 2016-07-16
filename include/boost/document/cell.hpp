@@ -425,6 +425,26 @@ namespace boost {
 			}
 	}
 
+	inline cell_data& cell_data::operator=(const cell& c) {
+			type = c.get_content_type();
+			switch(type) {
+				case boost::cell_content_type::STRING:
+					value = c.get_string();
+					break;
+				case boost::cell_content_type::VALUE:
+					value = c.get_value();
+					break;
+				case boost::cell_content_type::FORMULA:
+					value = c.get_formula();
+					formula_val = c.get_value();
+					break;
+				case boost::cell_content_type::EMPTY:
+				case boost::cell_content_type::ERROR:
+					break;
+			}
+			return *this;
+	}
+
 	inline void swap(cell lhs, cell rhs) {
 			cell_data temp(lhs);
 			lhs = rhs;

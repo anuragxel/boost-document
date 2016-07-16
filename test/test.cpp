@@ -642,8 +642,8 @@ int row_double_sort_test(boost::document& c) {
 			std::generate(r.begin(), r.begin() + len, gen);
 			boost::row_iterator end(r.begin() + len);
 			// A simple insertion sort implementation
-			insertion_sort(r, len);
-			// std::stable_sort(r.begin(), end);
+			// insertion_sort(r, len);
+			std::stable_sort(r.begin(), end);
 			// std::sort(r.begin(), end);
 			std::cout << std::endl;
 			BOOST_REQUIRE(std::is_sorted(r.begin(),end));

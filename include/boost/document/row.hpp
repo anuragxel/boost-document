@@ -59,15 +59,18 @@ namespace boost {
 	template<typename Cell>
 	class row_iter: public boost::iterator_facade<
 		row_iter<Cell>,
-		Cell,
-		boost::random_access_traversal_tag
+		boost::cell_data,
+		boost::random_access_traversal_tag,
+		Cell
 		> {
 		protected:
-		typename boost::conditional<
-        		boost::is_const<Cell>::value,
+		typedef typename boost::conditional<
+        		boost::is_same<Cell, boost::const_cell>::value,
         		boost::shared_ptr<const sheet_interface>,
         		boost::shared_ptr<sheet_interface>
-    		>::type r_;
+    		>::type sheet_interface_t;
+
+		sheet_interface_t r_;
 
 		std::size_t cell_no_;
 		mutable boost::optional<boost::cell> current_cell_;
@@ -75,7 +78,7 @@ namespace boost {
 		public:
 		friend class boost::iterator_core_access;
 
-		row_iter(boost::shared_ptr<sheet_interface> r, std::size_t num, std::size_t row) : r_(r), cell_no_(num), row_(row)
+		row_iter(sheet_interface_t r, std::size_t num, std::size_t row) : r_(r), cell_no_(num), row_(row)
 		{}
 
 		void increment() { ++this->cell_no_; }
