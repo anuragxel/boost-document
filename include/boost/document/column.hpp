@@ -80,7 +80,7 @@ namespace boost {
 		sheet_interface_t r_;
 
 		std::size_t cell_no_;
-		mutable boost::optional<boost::cell> current_cell_;
+		mutable boost::optional<Cell> current_cell_;
 		std::size_t column_;
 
 		public:

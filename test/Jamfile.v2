@@ -17,9 +17,9 @@ project
         # set warnings as errors for those compilers we know we get warning free:
         <toolset>gcc:<cxxflags>-Wextra
         <toolset>gcc:<cxxflags>-Wno-uninitialized
-        <toolset>gcc:<cxxflags>-std=c++0x
+        <toolset>gcc:<cxxflags>-std=c++14
 
-        <toolset>clang:<cxxflags>-std=c++11
+        <toolset>clang:<cxxflags>-std=c++14
         <toolset>clang:<cxxflags>-stdlib=libstdc++
         <toolset>clang:<linkflags>-lc++
     ;

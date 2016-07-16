@@ -617,17 +617,18 @@ void insertion_sort(T& r, int len) {
 		}
 }
 
-// Iterator based version
-/*template<typename T>
-void insertion_sort_iter(T& begin, T& end) {
-		for(int it=begin; it!=end; it++) {
-				int jt = it;
-				while(jt >  and r[j] < r[j-1]) {
-						swap(r[j],r[j-1]);
-						j--;
-				}
-		}
-}*/
+template <class CellArray>
+void quick_sort(CellArray first, CellArray last) {
+    if(first == last) return;
+    auto pivot = *std::next(first, std::distance(first,last)/2);
+    CellArray middle1 = std::partition(first, last,
+                         [pivot](const auto& em){ return em < pivot; });
+    CellArray middle2 = std::partition(middle1, last,
+                         [pivot](const auto& em){ return !(pivot < em); });
+    quick_sort(first, middle1);
+    quick_sort(middle2, last);
+}
+
 
 int row_double_sort_test(boost::document& c) {
 	try {
@@ -642,9 +643,9 @@ int row_double_sort_test(boost::document& c) {
 			std::generate(r.begin(), r.begin() + len, gen);
 			boost::row_iterator end(r.begin() + len);
 			// A simple insertion sort implementation
-			// insertion_sort(r, len);
-			std::stable_sort(r.begin(), end);
-			// std::sort(r.begin(), end);
+			insertion_sort(r, len);
+			//std::stable_sort(r.begin(), end);
+			//std::sort(r.begin(), end);
 			std::cout << std::endl;
 			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
 			return 0;
@@ -670,7 +671,6 @@ int row_string_sort_test(boost::document& c) {
 			boost::row_iterator end(r.begin() + len);
 			// A simple insertion sort implementation
 			insertion_sort(r, len);
-			// std::sort(r.begin(), end);
 			// std::stable_sort(r.begin(), end);
 			BOOST_REQUIRE(std::is_sorted(r.begin(),end));
 			return 0;
@@ -696,15 +696,61 @@ int column_heterogenous_sort_test(boost::document& c) {
 			cl[5] = 3132.0;
 			cl[6] = 0.0;
 			boost::column_iterator end(cl.begin() + len);
-			// A simple insertion sort implementation
+			//quick_sort(cl.begin(), end);
 			insertion_sort(cl, len);
-			// std::sort(r.begin(), end);
-			// std::stable_sort(r.begin(), end);
 			BOOST_REQUIRE(std::is_sorted(cl.begin(),end));
 			return 0;
 	}
 	catch(boost::document_exception& e) {
 			std::cerr << "Test column_heterogenous_sort_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
+	}
+}
+
+int row_lower_bound_test(boost::document& c) {
+	try {
+			boost::sheet s1 = c["Anurag"];
+			boost::row r = s1.get_row(7);
+			const boost::row_iterator end(r.begin() + 12);
+			std::fill(r.begin(), r.begin() + 2, 1);
+			std::fill(r.begin() + 2, r.begin() + 4, 4);
+			std::fill(r.begin() + 4, r.begin() + 6, 6);
+			std::fill(r.begin() + 6, r.begin() + 8, 2);
+			std::fill(r.begin() + 8, r.begin() + 10, 5);
+			std::fill(r.begin() + 10, r.begin() + 12, 3);
+			std::nth_element(r.begin(), r.begin() + 6, r.begin() + 12);
+			for (auto it = r.begin(); it != end; ++it) {
+				std::cout << (*it).get_value() << std::endl;
+			}
+			BOOST_REQUIRE(1==1);
+			return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << e.what() << std::endl;
+			return 1;
+	}
+}
+
+int column_bin_search_test(boost::document& c) {
+	try {
+			boost::sheet s1 = c["Anurag"];
+			boost::column r = s1.get_column(7);
+			const boost::column_iterator end(r.begin() + 100);
+			auto i = 0;
+			for (auto it = r.begin(); it != end; ++it) {
+					*it = i;
+					i += 1;
+			}
+			auto x = std::binary_search(r.begin(), end, 56);
+			BOOST_REQUIRE(x==true);
+			x = std::binary_search(r.begin(), end, 134);
+			BOOST_REQUIRE(x==false);
+			return 0;
+	}
+	catch(boost::document_exception& e) {
+			std::cerr << "Test row_sort_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -818,6 +864,7 @@ int test_main(int argc, char *argv[]) {
 	// iterator checks
 	rv += check_row_and_column_class(c);
 	rv += check_for_sheet_and_row_scope(c);
+	rv += row_iterator_caching(c);
 
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
@@ -825,7 +872,9 @@ int test_main(int argc, char *argv[]) {
 	rv += row_double_sort_test(c);
 	rv += row_string_sort_test(c);
 	rv += column_heterogenous_sort_test(c);
-	rv += row_iterator_caching(c);
+	//rv += row_lower_bound_test(c);
+	//rv += column_bin_search_test(c);
+
 	rv += cell_color_test(c);
 
 	if (rv > 0) {
