@@ -530,6 +530,27 @@ int check_for_sheet_and_row_scope(boost::document& c) {
 	}
 }
 
+int row_iterator_comparison(boost::document& c) {
+	try {
+		boost::sheet s1 = c.get_sheet(0);
+		boost::sheet s2 = c.get_sheet(0);
+		boost::sheet s_different = c.get_sheet(1);
+		boost::row r1 = s1.get_row(3);
+		boost::row r2 = s2.get_row(3);
+		boost::row r_different = s_different.get_row(3);
+		boost::row r_different2 = s2.get_row(4);
+		//assert(r1 == r2); // same rows from same sheets, but sheet pointers differ
+		//assert(r1 != r_different); // sheets differ
+		//assert(r1 != r_different2); // rows differ
+		//assert(r2 != r_different2); // rows differ
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test row_iterator_comparison Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
 
 int use_row_iterator(boost::document& c) {
 	try {
@@ -719,6 +740,9 @@ int row_lower_bound_test(boost::document& c) {
 			std::fill(r.begin() + 6, r.begin() + 8, 2);
 			std::fill(r.begin() + 8, r.begin() + 10, 5);
 			std::fill(r.begin() + 10, r.begin() + 12, 3);
+			for (auto it = r.begin(); it != end; ++it) {
+				std::cout << (*it).get_value() << std::endl;
+			}
 			std::nth_element(r.begin(), r.begin() + 6, r.begin() + 12);
 			for (auto it = r.begin(); it != end; ++it) {
 				std::cout << (*it).get_value() << std::endl;
@@ -865,6 +889,7 @@ int test_main(int argc, char *argv[]) {
 	rv += check_row_and_column_class(c);
 	rv += check_for_sheet_and_row_scope(c);
 	rv += row_iterator_caching(c);
+	rv += row_iterator_comparison(c);
 
 	rv += use_row_iterator(c);
 	rv += row_stl_functionality(c);
@@ -872,8 +897,8 @@ int test_main(int argc, char *argv[]) {
 	rv += row_double_sort_test(c);
 	rv += row_string_sort_test(c);
 	rv += column_heterogenous_sort_test(c);
-	//rv += row_lower_bound_test(c);
-	//rv += column_bin_search_test(c);
+	rv += row_lower_bound_test(c);
+	rv += column_bin_search_test(c);
 
 	rv += cell_color_test(c);
 

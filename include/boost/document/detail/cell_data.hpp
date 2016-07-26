@@ -16,7 +16,7 @@ namespace boost {
   struct cell_data {
     cell_data() {}
     cell_data(const cell_data& c) : type(c.type), value(c.value), formula_val(c.formula_val) {}
-    explicit cell_data(const cell& c);
+    cell_data(const cell& c);
     cell_data& operator=(const cell& c);
     boost::cell_content_type::type type;
     boost::variant<double, std::string> value;

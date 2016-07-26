@@ -46,6 +46,12 @@ namespace boost {
 			return row_;
 		}
 
+		bool operator==(const row& rhs) const {
+				if(obj_ == rhs.obj_ && row_ == rhs.row_)
+						return true;
+				return false;
+		}
+
 		inline row_iterator begin();
 
 		inline row_iterator end();
@@ -89,12 +95,14 @@ namespace boost {
 
 		template <class T>
 		bool equal(row_iter<T> const& other) const {
-		    return this->r_ == other.r_ && this->cell_no_ == other.cell_no_;
+		    return this->r_ == other.r_  &&
+							 this->row_ == other.row_ &&
+							 this->cell_no_ == other.cell_no_;
 		}
 
 		template <class T>
 		std::size_t distance_to(row_iter<T> const& other) const {
-			if(this->r_ != other.r_) {
+			if(this->r_ == other.r_  && this->row_ != other.row_) {
 				boost::throw_exception(document_exception(
 				"Error: Both the iterators are not equal"));
 			}
