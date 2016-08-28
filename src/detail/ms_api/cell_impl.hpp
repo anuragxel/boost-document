@@ -10,7 +10,9 @@
 
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/cell_interface.hpp>
+
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
 
 #include <boost/document/detail/ms_api/ms_cell_func.hpp>
 
@@ -41,24 +43,24 @@ class ms_cell : public cell_interface {
 		boost::doc::ms_cell_func::set_cell_value(cell_ptr_,x);
 	}
 
-	boost::cell_content_type::type get_content_type() {
+	boost::cell_content_type::type get_content_type() const {
 		return boost::doc::ms_cell_func::get_content_type(cell_ptr_);
 	}
 
-	std::string get_string() {
+	std::string get_string() const {
 		return boost::doc::ms_cell_func::get_string(cell_ptr_);
 	}
 
 
-	std::string get_formula() {
+	std::string get_formula() const {
 		return boost::doc::ms_cell_func::get_formula(cell_ptr_);
 	}
 
-	double get_value() {
+	double get_value() const {
 		return boost::doc::ms_cell_func::get_value(cell_ptr_);
 	}
 
-	bool empty() {
+	bool empty() const {
 		if(boost::doc::ms_cell_func::get_content_type(cell_ptr_) == boost::cell_content_type::EMPTY) {
 			return true;
 		}
@@ -69,13 +71,21 @@ class ms_cell : public cell_interface {
 		boost::doc::ms_cell_func::set_cell_value(cell_ptr_,"");
 	}
 
-	std::size_t get_row_index() {
+	std::size_t get_row_index() const {
 		return row_;
 	}
 
-	std::size_t get_column_index() {
+	std::size_t get_column_index() const {
 		return column_;
 	}
+
+ 	// TODO: Implement this
+	void set_style(const std::string& str) {}
+    void set_foreground_color(int x) {}
+    void set_background_color(int x) {}
+    void set_font_size(double x) {}
+    void set_horizontal_alignment(boost::cell_horizontal_alignment::type) {}
+    void set_vertical_alignment(boost::cell_vertical_alignment::type) {}
 
  	~ms_cell() {
  	}

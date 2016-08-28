@@ -21,7 +21,7 @@
 
 namespace boost { namespace doc { namespace ms_sheet {
 
-void get_sheets_of_document(IDispatch*& sheets_ptr, IDispatch* book_ptr);
+void get_sheets_of_document(IDispatch*& sheets_ptr, IDispatch*& book_ptr);
 
 void rename_sheet(IDispatch* sheet_ptr, const std::string& str);
 

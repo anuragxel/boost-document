@@ -18,6 +18,8 @@
 #include <boost/lexical_cast.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
+#include <boost/document/detail/cell_content_type.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 
 #include <boost/document/detail/ms_api/com_variant.hpp>

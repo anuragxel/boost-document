@@ -103,6 +103,9 @@ public:
 		boost::doc::ms_functions::export_ms(this->doc_path_, format, this->appl_ptr_, this->book_ptr_);
  	}
 
+ 	// TODO: Implement this
+ 	void export_as(const boost::filesystem::path& exp_path,boost::document_file_format::type format) {}
+
 	boost::sheet insert_sheet(const std::string& str) {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
@@ -163,13 +166,14 @@ public:
 		return boost::sheet(boost::dynamic_pointer_cast<sheet_interface>(boost::make_shared<boost::detail::ms_sheet>(sheet_ptr,index)));
 	}
 
-	std::size_t sheet_count() const {
+	std::size_t sheet_count() {
 		if (!this->is_file_opened) {
 			boost::throw_exception(document_exception(
 				"Error: Document Not Open."));
 		}
 		if (!this->sheets_ptr_) {
-			boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
+			// TODO: Fix this
+			//boost::doc::ms_sheet::get_sheets_of_document(this->sheets_ptr_, this->book_ptr_);
 		}
 		return (std::size_t)boost::doc::ms_sheet::get_sheet_count(this->sheets_ptr_);
 	}

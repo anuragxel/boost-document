@@ -26,7 +26,7 @@ void get_cell_unchecked(IDispatch* sheet_ptr,int i, int j, IDispatch*& cell_ptr)
 
 void set_cell_value(IDispatch* cell_ptr, const std::string& str);
 void set_cell_value(IDispatch* cell_ptr, double x);
-void set_cell_formula(IDispatch* cell_ptr, const std::string& str)
+void set_cell_formula(IDispatch* cell_ptr, const std::string& str);
 
 std::string get_string(IDispatch* cell_ptr);
 std::string get_formula(IDispatch* cell_ptr);

@@ -8,6 +8,7 @@
 
 namespace boost {
 
+	#undef ERROR
 	//! \brief Cell Content Type
 	//!        Currently present in Cell.
 	//!
