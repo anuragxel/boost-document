@@ -18,7 +18,9 @@
 #include <boost/lexical_cast.hpp>
 
 #include <boost/document/detail/document_file_format.hpp>
+
 #include <boost/document/detail/cell_content_type.hpp>
+#include <boost/document/detail/cell_alignment_type.hpp>
 
 #include <boost/document/detail/document_exception.hpp>
 
@@ -130,6 +132,97 @@ boost::cell_content_type::type get_content_type(IDispatch* cell_ptr) {
 		case VT_VOID:
 			return boost::cell_content_type::EMPTY;
 	} //EMPTY,STRING,VALUE,FORMULA,ERROR
+	return boost::cell_content_type::ERROR;
+}
+
+//! \fn
+//!
+void set_style(IDispatch* cell_ptr, const std::string& str) {
+
+}
+
+//! \fn
+//!
+void set_foreground_color(IDispatch* cell_ptr, int x) { 
+	IDispatch *font_ptr = NULL;
+	VARIANT result;
+	VariantInit(&result);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
+	font_ptr = result.pdispVal;
+	
+	// x is of the form, 0x00bbggrr
+	boost::detail::com_variant vt_cell( x );
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Color", 1, 
+		vt_cell.native()
+	);
+}
+
+//! \fn
+//!
+void set_background_color(IDispatch* cell_ptr, int x) {
+	IDispatch *interior_ptr = NULL;
+	VARIANT result;
+	VariantInit(&result);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, cell_ptr, L"Interior",0);
+	interior_ptr=result.pdispVal;
+	// x is of the form, 0x00bbggrr
+	boost::detail::com_variant vt_cell( x );
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, interior_ptr, L"Color", 1, 
+		vt_cell.native()
+	);
+}
+
+//! \fn
+//!
+void set_font_size(IDispatch* cell_ptr, double x) {
+	IDispatch *font_ptr = NULL;
+	VARIANT result;
+	VariantInit(&result);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
+	font_ptr = result.pdispVal;
+	
+	// font size is integer in Excel COM API :/
+	boost::detail::com_variant vt_cell( (int) x );
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Size", 1, 
+		vt_cell.native()
+	);
+
+}
+
+//! \fn
+//!
+void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignment::type t) {
+	// Left: -4131 Center: -4108  Right: -4152 
+	// https://msdn.microsoft.com/en-us/library/microsoft.office.interop.excel.constants.aspx
+	int x = -4108;
+	if(t == boost::cell_horizontal_alignment::RIGHT) {
+		x = -4152;
+	}
+	else if(t == boost::cell_horizontal_alignment::LEFT) {
+		x = -4131;
+	}
+	boost::detail::com_variant vt_cell(x);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"HorizontalAlignment", 1, 
+		vt_cell.native()
+		);
+}
+
+//! \fn
+//!
+void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment::type t) {
+	// Top: -4160 Bottom: -4107 Center: -4108
+	// https://msdn.microsoft.com/en-us/library/microsoft.office.interop.excel.constants.aspx
+	int x = -4108;
+	if(t == boost::cell_vertical_alignment::BOTTOM) {
+		x = -4107;
+	}
+	else if(t == boost::cell_vertical_alignment::TOP) {
+		x = -4160;
+	}
+	boost::detail::com_variant vt_cell(x);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"VerticalAlignment", 1, 
+		vt_cell.native()
+		);
 }
 
 }}}

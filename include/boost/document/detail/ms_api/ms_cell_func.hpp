@@ -19,6 +19,8 @@
 #include <boost/document/detail/document_file_format.hpp>
 #include <boost/document/detail/document_exception.hpp>
 
+#include <boost/document/detail/cell_alignment_type.hpp>
+
 namespace boost { namespace doc { namespace ms_cell_func {
 
 void get_cell(IDispatch* sheet_ptr,int i, int j, IDispatch*& cell_ptr);
@@ -33,6 +35,13 @@ std::string get_formula(IDispatch* cell_ptr);
 double get_value(IDispatch* cell_ptr);
 
 boost::cell_content_type::type get_content_type(IDispatch* cell_ptr);
+
+void set_style(IDispatch* cell_ptr, const std::string& str);
+void set_foreground_color(IDispatch* cell_ptr, int x);
+void set_background_color(IDispatch* cell_ptr, int x);
+void set_font_size(IDispatch* cell_ptr, double x);
+void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignment::type);
+void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment::type);
 
 }}}
 #endif
