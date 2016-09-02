@@ -36,7 +36,7 @@ lib uno_cppuhelpergcc3 uno_cppu uno_salhelpergcc3 uno_sal
     :
         # Portable way to specify library search paths
         <search>"$(OO_SDK_OUT)/lib"
-        <search>"/usr/lib/libreoffice/ure-link/lib"vim
+        <search>"/usr/lib/libreoffice/ure-link/lib"
         <search>"/usr/lib/libreoffice/sdk/lib"
         # Telling bjam that those libraries exist only in shared version
         <link>shared

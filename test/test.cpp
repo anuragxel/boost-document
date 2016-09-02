@@ -638,7 +638,7 @@ void insertion_sort(T& r, int len) {
 		}
 }
 
-template <class CellArray>
+/*template <class CellArray>
 void quick_sort(CellArray first, CellArray last) {
     if(first == last) return;
     auto pivot = *std::next(first, std::distance(first,last)/2);
@@ -648,7 +648,7 @@ void quick_sort(CellArray first, CellArray last) {
                          [pivot](const auto& em){ return !(pivot < em); });
     quick_sort(first, middle1);
     quick_sort(middle2, last);
-}
+}*/
 
 
 int row_double_sort_test(boost::document& c) {

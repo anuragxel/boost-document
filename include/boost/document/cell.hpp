@@ -10,8 +10,8 @@
 #include <boost/document/detail/cell_interface.hpp>
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 #include <boost/document/detail/cell_data.hpp>
-
 
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
@@ -341,6 +341,14 @@ namespace boost {
 
 		void set_background_color(int color) {
 			impl().set_background_color(color);
+		}
+
+		void set_border(boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
+			impl().set_border(t, w, color);
+		}
+
+		void set_font_style(const std::string& font_name) {
+			impl().set_font_style(font_name);
 		}
 
 		void set_font_size(double val) {

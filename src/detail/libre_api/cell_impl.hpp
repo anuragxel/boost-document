@@ -13,6 +13,7 @@
 
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
@@ -68,6 +69,14 @@ class libre_cell : public cell_interface {
 
 	void set_vertical_alignment(boost::cell_vertical_alignment::type t) {
 		boost::doc::libre_cell_func::set_cell_vertical_alignment(this->xCell_, t);
+	}
+
+	void set_font_style(const std::string& font_name) {
+		boost::doc::libre_cell_func::set_cell_font_name(this->xCell_, font_name);
+	}
+
+	void set_border(boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
+		boost::doc::libre_cell_func::set_cell_border(this->xCell_, t, w, color);
 	}
 
 	boost::cell_content_type::type get_content_type() const {

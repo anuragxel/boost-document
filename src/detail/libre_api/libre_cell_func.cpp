@@ -36,6 +36,7 @@
 
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 
 #include <boost/document/detail/document_exception.hpp>
 
@@ -200,6 +201,12 @@ void set_cell_font_size(Reference < XCell > xCell, double val) {
     set_cell_property(xCell, OUString::createFromAscii("CharHeightComplex"), (float)val);
 }
 
+void set_cell_font_name(Reference < XCell > xCell, const std::string& str) {
+    set_cell_property(xCell, OUString::createFromAscii("CharFontName"), OUString::createFromAscii(str.c_str()));
+    set_cell_property(xCell, OUString::createFromAscii("CharFontNameAsian"), OUString::createFromAscii(str.c_str()));
+    set_cell_property(xCell, OUString::createFromAscii("CharFontNameComplex"), OUString::createFromAscii(str.c_str()));
+}
+
 void set_cell_horizontal_alignment(Reference < XCell > xCell, boost::cell_horizontal_alignment::type t) {
     switch(t) {
     case boost::cell_horizontal_alignment::LEFT :
@@ -226,6 +233,10 @@ void set_cell_vertical_alignment(Reference < XCell > xCell, boost::cell_vertical
         set_cell_property(xCell, OUString::createFromAscii("VertJustify"), CellVertJustify_BOTTOM);
         break;
     }
+}
+
+void set_cell_border(Reference < XCell > xCell, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
+  
 }
 
 }}}
