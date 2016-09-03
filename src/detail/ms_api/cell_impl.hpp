@@ -13,6 +13,7 @@
 
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 
 #include <boost/document/detail/ms_api/ms_cell_func.hpp>
 
@@ -93,6 +94,14 @@ class ms_cell : public cell_interface {
 
     void set_font_size(double x) {
         boost::doc::ms_cell_func::set_font_size(cell_ptr_, x);
+    }
+
+    void set_font_style(const std::string& font_name) {
+        boost::doc::ms_cell_func::set_font_style(cell_ptr_, font_name);
+    }
+
+    void set_border(boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
+        boost::doc::ms_cell_func::set_border(cell_ptr_, t, w, color);
     }
 
     void set_horizontal_alignment(boost::cell_horizontal_alignment::type t) {

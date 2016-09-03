@@ -21,6 +21,7 @@
 
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 
 #include <boost/document/detail/document_exception.hpp>
 
@@ -188,6 +189,61 @@ void set_font_size(IDispatch* cell_ptr, double x) {
 	);
 
 }
+
+
+//! \fn
+//!
+void set_font_style(IDispatch* cell_ptr, const std::string& font_name) {
+	IDispatch *font_ptr = NULL;
+	VARIANT result;
+	VariantInit(&result);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
+	font_ptr = result.pdispVal;
+	
+	// font size is integer in Excel COM API :/
+	boost::detail::com_variant vt_cell( font_name );
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Name", 1, 
+		vt_cell.native()
+	);
+
+}
+
+//! \fn
+//!
+void set_border(IDispatch* cell_ptr, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
+	// Code and Call: https://msdn.microsoft.com/en-us/library/office/ff838258.aspx
+	
+	// Border Style: NONE, CONTINUOUS, DASH, DASHDOT
+	int style_code = -4142; // NONE
+	if(t == boost::cell_border_style::CONTINUOUS) {
+		style_code = 1;
+	}
+	else if(t == boost::cell_border_style::DASH) {
+		style_code = -4115;
+	}
+	else if(t == boost::cell_border_style::DASHDOT){
+		style_code = 4;
+	}
+
+	// Border Weight: MEDIUM, THICK, THIN
+	int style_weight = -4138; // MEDIUM
+	if(w == boost::cell_border_weight::THICK) {
+		style_weight = 4;
+	}
+	else if(w == boost::cell_border_weight::THIN) {
+		style_weight = 2;
+	}
+
+	boost::detail::com_variant border_style(style_code), border_weight(style_weight), border_color_idx(-4105), border_color(color);
+	// Reverse order
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_METHOD, NULL, cell_ptr, L"BorderAround", 4,
+		border_color.native(),
+		border_color_idx.native(),
+		border_weight.native(),
+		border_style.native()
+		);
+}
+
 
 //! \fn
 //!

@@ -20,6 +20,7 @@
 #include <boost/document/detail/document_exception.hpp>
 
 #include <boost/document/detail/cell_alignment_type.hpp>
+#include <boost/document/detail/cell_border_type.hpp>
 
 namespace boost { namespace doc { namespace ms_cell_func {
 
@@ -42,6 +43,8 @@ void set_background_color(IDispatch* cell_ptr, int x);
 void set_font_size(IDispatch* cell_ptr, double x);
 void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignment::type);
 void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment::type);
+void set_font_style(IDispatch* cell_ptr, const std::string& font_name);
+void set_border(IDispatch* cell_ptr, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color);
 
 }}}
 #endif
