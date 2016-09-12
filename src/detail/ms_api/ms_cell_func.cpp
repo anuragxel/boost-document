@@ -139,21 +139,30 @@ boost::cell_content_type::type get_content_type(IDispatch* cell_ptr) {
 //! \fn
 //!
 void set_style(IDispatch* cell_ptr, const std::string& str) {
+	IDispatch *style_ptr = NULL;
+	VARIANT result;
+	VariantInit(&result);
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, style_ptr, L"Style",0);
+	style_ptr = result.pdispVal;
 
+	boost::detail::com_variant vt_cell( str );
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, style_ptr, L"Name", 1,
+		vt_cell.native()
+	);
 }
 
 //! \fn
 //!
-void set_foreground_color(IDispatch* cell_ptr, int x) { 
+void set_foreground_color(IDispatch* cell_ptr, int x) {
 	IDispatch *font_ptr = NULL;
 	VARIANT result;
 	VariantInit(&result);
 	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
 	font_ptr = result.pdispVal;
-	
+
 	// x is of the form, 0x00bbggrr
 	boost::detail::com_variant vt_cell( x );
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Color", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Color", 1,
 		vt_cell.native()
 	);
 }
@@ -166,9 +175,10 @@ void set_background_color(IDispatch* cell_ptr, int x) {
 	VariantInit(&result);
 	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, cell_ptr, L"Interior",0);
 	interior_ptr=result.pdispVal;
+
 	// x is of the form, 0x00bbggrr
 	boost::detail::com_variant vt_cell( x );
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, interior_ptr, L"Color", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, interior_ptr, L"Color", 1,
 		vt_cell.native()
 	);
 }
@@ -181,10 +191,10 @@ void set_font_size(IDispatch* cell_ptr, double x) {
 	VariantInit(&result);
 	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
 	font_ptr = result.pdispVal;
-	
+
 	// font size is integer in Excel COM API :/
 	boost::detail::com_variant vt_cell( (int) x );
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Size", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Size", 1,
 		vt_cell.native()
 	);
 
@@ -199,10 +209,10 @@ void set_font_style(IDispatch* cell_ptr, const std::string& font_name) {
 	VariantInit(&result);
 	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, font_ptr, L"Font",0);
 	font_ptr = result.pdispVal;
-	
+
 	// font size is integer in Excel COM API :/
 	boost::detail::com_variant vt_cell( font_name );
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Name", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Name", 1,
 		vt_cell.native()
 	);
 
@@ -212,7 +222,7 @@ void set_font_style(IDispatch* cell_ptr, const std::string& font_name) {
 //!
 void set_border(IDispatch* cell_ptr, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
 	// Code and Call: https://msdn.microsoft.com/en-us/library/office/ff838258.aspx
-	
+
 	// Border Style: NONE, CONTINUOUS, DASH, DASHDOT
 	int style_code = -4142; // NONE
 	if(t == boost::cell_border_style::CONTINUOUS) {
@@ -248,7 +258,7 @@ void set_border(IDispatch* cell_ptr, boost::cell_border_style::type t, boost::ce
 //! \fn
 //!
 void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignment::type t) {
-	// Left: -4131 Center: -4108  Right: -4152 
+	// Left: -4131 Center: -4108  Right: -4152
 	// https://msdn.microsoft.com/en-us/library/microsoft.office.interop.excel.constants.aspx
 	int x = -4108;
 	if(t == boost::cell_horizontal_alignment::RIGHT) {
@@ -258,7 +268,7 @@ void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignm
 		x = -4131;
 	}
 	boost::detail::com_variant vt_cell(x);
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"HorizontalAlignment", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"HorizontalAlignment", 1,
 		vt_cell.native()
 		);
 }
@@ -276,7 +286,7 @@ void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment:
 		x = -4160;
 	}
 	boost::detail::com_variant vt_cell(x);
-	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"VerticalAlignment", 1, 
+	boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, cell_ptr, L"VerticalAlignment", 1,
 		vt_cell.native()
 		);
 }
