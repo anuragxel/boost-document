@@ -672,7 +672,7 @@ int row_double_sort_test(boost::document& c) {
 			return 0;
 	}
 	catch(boost::document_exception& e) {
-			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << "Test row_double_sort_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -697,7 +697,7 @@ int row_string_sort_test(boost::document& c) {
 			return 0;
 	}
 	catch(boost::document_exception& e) {
-			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << "Test row_string_sort_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -751,7 +751,7 @@ int row_lower_bound_test(boost::document& c) {
 			return 0;
 	}
 	catch(boost::document_exception& e) {
-			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << "Test row_lower_bound_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -774,7 +774,7 @@ int column_bin_search_test(boost::document& c) {
 			return 0;
 	}
 	catch(boost::document_exception& e) {
-			std::cerr << "Test row_sort_test Failed." << std::endl;
+			std::cerr << "Test column_bin_search_test Failed." << std::endl;
 			std::cerr << e.what() << std::endl;
 			return 1;
 	}
@@ -801,7 +801,7 @@ int row_iterator_caching(boost::document& c) {
 	}
 }
 
-int cell_color_test(boost::document& c) {
+int cell_format_test(boost::document& c) {
 	try {
 		boost::sheet s1 = c["Anurag"];
 		boost::cell c1 = s1[0][0];
@@ -817,7 +817,26 @@ int cell_color_test(boost::document& c) {
 		return 0;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test row_iterator_caching Failed." << std::endl;
+		std::cerr << "Test cell_format_test Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
+int cell_border_test(boost::document& c) {
+	try {
+		boost::sheet s1 = c["Anurag"];
+		boost::cell c1 = s1[1][0];
+		boost::cell c2 = s1[1][1];
+		boost::cell c3 = s1[1][2];
+		c1.set_border(boost::cell_border_style::CONTINUOUS, boost::cell_border_weight::MEDIUM, 0x000000);
+		c2.set_border(boost::cell_border_style::DASHDOT, boost::cell_border_weight::THICK, 0x800000);
+		c3.set_border(boost::cell_border_style::DASH, boost::cell_border_weight::THIN, 0x00800b);
+		c.export_document( boost::filesystem::path("Test2_style1.pdf"), boost::document_file_format::PDF); // to check the output, basically
+		return 0;
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test cell_border_test Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
@@ -900,7 +919,8 @@ int test_main(int argc, char *argv[]) {
 	rv += row_lower_bound_test(c);
 	rv += column_bin_search_test(c);
 
-	rv += cell_color_test(c);
+	rv += cell_format_test(c);
+	rv += cell_border_test(c);
 
 	if (rv > 0) {
 		std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;

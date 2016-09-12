@@ -32,6 +32,13 @@
 #include <com/sun/star/table/CellHoriJustify.hpp>
 #include <com/sun/star/table/CellVertJustify.hpp>
 
+#include <com/sun/star/table/TableBorder.hpp>
+#include <com/sun/star/table/BorderLine.hpp>
+
+#include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/BorderLineStyle.hpp>
+
 #include <com/sun/star/text/XText.hpp>
 
 #include <boost/document/detail/cell_content_type.hpp>
@@ -236,7 +243,60 @@ void set_cell_vertical_alignment(Reference < XCell > xCell, boost::cell_vertical
 }
 
 void set_cell_border(Reference < XCell > xCell, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
-  
+    // Border Weight: MEDIUM, THICK, THIN
+    int style_weight = 50; // MEDIUM
+    if(w == boost::cell_border_weight::THICK) {
+      style_weight = 100;
+    }
+    else if(w == boost::cell_border_weight::THIN) {
+      style_weight = 20;
+    }
+    sal_Bool x = (sal_Bool)true;
+    try {
+        // NONE, CONTINUOUS, DASH, DASHDOT
+        int style_type = BorderLineStyle::SOLID;
+        if(t == boost::cell_border_style::DASH) {
+            style_type = BorderLineStyle::DASHED;
+        }
+        else if(t == boost::cell_border_style::DASHDOT) {
+            style_type = BorderLineStyle::DASH_DOT;
+        }
+        else if(t == boost::cell_border_style::NONE) {
+            x = (sal_Bool)false;
+            style_type = BorderLineStyle::NONE;
+        }
+        BorderLine2 b2(color, 0, style_weight, 0, style_type, 0);
+        TableBorder2 val2(
+          b2, x,
+          b2, x,
+          b2, x,
+          b2, x,
+          b2, x,
+          b2, x,
+          0, (sal_Bool)true
+        );
+        set_cell_property(xCell, OUString::createFromAscii("TableBorder2"), val2);
+    }
+    catch( Exception &e ){
+        // Open Office: API Difference with  Libreoffice
+        // Open Office doesn't support the BorderLine2 interface and thus TableBorder2
+        // interface. There is no support for style of the border AFAIK.
+        // This code is supported by both Libreoffice and Openoffice
+        if(t == boost::cell_border_style::NONE) {
+            x = (sal_Bool)false;
+        }
+        BorderLine b(color, 0, style_weight, 0);
+        TableBorder val(
+          b, x,
+          b, x,
+          b, x,
+          b, x,
+          b, x,
+          b, x,
+          0, (sal_Bool)true
+        );
+        set_cell_property(xCell, OUString::createFromAscii("TableBorder"), val);
+    }
 }
 
 }}}
