@@ -158,7 +158,7 @@ local SOURCES ;
 #}
 #else if  ( $(LIBRE_REQUIREMENTS) )
 #{
-   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/libre_api/libre_cell_func detail/open_instance ;
+   SOURCES = detail/libre_api/libre_functions detail/libre_api/libre_sheet_func detail/libre_api/libre_cell_func detail/libre_api/libre_chart_func detail/open_instance ;
 #}
 
 

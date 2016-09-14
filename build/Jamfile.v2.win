@@ -154,7 +154,7 @@ local SOURCES ;
 
 #if ( $(MS_REQUIREMENTS) )
 #{
-    SOURCES = detail/ms_api/ms_functions detail/ms_api/ms_sheet detail/ms_api/ms_cell_func detail/open_instance ;
+    SOURCES = detail/ms_api/ms_functions detail/ms_api/ms_sheet detail/ms_api/ms_cell_func detail/ms_api/ms_chart_func detail/open_instance ;
 #}
 #else if  ( $(LIBRE_REQUIREMENTS) )
 #{

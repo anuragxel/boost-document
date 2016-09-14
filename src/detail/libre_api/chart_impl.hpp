@@ -33,7 +33,7 @@ protected:
 	boost::chart_type::type t_;
 
 public:
-	libre_chart(const ::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument >& xChart,
+	libre_chart(::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart,
 		const std::string& name, const std::string& cell_range,
 		int left, int top, int width, int height,
 		boost::chart_type::type t) {

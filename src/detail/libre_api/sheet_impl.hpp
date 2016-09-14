@@ -23,6 +23,8 @@
 #include <boost/document/detail/libre_api/libre_sheet_func.hpp>
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
+#include <boost/document/detail/libre_api/libre_chart_func.hpp>
+
 #include "cell_impl.hpp"
 #include "chart_impl.hpp"
 

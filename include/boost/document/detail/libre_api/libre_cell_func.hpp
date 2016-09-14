@@ -1,5 +1,5 @@
-#ifndef _LIBRE_CELL_HPP
-#define _LIBRE_CELL_HPP
+#ifndef _LIBRE_CELL_FUNC_HPP
+#define _LIBRE_CELL_FUNC_HPP
 
 //          Copyright Anurag Ghosh 2015.
 // Distributed under the Boost Software License, Version 1.0.

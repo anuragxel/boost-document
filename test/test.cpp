@@ -842,6 +842,80 @@ int cell_border_test(boost::document& c) {
 	}
 }
 
+int basic_chart_test(boost::document& c) {
+	try {
+			boost::sheet s1 = c.insert_sheet("Chart_Test");
+
+			// Adapted from http://api.libreoffice.org/examples/java/Spreadsheet/SCalc.java
+			s1[0][1] = "JAN";
+			s1[0][2] = "FEB";
+			s1[0][3] = "MAR";
+			s1[0][4] = "APR";
+			s1[0][5] = "MAY";
+			s1[0][6] = "JUN";
+			s1[0][7] = "JUL";
+			s1[0][8] = "AUG";
+			s1[0][9] = "SEP";
+			s1[0][10] = "OCT";
+			s1[0][11] = "NOV";
+			s1[0][12] = "DEC";
+			s1[0][13] = "SUM";
+
+			s1[1][0] = "Smith";
+			s1[1][1] = 42;
+			s1[1][2] = 58.9;
+			s1[1][3] = -66.5;
+			s1[1][4] = 43.4;
+			s1[1][5] = 44.5;
+			s1[1][6] = 45.3;
+			s1[1][7] = -67.3;
+			s1[1][8] = 30.5;
+			s1[1][9] = 23.2;
+			s1[1][10] = -97.3;
+			s1[1][11] = 22.4;
+			s1[1][12] = 23.5;
+			s1[1][13] = "=SUM(B2:M2)";
+
+			s1[1][0] = "Jones";
+			s1[1][1] = 21;
+			s1[1][2] = 40.9;
+			s1[1][3] = -57.5;
+			s1[1][4] = -23.4;
+			s1[1][5] = 34.5;
+			s1[1][6] = 59.3;
+			s1[1][7] = 27.3;
+			s1[1][8] = -38.5;
+			s1[1][9] = 43.2;
+			s1[1][10] = 57.3;
+			s1[1][11] = 25.4;
+			s1[1][12] = 28.5;
+			s1[1][13] = "=SUM(B3:M3)";
+
+			s1[1][0] = "Brown";
+			s1[1][1] = 31.45;
+			s1[1][2] = -20.9;
+			s1[1][3] = -117.5;
+			s1[1][4] = 23.4;
+			s1[1][5] = -114.5;
+			s1[1][6] = 115.3;
+			s1[1][7] = -171.3;
+			s1[1][8] = 89.5;
+			s1[1][9] = 41.2;
+			s1[1][10] = 71.3;
+			s1[1][11] = 25.4;
+			s1[1][12] = 38.5;
+			s1[1][13] = "=SUM(B4:M4)";
+
+			//s1.add_chart("Test1");
+			c.export_document( boost::filesystem::path("Test2_chart1.pdf"), boost::document_file_format::PDF); // to check the output, basically
+	}
+	catch(boost::document_exception& e) {
+		std::cerr << "Test cell_border_test Failed." << std::endl;
+		std::cerr << e.what() << std::endl;
+		return 1;
+	}
+}
+
 int test_main(int argc, char *argv[]) {
 //#ifdef BOOST_DOCUMENT_HAS_MS
 //    boost::document b("Excel_Test1.xlsx");
