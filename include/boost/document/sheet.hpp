@@ -13,6 +13,9 @@
 
 
 #include <boost/document/detail/sheet_interface.hpp>
+#include <boost/document/detail/chart_interface.hpp>
+#include <boost/document/detail/chart_type.hpp>
+
 #include <boost/document/detail/document_exception.hpp>
 
 #include <boost/shared_ptr.hpp>
@@ -163,6 +166,19 @@ namespace boost {
 		//!        No Exception Handling.
 		boost::cell operator[](const char* str) {
 		    return cell_idx_from_string(str, std::strlen(str));
+		}
+
+		//! \brief Adds a chart to the sheet over cell_range,
+		//!        at position (left, top) with size (width, height)
+		//!        and of type boost::chart_type::type
+		boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) {
+				return pimpl_->add_chart(name, cell_range, left, top, width, height, t);
+		}
+
+		//! \brief Deletes a chart of the
+		//! 			 name 'name'
+		void delete_chart(const std::string& name) {
+				return pimpl_->delete_chart(name);
 		}
 
 		//! \brief Destructor

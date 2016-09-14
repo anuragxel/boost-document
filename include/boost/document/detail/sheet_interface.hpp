@@ -8,6 +8,10 @@
 
 #include <string>
 #include <boost/document/cell.hpp>
+#include <boost/document/chart.hpp>
+
+#include <boost/document/detail/chart_type.hpp>
+
 
 namespace boost {
 
@@ -20,8 +24,12 @@ namespace boost {
 		virtual boost::cell get_cell_unchecked(std::size_t i, std::size_t j) = 0;
 		virtual std::size_t max_row() = 0;
 		virtual std::size_t max_column() = 0;
+
+		virtual boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t);
+		virtual void delete_chart(const std::string& name);
+
 		virtual ~sheet_interface() {}
-	};	
+	};
 } // namespace boost
 
 #endif

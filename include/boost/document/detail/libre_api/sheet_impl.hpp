@@ -18,13 +18,12 @@
 
 #include <boost/document/detail/sheet_interface.hpp>
 #include <boost/document/detail/cell_interface.hpp>
-#include <boost/document/detail/chart_interface.hpp>
+
 
 #include <boost/document/detail/libre_api/libre_sheet_func.hpp>
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
 #include "cell_impl.hpp"
-#include "chart_impl.hpp"
 
 namespace boost { namespace detail {
 
@@ -90,15 +89,6 @@ public:
 	boost::cell get_cell_unchecked(std::size_t row, std::size_t column) {
 		::com::sun::star::uno::Reference< com::sun::star::table::XCell > xCell = this->xSheet_->getCellByPosition((int)row, (int)column);
 		return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::libre_cell>(xCell,row,column)));
-	}
-
-	boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) {
-		::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart = boost::doc::libre_chart_func::add_chart(this->xSheet_, name, cell_range, left, top, width, height, t);
-		return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::libre_chart>(xChart, name, cell_range, left, top, width, height, t)));
-	}
-
-	void delete_chart(const std::string& name) {
-		boost::doc::libre_chart_func::delete_chart(this->xSheet_, name);
 	}
 
  	~libre_sheet() {
