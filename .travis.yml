@@ -31,7 +31,11 @@ before_install:
     # Installing all the LibreOffice SDK stuff
     # Following lines are the only difference from original file from https://svn.boost.org/trac/boost/wiki/TravisCoverals
     - sudo apt-get update -qq
-    - sudo apt-get install -qq -y libreoffice-dev libreoffice g++-4.8
+    - sudo apt-get install -qq -y libreoffice-dev libreoffice
+    # Quick fix for getting g++-4.8
+    - sudo add-apt-repository -qq -y ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update -qq
+    - sudo apt-get install g++-4.8
     - cd /usr/lib/libreoffice/sdk
     - source setsdkenv_unix.sh
     - mkdir $OO_SDK_OUT/

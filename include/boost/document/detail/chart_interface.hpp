@@ -7,12 +7,15 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 
+#include <string>
 #include <boost/document/detail/chart_type.hpp>
 
 namespace boost {
 
 	class chart_interface {
 	 public:
+    virtual void set_title(const std::string& title) = 0;
+    virtual void set_legend(bool set) = 0;
 		virtual ~chart_interface() {}
 	};
 } // namespace boost

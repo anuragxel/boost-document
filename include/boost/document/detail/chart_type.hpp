@@ -13,7 +13,7 @@ namespace boost {
 	//!
 	struct chart_type {
 		enum type {
-      BAR, PIE
+      BAR, PIE, SCATTER
 		};
 	};
 } // namespace boost

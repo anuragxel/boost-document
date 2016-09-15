@@ -98,7 +98,7 @@ void set_title(Reference<XChartDocument> xChart, const std::string& title) {
     set_chart_property(xChart->getTitle(), OUString::createFromAscii("String"), OUString::createFromAscii(title.c_str()));
 }
 
-void legend(Reference<XChartDocument> xChart, bool set) {
+void set_legend(Reference<XChartDocument> xChart, bool set) {
     set_chart_property(xChart, OUString::createFromAscii("HasLegend"), (sal_Bool)set);
 }
 
@@ -128,7 +128,7 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
       Reference<XChartDocument> xChart(oInt, UNO_QUERY);
 
       set_title(xChart, name);
-      legend(xChart, true);
+      set_legend(xChart, true);
       /*std::cout << "Chart Props\n\n\n" << std::endl;
       __debug_find_props(xChart);
       std::cout << "Diagram Props\n\n\n" << std::endl;

@@ -47,6 +47,14 @@ public:
 		this->t_ = t;
 	}
 
+	void set_title(const std::string& title) {
+			boost::doc::libre_chart_func::set_title(xChart_, title);
+	}
+
+	void set_legend(bool set) {
+			boost::doc::libre_chart_func::set_legend(xChart_, set);
+	}
+
  	~libre_chart() {
  	}
 
