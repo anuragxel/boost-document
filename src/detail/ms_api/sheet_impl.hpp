@@ -18,11 +18,15 @@
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/sheet_interface.hpp>
 #include <boost/document/detail/cell_interface.hpp>
+#include <boost/document/detail/chart_interface.hpp>
 
 #include <boost/document/detail/ms_api/ms_sheet.hpp>
 #include <boost/document/detail/ms_api/ms_cell_func.hpp>
+#include <boost/document/detail/ms_api/ms_chart_func.hpp>
 
+#include <boost/document/detail/chart_type.hpp>
 
+#include "chart_impl.hpp"
 #include "cell_impl.hpp"
 
 namespace boost {
@@ -89,6 +93,16 @@ namespace boost {
 				return 1024;
 			}
 
+			boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) {
+				IDispatch* chart_ptr;
+				boost::doc::ms_chart_func::add_chart(this->sheet_ptr_, name, cell_range, left, top, width, height, t, chart_ptr);
+				return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::ms_chart>(chart_ptr, name, cell_range, left, top, width, height, t)));
+			}
+
+			void delete_chart(const std::string& name) {
+				boost::doc::ms_chart_func::delete_chart(this->sheet_ptr_, name);
+			}
+			
 			~ms_sheet() {
 				sheet_ptr_->Release();
 			}
