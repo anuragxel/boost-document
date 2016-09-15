@@ -9,7 +9,6 @@
 #include <string>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>

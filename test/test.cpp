@@ -771,6 +771,9 @@ int column_bin_search_test(boost::document& c) {
 			BOOST_REQUIRE(x==true);
 			x = std::binary_search(r.begin(), end, 134);
 			BOOST_REQUIRE(x==false);
+			for (auto it = r.begin(); it != end; ++it) {
+					it->reset();
+			}
 			return 0;
 	}
 	catch(boost::document_exception& e) {
@@ -844,9 +847,9 @@ int cell_border_test(boost::document& c) {
 
 int basic_chart_test(boost::document& c) {
 	try {
-			boost::sheet s1 = c.insert_sheet("Chart_Test");
+			boost::sheet s1 = c.insert_sheet("ChartTest");
 
-			// Adapted from http://api.libreoffice.org/examples/java/Spreadsheet/SCalc.java
+			// Example Adapted from http://api.libreoffice.org/examples/java/Spreadsheet/SCalc.java
 			s1[0][1] = "JAN";
 			s1[0][2] = "FEB";
 			s1[0][3] = "MAR";
@@ -876,41 +879,44 @@ int basic_chart_test(boost::document& c) {
 			s1[1][12] = 23.5;
 			s1[1][13] = "=SUM(B2:M2)";
 
-			s1[1][0] = "Jones";
-			s1[1][1] = 21;
-			s1[1][2] = 40.9;
-			s1[1][3] = -57.5;
-			s1[1][4] = -23.4;
-			s1[1][5] = 34.5;
-			s1[1][6] = 59.3;
-			s1[1][7] = 27.3;
-			s1[1][8] = -38.5;
-			s1[1][9] = 43.2;
-			s1[1][10] = 57.3;
-			s1[1][11] = 25.4;
-			s1[1][12] = 28.5;
-			s1[1][13] = "=SUM(B3:M3)";
+			s1[2][0] = "Jones";
+			s1[2][1] = 21;
+			s1[2][2] = 40.9;
+			s1[2][3] = -57.5;
+			s1[2][4] = -23.4;
+			s1[2][5] = 34.5;
+			s1[2][6] = 59.3;
+			s1[2][7] = 27.3;
+			s1[2][8] = -38.5;
+			s1[2][9] = 43.2;
+			s1[2][10] = 57.3;
+			s1[2][11] = 25.4;
+			s1[2][12] = 28.5;
+			s1[2][13] = "=SUM(B3:M3)";
 
-			s1[1][0] = "Brown";
-			s1[1][1] = 31.45;
-			s1[1][2] = -20.9;
-			s1[1][3] = -117.5;
-			s1[1][4] = 23.4;
-			s1[1][5] = -114.5;
-			s1[1][6] = 115.3;
-			s1[1][7] = -171.3;
-			s1[1][8] = 89.5;
-			s1[1][9] = 41.2;
-			s1[1][10] = 71.3;
-			s1[1][11] = 25.4;
-			s1[1][12] = 38.5;
-			s1[1][13] = "=SUM(B4:M4)";
+			s1[3][0] = "Brown";
+			s1[3][1] = 31.45;
+			s1[3][2] = -20.9;
+			s1[3][3] = -117.5;
+			s1[3][4] = 23.4;
+			s1[3][5] = -114.5;
+			s1[3][6] = 115.3;
+			s1[3][7] = -171.3;
+			s1[3][8] = 89.5;
+			s1[3][9] = 41.2;
+			s1[3][10] = 71.3;
+			s1[3][11] = 25.4;
+			s1[3][12] = 38.5;
+			s1[3][13] = "=SUM(B4:M4)";
 
-			//s1.add_chart("Test1");
+			boost::chart chrt = s1.add_chart("Test1", "A1:N4", 500, 3000, 25000, 11000, boost::chart_type::PIE);
 			c.export_document( boost::filesystem::path("Test2_chart1.pdf"), boost::document_file_format::PDF); // to check the output, basically
+			s1.delete_chart("Test1");
+			c.save_as_document(boost::filesystem::path("Test2_chart1.ods"));
+			return 0;
 	}
 	catch(boost::document_exception& e) {
-		std::cerr << "Test cell_border_test Failed." << std::endl;
+		std::cerr << "Test basic_chart_test Failed." << std::endl;
 		std::cerr << e.what() << std::endl;
 		return 1;
 	}
@@ -995,6 +1001,8 @@ int test_main(int argc, char *argv[]) {
 
 	rv += cell_format_test(c);
 	rv += cell_border_test(c);
+
+	rv += basic_chart_test(c);
 
 	if (rv > 0) {
 		std::cout << rv << " Tests Failed. Look at Log for more information." << std::endl;

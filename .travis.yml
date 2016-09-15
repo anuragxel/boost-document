@@ -31,12 +31,12 @@ before_install:
     # Installing all the LibreOffice SDK stuff
     # Following lines are the only difference from original file from https://svn.boost.org/trac/boost/wiki/TravisCoverals
     - sudo apt-get update -qq
-    - sudo apt-get install -qq -y libreoffice-dev libreoffice
+    - sudo apt-get install -qq -y libreoffice-dev libreoffice g++-4.8
     - cd /usr/lib/libreoffice/sdk
     - source setsdkenv_unix.sh
     - mkdir $OO_SDK_OUT/
     - cd $OO_SDK_OUT
-    
+
     ## TODO: Write a "robust" IF to detect version and call
     ## the appropriate cppumaker command : path/types.rdb --> /usr/lib/libreoffice/program/types.rdb
     - /usr/lib/libreoffice/sdk/bin/cppumaker -Gc -BUCR -O"$OO_SDK_OUT/include/" /usr/lib/ure/share/misc/types.rdb /usr/lib/libreoffice/program/types/offapi.rdb /usr/lib/libreoffice/program/types/oovbaapi.rdb
@@ -69,7 +69,7 @@ script:
     - if [ "$CCFLAGS" != "" ]; then FLAGS="cxxflags=\"$CCFLAGS\" linkflags=\"$LINKFLAGS\""; else FLAGS=""; fi
     - cd $BOOST/libs/$PROJECT_TO_TEST/test/
     # `--coverage` flags required to generate coverage info for Coveralls
-    - ../../../b2 cxxflags="--coverage -std=$CXX_STANDARD" linkflags="--coverage"
+    - ../../../b2 --toolset=gcc-4.8 cxxflags="--coverage -std=$CXX_STANDARD" linkflags="--coverage"
 
 after_success:
     # Copying Coveralls data to a separate folder

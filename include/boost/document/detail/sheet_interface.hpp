@@ -25,8 +25,8 @@ namespace boost {
 		virtual std::size_t max_row() = 0;
 		virtual std::size_t max_column() = 0;
 
-		virtual boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t);
-		virtual void delete_chart(const std::string& name);
+		virtual boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) = 0;
+		virtual void delete_chart(const std::string& name) = 0;
 
 		virtual ~sheet_interface() {}
 	};
