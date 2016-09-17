@@ -914,7 +914,7 @@ int basic_chart_test(boost::document& c) {
 			s1[3][12] = 38.5;
 			s1[3][13] = "=SUM(B4:M4)";
 
-			boost::chart chrt = s1.add_chart("Test1", "A1:N4", 500, 3000, 25000, 11000, boost::chart_type::PIE);
+			boost::chart chrt = s1.add_chart("Test1", "A1:N4", 100, 3000, 20000, 8000, boost::chart_type::PIE);
 			c.export_document( boost::filesystem::path("Test2_chart1.pdf"), boost::document_file_format::PDF); // to check the output, basically
 			s1.delete_chart("Test1");
 			c.save_as_document(boost::filesystem::path("Test2_chart1.ods"));

@@ -13,7 +13,18 @@ namespace boost {
 	//!
 	struct chart_type {
 		enum type {
-      BAR, PIE, SCATTER
+			AREA,
+			BAR,
+			BUBBLE,
+			DONUT,
+			LINE,
+			RADAR,
+			PIE,
+			STOCK,
+			STOCKO,
+			STOCKV,
+			STOCKVO,
+			SCATTER
 		};
 	};
 } // namespace boost

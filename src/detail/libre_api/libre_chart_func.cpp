@@ -26,16 +26,18 @@
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/table/XTableCharts.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
-
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 
 #include <boost/document/detail/chart_type.hpp>
 
@@ -102,6 +104,59 @@ void set_legend(Reference<XChartDocument> xChart, bool set) {
     set_chart_property(xChart, OUString::createFromAscii("HasLegend"), (sal_Bool)set);
 }
 
+
+Reference<XDiagram> helper_get_XDiagram(Reference<XChartDocument> xChart, std::string service_name) {
+    Reference<XMultiServiceFactory> xMSF(xChart, UNO_QUERY);
+    Reference<XDiagram> xDiag(xMSF->createInstance(OUString::createFromAscii(service_name.c_str())), UNO_QUERY);
+    return xDiag;
+}
+// MS Office : https://msdn.microsoft.com/en-us/library/office/ff838409.aspx
+// OpenOffice : https://www.openoffice.org/api/docs/common/ref/com/sun/star/chart/module-ix.html
+void set_type(Reference<XChartDocument> xChart, boost::chart_type::type t, bool enable_3d) {
+    Reference<XDiagram> xDiag = NULL;
+    bool v,o;
+    switch(t) {
+        case boost::chart_type::AREA :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.AreaDiagram");
+            break;
+        case boost::chart_type::BAR :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.BarDiagram");
+            break;
+        case boost::chart_type::BUBBLE :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.BubbleDiagram");
+            break;
+        case boost::chart_type::DONUT :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.DonutDiagram");
+            break;
+        case boost::chart_type::LINE :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.LineDiagram");
+            break;
+        case boost::chart_type::RADAR :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.NetDiagram");
+            break;
+        case boost::chart_type::PIE :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.PieDiagram");
+            break;
+        case boost::chart_type::STOCK :
+        case boost::chart_type::STOCKO :
+        case boost::chart_type::STOCKV :
+        case boost::chart_type::STOCKVO :
+            if(t == boost::chart_type::STOCK) { v = false; o = false; }
+            else if(t == boost::chart_type::STOCKO) { v = false; o = true; }
+            else if(t == boost::chart_type::STOCKV) { v = true; o = false;}
+            else { v = true; o = true; }
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.StockDiagram");
+            set_chart_property(xDiag, OUString::createFromAscii("Volume"), (sal_Bool)v);
+            set_chart_property(xDiag, OUString::createFromAscii("UpDown"), (sal_Bool)o);
+            break;
+        case boost::chart_type::SCATTER :
+            xDiag = helper_get_XDiagram(xChart, "com.sun.star.chart.XYDiagram");
+            break;
+    }
+    set_chart_property(xDiag, OUString::createFromAscii("Dim3D"), (sal_Bool)enable_3d);
+    xChart->setDiagram(xDiag);
+}
+
 Reference < XChartDocument >
 add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::string& cell_range,
                           int left, int top, int width, int height, boost::chart_type::type t) {
@@ -129,6 +184,7 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
 
       set_title(xChart, name);
       set_legend(xChart, true);
+      set_type(xChart, t, true);
       /*std::cout << "Chart Props\n\n\n" << std::endl;
       __debug_find_props(xChart);
       std::cout << "Diagram Props\n\n\n" << std::endl;

@@ -16,6 +16,7 @@ namespace boost {
 	 public:
     virtual void set_title(const std::string& title) = 0;
     virtual void set_legend(bool set) = 0;
+		virtual void set_type(boost::chart_type::type t, bool enable_3d) = 0;
 		virtual ~chart_interface() {}
 	};
 } // namespace boost

@@ -11,6 +11,7 @@
 
 #include <boost/document/detail/chart_interface.hpp>
 #include <boost/document/detail/document_exception.hpp>
+#include <boost/document/detail/chart_type.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -36,10 +37,14 @@ namespace boost {
         pimpl_->set_title(title);
     }
 
+		void set_type(boost::chart_type::type t, bool enable_3d) {
+				pimpl_->set_type(t, enable_3d);
+		}
+
     void set_legend(bool set) {
         pimpl_->set_legend(set);
     }
-    
+
 		//! \brief Destructor
 		//!        Chart instance is destroyed.
 		~chart() {

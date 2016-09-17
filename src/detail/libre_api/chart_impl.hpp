@@ -51,6 +51,10 @@ public:
 			boost::doc::libre_chart_func::set_title(xChart_, title);
 	}
 
+	void set_type(boost::chart_type::type t, bool enable_3d) {
+			boost::doc::libre_chart_func::set_type(xChart_, t, enable_3d);
+	}
+
 	void set_legend(bool set) {
 			boost::doc::libre_chart_func::set_legend(xChart_, set);
 	}
