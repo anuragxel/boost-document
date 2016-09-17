@@ -44,6 +44,13 @@ class com_variant : boost::noncopyable {
         return v;
     }
 
+    static VARIANT make_bool(bool i) {
+        VARIANT v;
+        v.vt = VT_BOOL;
+        v.boolVal = (i==true)?VARIANT_TRUE:VARIANT_FALSE;
+        return v;
+    }
+
 public:
     com_variant()
         : v_(make_empty())
@@ -65,6 +72,11 @@ public:
     explicit com_variant(double i)
         : v_(make_double(i))
     {}
+
+    explicit com_variant(bool i)
+        : v_(make_bool(i))
+    {}
+
 
     void clear() {
         VariantClear(&v_);
@@ -95,6 +107,12 @@ public:
     com_variant& operator=(double i) {
         clear();
         v_ = make_double(i);
+        return *this;
+    }
+
+    com_variant& operator=(bool i) {
+        clear();
+        v_ = make_bool(i);
         return *this;
     }
 

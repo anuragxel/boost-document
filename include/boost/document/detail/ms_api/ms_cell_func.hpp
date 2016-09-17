@@ -21,6 +21,7 @@
 
 #include <boost/document/detail/cell_alignment_type.hpp>
 #include <boost/document/detail/cell_border_type.hpp>
+#include <boost/document/detail/cell_format_property.hpp>
 
 namespace boost { namespace doc { namespace ms_cell_func {
 
@@ -45,6 +46,7 @@ void set_horizontal_alignment(IDispatch* cell_ptr, boost::cell_horizontal_alignm
 void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment::type);
 void set_font_style(IDispatch* cell_ptr, const std::string& font_name);
 void set_border(IDispatch* cell_ptr, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color);
+void set_formatting_property(IDispatch* cell_ptr, boost::cell_format_property::type t, bool set);
 
 }}}
 #endif

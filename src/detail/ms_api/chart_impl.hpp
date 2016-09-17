@@ -46,11 +46,15 @@ class ms_chart : public chart_interface {
     }
 
     void set_title(const std::string& title) {
-            boost::doc::ms_chart_func::set_title(chart_ptr_, title);
+        boost::doc::ms_chart_func::set_title(chart_ptr_, title);
+    }
+
+    void set_type(boost::chart_type::type t, bool enable_3d) {
+        boost::doc::ms_chart_func::set_type(chart_ptr_, t, enable_3d);
     }
 
     void set_legend(bool set) {
-            boost::doc::ms_chart_func::set_legend(chart_ptr_, set);
+        boost::doc::ms_chart_func::set_legend(chart_ptr_, set);
     }
 
     ~ms_chart() {

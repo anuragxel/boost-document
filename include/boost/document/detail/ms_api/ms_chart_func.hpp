@@ -22,7 +22,7 @@ void delete_chart(IDispatch* sheet_ptr, const std::string& name);
 
 void set_title(IDispatch* chart_ptr, const std::string& title);
 void set_legend(IDispatch* chart_ptr, bool set);
-
+void set_type(IDispatch* chart_ptr, boost::chart_type::type t, bool enable_3d);
 
 }}}
 #endif

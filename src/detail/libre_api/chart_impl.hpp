@@ -27,40 +27,40 @@ namespace boost { namespace detail {
 class libre_chart: public chart_interface {
 
 protected:
-	std::string name_, cell_range_;
-	::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart_;
-	int left_, top_, width_, height_;
-	boost::chart_type::type t_;
+    std::string name_, cell_range_;
+    ::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart_;
+    int left_, top_, width_, height_;
+    boost::chart_type::type t_;
 
 public:
-	libre_chart(::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart,
-		const std::string& name, const std::string& cell_range,
-		int left, int top, int width, int height,
-		boost::chart_type::type t) {
-		this->xChart_ = xChart;
-		this->cell_range_ = cell_range;
-		this->name_ = name;
-		this->left_ = left;
-		this->top_ = top;
-		this->width_ = width;
-		this->height_ = height;
-		this->t_ = t;
-	}
+    libre_chart(::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart,
+        const std::string& name, const std::string& cell_range,
+        int left, int top, int width, int height,
+        boost::chart_type::type t) {
+        this->xChart_ = xChart;
+        this->cell_range_ = cell_range;
+        this->name_ = name;
+        this->left_ = left;
+        this->top_ = top;
+        this->width_ = width;
+        this->height_ = height;
+        this->t_ = t;
+    }
 
-	void set_title(const std::string& title) {
-			boost::doc::libre_chart_func::set_title(xChart_, title);
-	}
+    void set_title(const std::string& title) {
+            boost::doc::libre_chart_func::set_title(xChart_, title);
+    }
 
-	void set_type(boost::chart_type::type t, bool enable_3d) {
-			boost::doc::libre_chart_func::set_type(xChart_, t, enable_3d);
-	}
+    void set_type(boost::chart_type::type t, bool enable_3d) {
+            boost::doc::libre_chart_func::set_type(xChart_, t, enable_3d);
+    }
 
-	void set_legend(bool set) {
-			boost::doc::libre_chart_func::set_legend(xChart_, set);
-	}
+    void set_legend(bool set) {
+            boost::doc::libre_chart_func::set_legend(xChart_, set);
+    }
 
- 	~libre_chart() {
- 	}
+    ~libre_chart() {
+    }
 
 };
 
