@@ -12,6 +12,7 @@
 #include <boost/document/detail/cell_alignment_type.hpp>
 #include <boost/document/detail/cell_border_type.hpp>
 #include <boost/document/detail/cell_data.hpp>
+#include <boost/document/detail/cell_format_property.hpp>
 
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
@@ -331,34 +332,61 @@ namespace boost {
 			impl().reset();
 		}
 
+		//! \brief Set the style of the cell content
+ 		//!        as one of the predefined styles or
+		//!        user defined styles
 		void set_style(const std::string& str) {
 			impl().set_style(str);
 		}
 
+
+		//! \brief Set the foreground of the cell
+		//!        as the specified RGB value (0x00BBGGRR)
 		void set_foreground_color(int color) {
 			impl().set_foreground_color(color);
 		}
 
+		//! \brief Set the background of the cell
+		//!        as the specified RGB value (0x00BBGGRR)
 		void set_background_color(int color) {
 			impl().set_background_color(color);
 		}
 
+		//! \brief Set the border for the cell by specifying
+		//!        the border style as either NONE, CONTINUOUS,
+		//! 			 DASH or DASHDOT, the weight of the border as
+		//!        HIN, MEDIUM or THICK and the color as an RGB value (0x00BBGGRR)
 		void set_border(boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
 			impl().set_border(t, w, color);
 		}
 
+		//! \brief Set the font style of the cell
+		//!        content
 		void set_font_style(const std::string& font_name) {
 			impl().set_font_style(font_name);
 		}
 
+		//! \brief Set the font size of the cell
+		//!        content
 		void set_font_size(double val) {
 			impl().set_font_size(val);
 		}
 
+		//! \brief Set the formatting property of the cell
+		//!        content by setting BOLD, ITALIC,
+		//!        UNDERLINED, STRIKETHROUGH as true or false
+		void set_formatting_property(boost::cell_format_property::type t, bool set) {
+			impl().set_formatting_property(t, set);
+		}
+
+		//! \brief Sets the horizontal alignment of the cell
+		//!				 content as either LEFT, CENTER, RIGHT
 		void set_horizontal_alignment(boost::cell_horizontal_alignment::type t) {
 			impl().set_horizontal_alignment(t);
 		}
 
+		//! \brief Sets the horizontal alignment of the cell
+		//!				 content as either TOP, CENTER, BOTTOM
 		void set_vertical_alignment(boost::cell_vertical_alignment::type t) {
 			impl().set_vertical_alignment(t);
 		}

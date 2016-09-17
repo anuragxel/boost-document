@@ -811,11 +811,16 @@ int cell_format_test(boost::document& c) {
 		c1.set_foreground_color(0x800000);
 		c1.set_background_color(0x00800b);
 		c1.set_style("Heading1");
+		c1.set_formatting_property(boost::cell_format_property::STRIKETHROUGH, true);
 		boost::cell c2 = s1[0][1];
 		c2.set_foreground_color(0x800000);
 		c2.set_font_size(18);
 		c2.set_vertical_alignment(boost::cell_vertical_alignment::TOP);
 		c2.set_horizontal_alignment(boost::cell_horizontal_alignment::RIGHT);
+		c2.set_formatting_property(boost::cell_format_property::BOLD, true);
+		c2.set_formatting_property(boost::cell_format_property::UNDERLINE, true);
+		boost::cell c3 = s1[1][1];
+		c3.set_formatting_property(boost::cell_format_property::ITALIC, true);
 		c.export_document( boost::filesystem::path("Test2_style.pdf"), boost::document_file_format::PDF); // to check the output, basically
 		return 0;
 	}

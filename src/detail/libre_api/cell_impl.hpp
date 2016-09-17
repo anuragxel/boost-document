@@ -14,6 +14,8 @@
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
 #include <boost/document/detail/cell_border_type.hpp>
+#include <boost/document/detail/cell_format_property.hpp>
+
 
 #include <boost/document/detail/libre_api/libre_cell_func.hpp>
 
@@ -78,6 +80,11 @@ class libre_cell : public cell_interface {
 	void set_border(boost::cell_border_style::type t, boost::cell_border_weight::type w, int color) {
 		boost::doc::libre_cell_func::set_cell_border(this->xCell_, t, w, color);
 	}
+
+	void set_formatting_property(boost::cell_format_property::type t, bool set) {
+		boost::doc::libre_cell_func::set_cell_formatting_property(this->xCell_, t, set);
+	}
+
 
 	boost::cell_content_type::type get_content_type() const {
 		return boost::doc::libre_cell_func::get_content_type(this->xCell_);

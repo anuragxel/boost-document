@@ -17,6 +17,7 @@
 #include <boost/document/detail/cell_content_type.hpp>
 #include <boost/document/detail/cell_alignment_type.hpp>
 #include <boost/document/detail/cell_border_type.hpp>
+#include <boost/document/detail/cell_format_property.hpp>
 
 
 namespace boost { namespace doc { namespace libre_cell_func {
@@ -43,6 +44,7 @@ void set_cell_horizontal_alignment(::com::sun::star::uno::Reference < ::com::sun
 void set_cell_vertical_alignment(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, boost::cell_vertical_alignment::type t);
 void set_cell_font_name(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, const std::string& str);
 void set_cell_border(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, boost::cell_border_style::type t, boost::cell_border_weight::type w, int color);
+void set_cell_formatting_property(::com::sun::star::uno::Reference < ::com::sun::star::table::XCell > xCell, boost::cell_format_property::type t, bool set);
 
 }}}
 #endif
