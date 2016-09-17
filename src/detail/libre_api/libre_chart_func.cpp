@@ -184,7 +184,7 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
 
       set_title(xChart, name);
       set_legend(xChart, true);
-      set_type(xChart, t, true);
+      set_type(xChart, t, false);
       /*std::cout << "Chart Props\n\n\n" << std::endl;
       __debug_find_props(xChart);
       std::cout << "Diagram Props\n\n\n" << std::endl;

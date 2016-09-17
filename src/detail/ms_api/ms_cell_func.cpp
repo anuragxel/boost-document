@@ -292,7 +292,8 @@ void set_vertical_alignment(IDispatch* cell_ptr, boost::cell_vertical_alignment:
         );
 }
 
-
+//! \fn
+//!
 void set_formatting_property(IDispatch* cell_ptr, boost::cell_format_property::type t, bool set) {
     IDispatch *font_ptr = NULL;
     VARIANT result;
@@ -308,13 +309,13 @@ void set_formatting_property(IDispatch* cell_ptr, boost::cell_format_property::t
     }
     else if(t == boost::cell_format_property::ITALIC) {
         boost::detail::com_variant vt_cell(set);
-        boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Strikethrough", 1,
+        boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Italic", 1,
         vt_cell.native()
         );
     }
     else if(t == boost::cell_format_property::STRIKETHROUGH ) {
         boost::detail::com_variant vt_cell(set);
-        boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Italic", 1,
+        boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, font_ptr, L"Strikethrough", 1,
         vt_cell.native()
         );
     }
