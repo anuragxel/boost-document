@@ -171,8 +171,11 @@ namespace boost {
 		//! \brief Adds a chart to the sheet over cell_range,
 		//!        at position (left, top) with size (width, height)
 		//!        and of type boost::chart_type::type
-		boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) {
-				return pimpl_->add_chart(name, cell_range, left, top, width, height, t);
+		//!        A cell range corresponds to a string of the form
+		//!        cell:cell where cell is [A-Z]+[0-9]+. The contiguous
+		//!        range is taken as the input data.
+		boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d) {
+				return pimpl_->add_chart(name, cell_range, left, top, width, height, t, enable_3d);
 		}
 
 		//! \brief Deletes a chart of the

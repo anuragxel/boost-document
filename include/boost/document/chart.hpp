@@ -33,14 +33,24 @@ namespace boost {
         explicit chart(const boost::shared_ptr<chart_interface> impl)
     : pimpl_(impl) {}
 
+
+    //! \brief Sets the title of the chart
+    //!        which is initially the assigned chart name
     void set_title(const std::string& title) {
         pimpl_->set_title(title);
     }
 
+    //! \brief Sets the type of the chart
+    //!        from one of the boost::chart_type::type values.
+    //!        Boolean enable_3d should be used to toggle between
+    //!        3d and 2d versions of the chart family (if supported
+    //!        by the unnderlying backend).
     void set_type(boost::chart_type::type t, bool enable_3d) {
         pimpl_->set_type(t, enable_3d);
     }
 
+    //! \brief Toggle between showing the
+    //!        legend of the chart or not
     void set_legend(bool set) {
         pimpl_->set_legend(set);
     }
@@ -49,7 +59,7 @@ namespace boost {
     //!        Chart instance is destroyed.
     ~chart() {
     }
-    
+
     };
 } // namespace boost
 

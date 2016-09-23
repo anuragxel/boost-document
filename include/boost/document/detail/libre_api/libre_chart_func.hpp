@@ -33,7 +33,7 @@ namespace boost { namespace doc { namespace libre_chart_func {
 
 ::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > add_chart(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet,
                                                                                       const std::string& name, const std::string& cell_range,
-                                                                                      int left, int top, int width, int height, boost::chart_type::type t);
+                                                                                      int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d);
 void delete_chart(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet, const std::string& name);
 void set_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, const std::string& title);
 void set_legend(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, bool set);

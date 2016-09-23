@@ -159,7 +159,7 @@ void set_type(Reference<XChartDocument> xChart, boost::chart_type::type t, bool 
 
 Reference < XChartDocument >
 add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::string& cell_range,
-                          int left, int top, int width, int height, boost::chart_type::type t) {
+                          int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d) {
     try {
       Rectangle oRect(left, top, width, height);
 
@@ -184,7 +184,7 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
 
       set_title(xChart, name);
       set_legend(xChart, true);
-      set_type(xChart, t, false);
+      set_type(xChart, t, enable_3d);
       /*std::cout << "Chart Props\n\n\n" << std::endl;
       __debug_find_props(xChart);
       std::cout << "Diagram Props\n\n\n" << std::endl;

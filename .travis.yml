@@ -71,6 +71,8 @@ before_install:
 
 script:
     - if [ "$CCFLAGS" != "" ]; then FLAGS="cxxflags=\"$CCFLAGS\" linkflags=\"$LINKFLAGS\""; else FLAGS=""; fi
+    - cd $BOOST/libs/$PROJECT_TO_TEST/build/
+    - cp Jamfile.v2.linux Jamfile.v2
     - cd $BOOST/libs/$PROJECT_TO_TEST/test/
     # `--coverage` flags required to generate coverage info for Coveralls
     - ../../../b2 --toolset=gcc-4.8 cxxflags="--coverage -std=$CXX_STANDARD" linkflags="--coverage"

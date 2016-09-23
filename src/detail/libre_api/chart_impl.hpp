@@ -31,12 +31,13 @@ protected:
     ::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart_;
     int left_, top_, width_, height_;
     boost::chart_type::type t_;
+    bool enable_3d_, legend_;
 
 public:
     libre_chart(::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart,
         const std::string& name, const std::string& cell_range,
         int left, int top, int width, int height,
-        boost::chart_type::type t) {
+        boost::chart_type::type t, bool enable_3d) {
         this->xChart_ = xChart;
         this->cell_range_ = cell_range;
         this->name_ = name;
@@ -45,6 +46,8 @@ public:
         this->width_ = width;
         this->height_ = height;
         this->t_ = t;
+        this->enable_3d_ = enable_3d;
+        this->legend_ = true;
     }
 
     void set_title(const std::string& title) {
@@ -53,10 +56,13 @@ public:
 
     void set_type(boost::chart_type::type t, bool enable_3d) {
             boost::doc::libre_chart_func::set_type(xChart_, t, enable_3d);
+            this->t_ = t;
+            this->enable_3d_ = enable_3d;
     }
 
     void set_legend(bool set) {
             boost::doc::libre_chart_func::set_legend(xChart_, set);
+            this->legend_ = set;
     }
 
     ~libre_chart() {
