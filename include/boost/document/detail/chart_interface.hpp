@@ -19,6 +19,7 @@ namespace boost {
     virtual void set_legend(bool set) = 0;
 		virtual void set_type(boost::chart_type::type t, bool enable_3d) = 0;
 		virtual void set_axis_title(boost::chart_axis::type t, const std::string& title) = 0;
+		virtual void set_axis_orientation(boost::chart_axis::type t, bool set) = 0;
 		virtual ~chart_interface() {}
 	};
 } // namespace boost

@@ -227,10 +227,13 @@ void delete_chart(Reference<XSpreadsheet> xSheet, const std::string& name) {
     }
 }
 
+void get_axis() {
+
+}
 void set_axis_title(Reference<XChartDocument> xChart, boost::chart_axis::type t, const std::string& title) {
     try {
         Any bool_true;
-        bool_true <<= true;
+        bool_true <<= (sal_Bool)true;
         Reference<XAxis> xAxis = NULL;
         if(t == boost::chart_axis::X) {
             Reference<XAxisXSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
@@ -239,7 +242,7 @@ void set_axis_title(Reference<XChartDocument> xChart, boost::chart_axis::type t,
                 xAxis = xAxis_tmp;
             }
         }
-        if (t == boost::chart_axis::Y) {
+        else if (t == boost::chart_axis::Y) {
             Reference<XAxisYSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
             if(get_chart_property(xChecker, OUString::createFromAscii("HasYAxis")) == bool_true) {
                 Reference<XAxis> xAxis_tmp(xChecker->getYAxis(), UNO_QUERY);
@@ -262,6 +265,41 @@ void set_axis_title(Reference<XChartDocument> xChart, boost::chart_axis::type t,
         set_chart_property(xAxis->getAxisTitle(), OUString::createFromAscii("String"), OUString::createFromAscii(title.c_str()));
     }
     catch( Exception &e ){
+        throw_document_exception(e);
+    }
+}
+
+void set_axis_orientation(Reference<XChartDocument> xChart, boost::chart_axis::type t, bool set) {
+    try{
+        Any bool_true;
+        bool_true <<= (sal_Bool)true;
+        Reference<XPropertySet> xChartAxis = NULL;
+      if(t == boost::chart_axis::X) {
+          Reference<XAxisXSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+          if(get_chart_property(xChecker, OUString::createFromAscii("HasXAxis")) == bool_true) {
+              xChartAxis = xChecker->getXAxis();
+          }
+      }
+      else if (t == boost::chart_axis::Y) {
+          Reference<XAxisYSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+          if(get_chart_property(xChecker, OUString::createFromAscii("HasYAxis")) == bool_true) {
+              xChartAxis = xChecker->getYAxis();
+          }
+      }
+      else if(t == boost::chart_axis::Z) {
+          Reference<XAxisZSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+          if(get_chart_property(xChecker, OUString::createFromAscii("HasZAxis")) == bool_true) {
+              xChartAxis = xChecker->getZAxis();
+          }
+      }
+      // If the axis isn't present at all in the diagram.
+      if(xChartAxis == NULL) {
+        boost::throw_exception(document_exception(
+            "Error: Chart type doesn't support axis."));
+      }
+      set_chart_property(xChartAxis, OUString::createFromAscii("ReverseDirection"), (sal_Bool)set);
+    }
+    catch( Exception &e ) {
         throw_document_exception(e);
     }
 }

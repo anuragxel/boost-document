@@ -70,6 +70,10 @@ public:
             this->legend_ = set;
     }
 
+    void set_axis_orientation(boost::chart_axis::type t, bool set) {
+            boost::doc::libre_chart_func::set_axis_orientation(xChart_, t, set);
+    }
+
     ~libre_chart() {
     }
 

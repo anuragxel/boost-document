@@ -41,8 +41,16 @@ namespace boost {
         pimpl_->set_title(title);
     }
 
+    //! \brief Sets the title of the chart axis
     void set_axis_title(boost::chart_axis::type t, const std::string& title) {
         pimpl_->set_axis_title(t, title);
+    }
+
+    //! \brief Sets the axis orientation of the chart axis.
+    //!        The axis orientation can be mathematical (set = true)
+    //!        or reversed (set = false)
+    void set_axis_orientation(boost::chart_axis::type t, bool set) {
+        pimpl_->set_axis_orientation(t, set);
     }
 
     //! \brief Sets the type of the chart
