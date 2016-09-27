@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 
 namespace boost { namespace doc { namespace libre_chart_func {
@@ -38,6 +39,8 @@ void delete_chart(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpr
 void set_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, const std::string& title);
 void set_legend(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, bool set);
 void set_type(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_type::type t, bool enable_3d);
+void set_axis_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, const std::string& title);
+void toggle_axis_location(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, bool alt);
 
 }}}
 #endif

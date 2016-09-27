@@ -17,6 +17,7 @@
 
 #include <boost/document/detail/chart_interface.hpp>
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 #include <boost/document/detail/libre_api/libre_chart_func.hpp>
 
@@ -52,6 +53,10 @@ public:
 
     void set_title(const std::string& title) {
             boost::doc::libre_chart_func::set_title(xChart_, title);
+    }
+
+    void set_axis_title(boost::chart_axis::type t, const std::string& title) {
+            boost::doc::libre_chart_func::set_axis_title(xChart_, t, title);
     }
 
     void set_type(boost::chart_type::type t, bool enable_3d) {

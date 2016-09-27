@@ -9,6 +9,7 @@
 
 #include <string>
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 namespace boost {
 
@@ -17,6 +18,7 @@ namespace boost {
     virtual void set_title(const std::string& title) = 0;
     virtual void set_legend(bool set) = 0;
 		virtual void set_type(boost::chart_type::type t, bool enable_3d) = 0;
+		virtual void set_axis_title(boost::chart_axis::type t, const std::string& title) = 0;
 		virtual ~chart_interface() {}
 	};
 } // namespace boost

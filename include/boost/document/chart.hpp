@@ -12,6 +12,7 @@
 #include <boost/document/detail/chart_interface.hpp>
 #include <boost/document/detail/document_exception.hpp>
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -40,6 +41,10 @@ namespace boost {
         pimpl_->set_title(title);
     }
 
+    void set_axis_title(boost::chart_axis::type t, const std::string& title) {
+        pimpl_->set_axis_title(t, title);
+    }
+
     //! \brief Sets the type of the chart
     //!        from one of the boost::chart_type::type values.
     //!        Boolean enable_3d should be used to toggle between
@@ -48,6 +53,8 @@ namespace boost {
     void set_type(boost::chart_type::type t, bool enable_3d) {
         pimpl_->set_type(t, enable_3d);
     }
+
+
 
     //! \brief Toggle between showing the
     //!        legend of the chart or not

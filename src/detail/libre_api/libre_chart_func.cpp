@@ -21,6 +21,11 @@
 
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XAxisSupplier.hpp>
+#include <com/sun/star/chart/XAxis.hpp>
+#include <com/sun/star/chart/XAxisXSupplier.hpp>
+#include <com/sun/star/chart/XAxisYSupplier.hpp>
+#include <com/sun/star/chart/XAxisZSupplier.hpp>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -40,6 +45,7 @@
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 #include <boost/document/detail/document_exception.hpp>
 
@@ -89,6 +95,17 @@ void set_chart_property(Reference < U > xSomething, const OUString& prop, const 
         Any propVal;
         propVal <<= val;
         xChartProps->setPropertyValue(prop, propVal);
+    }
+    catch( Exception &e ){
+        throw_document_exception(e);
+    }
+}
+
+template<typename U>
+Any get_chart_property(Reference < U > xSomething, const OUString& prop) {
+    try {
+        Reference < XPropertySet > xChartProps(xSomething, UNO_QUERY);
+        return xChartProps->getPropertyValue(prop);
     }
     catch( Exception &e ){
         throw_document_exception(e);
@@ -204,6 +221,45 @@ void delete_chart(Reference<XSpreadsheet> xSheet, const std::string& name) {
       Reference<XTableChartsSupplier> oSupp(xSheet, UNO_QUERY);
       Reference<XTableCharts> oCharts = oSupp->getCharts();
       oCharts->removeByName(OUString::createFromAscii(name.c_str()));
+    }
+    catch( Exception &e ){
+        throw_document_exception(e);
+    }
+}
+
+void set_axis_title(Reference<XChartDocument> xChart, boost::chart_axis::type t, const std::string& title) {
+    try {
+        Any bool_true;
+        bool_true <<= true;
+        Reference<XAxis> xAxis = NULL;
+        if(t == boost::chart_axis::X) {
+            Reference<XAxisXSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+            if(get_chart_property(xChecker, OUString::createFromAscii("HasXAxis")) == bool_true) {
+                Reference<XAxis> xAxis_tmp(xChecker->getXAxis(), UNO_QUERY);
+                xAxis = xAxis_tmp;
+            }
+        }
+        if (t == boost::chart_axis::Y) {
+            Reference<XAxisYSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+            if(get_chart_property(xChecker, OUString::createFromAscii("HasYAxis")) == bool_true) {
+                Reference<XAxis> xAxis_tmp(xChecker->getYAxis(), UNO_QUERY);
+                xAxis = xAxis_tmp;
+            }
+        }
+        else if(t == boost::chart_axis::Z) {
+            Reference<XAxisZSupplier> xChecker(xChart->getDiagram(), UNO_QUERY);
+            if(get_chart_property(xChecker, OUString::createFromAscii("HasZAxis")) == bool_true) {
+                Reference<XAxis> xAxis_tmp(xChecker->getZAxis(), UNO_QUERY);
+                xAxis = xAxis_tmp;
+            }
+        }
+        // If the axis isn't present at all in the diagram.
+        if(xAxis == NULL) {
+          boost::throw_exception(document_exception(
+              "Error: Chart type doesn't support axis."));
+        }
+        //Reference<XAxisSupplier> xAxisSupplier(xChart, UNO_QUERY);
+        set_chart_property(xAxis->getAxisTitle(), OUString::createFromAscii("String"), OUString::createFromAscii(title.c_str()));
     }
     catch( Exception &e ){
         throw_document_exception(e);
