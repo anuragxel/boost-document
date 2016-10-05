@@ -174,7 +174,9 @@ namespace boost {
 		//!        A cell range corresponds to a string of the form
 		//!        cell:cell where cell is [A-Z]+[0-9]+. The contiguous
 		//!        range is taken as the input data.
-		boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d) {
+		boost::chart add_chart(const std::string& name, const std::string& cell_range,
+				std::size_t left, std::size_t top, std::size_t width,
+				std::size_t height, boost::chart_type::type t, bool enable_3d) {
 				return pimpl_->add_chart(name, cell_range, left, top, width, height, t, enable_3d);
 		}
 
