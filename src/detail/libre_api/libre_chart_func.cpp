@@ -9,11 +9,14 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <string>
+#include <iostream>
 
 #include <boost/filesystem.hpp>
 #include <boost/throw_exception.hpp>
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Size.hpp>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -30,6 +33,12 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -60,6 +69,7 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::sheet;
 using namespace com::sun::star::container;
 using namespace com::sun::star::document;
+using namespace com::sun::star::drawing;
 
 using namespace rtl;
 using namespace cppu;
@@ -214,9 +224,29 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
     }
 }
 
-void set_rectangle(Reference < XChartDocument > xChart, int left, int top, int width, int height) {
+void set_rectangle(Reference < XChartDocument > xChart, Reference < XSpreadsheet > xSheet, int left, int top, int width, int height) {
     try {
-        Rectangle oRect(left, top, width, height);
+        // Deprecated :/
+        Reference< XDrawPageSupplier > xDPS(xSheet, UNO_QUERY);
+        Reference< XDrawPage > xDrawPage(xDPS->getDrawPage(), UNO_QUERY);
+        Reference< XShapes > xShapes(xDrawPage, UNO_QUERY);
+        Reference< XIndexAccess > xIA(xShapes, UNO_QUERY);
+        int count = xIA->getCount();
+        if(count == 1) {
+            Reference< XShape > xShape(xIA->getByIndex(0), UNO_QUERY);
+            Point pos(left, top);
+            // specific to libreoffice, openoffice uses Point
+            Size siz(width, height);
+            xShape->setPosition(pos);
+            xShape->setSize(siz);
+        }
+        else {
+            // Multiple shapes, then?
+            // How to identify?
+            for(int i = 0; i < count; i++){
+            
+            }
+        }
     }
     catch( Exception &e){
         throw_document_exception(e);

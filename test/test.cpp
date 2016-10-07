@@ -919,6 +919,7 @@ int basic_chart_test(boost::document& c) {
 			chrt.set_axis_title(boost::chart_axis::X, "Ghosh");
 			chrt.set_axis_orientation(boost::chart_axis::X, false);
 			chrt.set_range("A1:N4");
+			chrt.set_position(200, 3000);
 			c.export_document( boost::filesystem::path("Test2_chart1.pdf"), boost::document_file_format::PDF); // to check the output, basically
 			s1.delete_chart("Test1");
 			c.save_as_document(boost::filesystem::path("Test2_chart1.ods"));

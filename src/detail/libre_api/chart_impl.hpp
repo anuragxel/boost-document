@@ -83,13 +83,13 @@ public:
     void set_position(std::size_t top, std::size_t left) {
             left_ = left;
             top_ = top;
-            boost::doc::libre_chart_func::set_rectangle(xChart_, (int)top_, (int)left_, (int)width_, (int)height_);
+            boost::doc::libre_chart_func::set_rectangle(xChart_, xSheet_, (int)top_, (int)left_, (int)width_, (int)height_);
     }
 
     void set_size(std::size_t width, std::size_t height) {
             width_ = width;
             height_ = height;
-            boost::doc::libre_chart_func::set_rectangle(xChart_, (int)top_, (int)left_, (int)width_, (int)height_);
+            boost::doc::libre_chart_func::set_rectangle(xChart_, xSheet_, (int)top_, (int)left_, (int)width_, (int)height_);
     }
 
 

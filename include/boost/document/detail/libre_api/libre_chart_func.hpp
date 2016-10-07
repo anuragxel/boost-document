@@ -42,7 +42,7 @@ void set_type(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChart
 void set_axis_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, const std::string& title);
 void set_axis_orientation(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, bool set);
 
-void set_rectangle(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, int left, int top, int width, int height);
+void set_rectangle(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet, int left, int top, int width, int height);
 void set_cell_range(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet, const std::string& name, const std::string& cell_range);
 
 }}}
