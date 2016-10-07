@@ -99,6 +99,11 @@ public:
 		return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::libre_chart>(xChart, this->xSheet_, name, cell_range, left, top, width, height)));
 	}
 
+	boost::chart get_chart(const std::string& name) {
+		::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart = boost::doc::libre_chart_func::get_chart(this->xSheet_, name);
+		return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::libre_chart>(xChart, this->xSheet_, name, "", 0, 0, 0, 0)));
+	}
+
 	void delete_chart(const std::string& name) {
 		boost::doc::libre_chart_func::delete_chart(this->xSheet_, name);
 	}

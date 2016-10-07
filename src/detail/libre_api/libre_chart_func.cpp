@@ -224,6 +224,23 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
     }
 }
 
+Reference < XChartDocument >
+get_chart(Reference<XSpreadsheet> xSheet, const std::string& name) {
+    try{
+        Reference<XTableChartsSupplier> oSupp(xSheet, UNO_QUERY);
+        Reference<XTableCharts> oCharts = oSupp->getCharts();
+        Reference<XNameAccess> xNamed(oCharts, UNO_QUERY);
+        Any oChart = xNamed->getByName(OUString::createFromAscii(name.c_str()));
+        Reference<XEmbeddedObjectSupplier> oEOS(oChart, UNO_QUERY);
+        Reference<XInterface> oInt = oEOS->getEmbeddedObject();
+        Reference<XChartDocument> xChart(oInt, UNO_QUERY);
+        return xChart
+    }
+    catch( Exception& e){
+        throw_document_exception(e);
+    }
+}
+
 void set_rectangle(Reference < XChartDocument > xChart, Reference < XSpreadsheet > xSheet, int left, int top, int width, int height) {
     try {
         // Deprecated :/
@@ -244,7 +261,7 @@ void set_rectangle(Reference < XChartDocument > xChart, Reference < XSpreadsheet
             // Multiple shapes, then?
             // How to identify?
             for(int i = 0; i < count; i++){
-            
+
             }
         }
     }
@@ -287,9 +304,6 @@ void delete_chart(Reference<XSpreadsheet> xSheet, const std::string& name) {
     }
 }
 
-void get_axis() {
-
-}
 void set_axis_title(Reference<XChartDocument> xChart, boost::chart_axis::type t, const std::string& title) {
     try {
         Any bool_true;

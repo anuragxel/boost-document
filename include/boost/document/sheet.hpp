@@ -180,6 +180,10 @@ namespace boost {
 				return pimpl_->add_chart(name, cell_range, left, top, width, height);
 		}
 
+		boost::chart get_chart(const std::string& name) {
+				return pimpl_->get_chart(name);
+		}
+
 		//! \brief Deletes a chart of the
 		//! 			 name 'name'
 		void delete_chart(const std::string& name) {
