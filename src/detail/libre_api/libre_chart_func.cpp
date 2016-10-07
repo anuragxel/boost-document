@@ -176,7 +176,7 @@ void set_type(Reference<XChartDocument> xChart, boost::chart_type::type t, bool 
 
 Reference < XChartDocument >
 add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::string& cell_range,
-                          int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d) {
+                          int left, int top, int width, int height) {
     try {
       Rectangle oRect(left, top, width, height);
 
@@ -201,7 +201,6 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
 
       set_title(xChart, name);
       set_legend(xChart, true);
-      set_type(xChart, t, enable_3d);
       /*std::cout << "Chart Props\n\n\n" << std::endl;
       __debug_find_props(xChart);
       std::cout << "Diagram Props\n\n\n" << std::endl;
@@ -214,6 +213,37 @@ add_chart(Reference<XSpreadsheet> xSheet, const std::string& name, const std::st
         throw_document_exception(e);
     }
 }
+
+void set_rectangle(Reference < XChartDocument > xChart, int left, int top, int width, int height) {
+    try {
+        Rectangle oRect(left, top, width, height);
+    }
+    catch( Exception &e){
+        throw_document_exception(e);
+    }
+}
+
+void set_cell_range(Reference < XChartDocument > xChart, Reference < XSpreadsheet > xSheet, const std::string& name, const std::string& cell_range){
+    try {
+        Reference<XCellRange> oRange(xSheet, UNO_QUERY);
+        Reference<XCellRange> xRange = oRange->getCellRangeByName(OUString::createFromAscii(cell_range.c_str()));
+        Reference<XCellRangeAddressable> oRangeAddr(xRange, UNO_QUERY);
+        CellRangeAddress xAddr = oRangeAddr->getRangeAddress();
+        Sequence < CellRangeAddress > oAddr(1);
+        oAddr[0] = xAddr;
+
+        Reference<XTableChartsSupplier> oSupp(xSheet, UNO_QUERY);
+        Reference<XTableCharts> oCharts = oSupp->getCharts();
+        Reference<XNameAccess> xNamed(oCharts, UNO_QUERY);
+        Any oChart = xNamed->getByName(OUString::createFromAscii(name.c_str()));
+        Reference<XTableChart> xTableChart(oChart, UNO_QUERY);
+        xTableChart->setRanges(oAddr);
+    }
+    catch( Exception &e){
+        throw_document_exception(e);
+    }
+}
+
 
 
 void delete_chart(Reference<XSpreadsheet> xSheet, const std::string& name) {

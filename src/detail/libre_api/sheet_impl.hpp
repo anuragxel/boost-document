@@ -94,9 +94,9 @@ public:
 		return boost::cell(boost::dynamic_pointer_cast<cell_interface>(boost::make_shared<boost::detail::libre_cell>(xCell,row,column)));
 	}
 
-	boost::chart add_chart(const std::string& name, const std::string& cell_range, std::size_t left, std::size_t top, std::size_t width, std::size_t height, boost::chart_type::type t, bool enable_3d) {
-		::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart = boost::doc::libre_chart_func::add_chart(this->xSheet_, name, cell_range, (int)left, (int)top, (int)width, (int)height, t, enable_3d);
-		return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::libre_chart>(xChart, name, cell_range, left, top, width, height, t, enable_3d)));
+	boost::chart add_chart(const std::string& name, const std::string& cell_range, std::size_t left, std::size_t top, std::size_t width, std::size_t height) {
+		::com::sun::star::uno::Reference < com::sun::star::chart::XChartDocument > xChart = boost::doc::libre_chart_func::add_chart(this->xSheet_, name, cell_range, (int)left, (int)top, (int)width, (int)height);
+		return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::libre_chart>(xChart, this->xSheet_, name, cell_range, left, top, width, height)));
 	}
 
 	void delete_chart(const std::string& name) {

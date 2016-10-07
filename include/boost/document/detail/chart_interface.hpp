@@ -20,6 +20,9 @@ namespace boost {
 		virtual void set_type(boost::chart_type::type t, bool enable_3d) = 0;
 		virtual void set_axis_title(boost::chart_axis::type t, const std::string& title) = 0;
 		virtual void set_axis_orientation(boost::chart_axis::type t, bool set) = 0;
+		virtual void set_range(const std::string& cell_range) = 0;
+		virtual void set_position(std::size_t top, std::size_t left) = 0;
+		virtual void set_size(std::size_t width, std::size_t height) = 0;
 		virtual ~chart_interface() {}
 	};
 } // namespace boost

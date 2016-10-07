@@ -34,13 +34,16 @@ namespace boost { namespace doc { namespace libre_chart_func {
 
 ::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > add_chart(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet,
                                                                                       const std::string& name, const std::string& cell_range,
-                                                                                      int left, int top, int width, int height, boost::chart_type::type t, bool enable_3d);
+                                                                                      int left, int top, int width, int height);
 void delete_chart(::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet, const std::string& name);
 void set_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, const std::string& title);
 void set_legend(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, bool set);
 void set_type(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_type::type t, bool enable_3d);
 void set_axis_title(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, const std::string& title);
 void set_axis_orientation(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, boost::chart_axis::type t, bool set);
+
+void set_rectangle(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, int left, int top, int width, int height);
+void set_cell_range(::com::sun::star::uno::Reference < ::com::sun::star::chart::XChartDocument > xChart, ::com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > xSheet, const std::string& name, const std::string& cell_range);
 
 }}}
 #endif

@@ -176,8 +176,8 @@ namespace boost {
 		//!        range is taken as the input data.
 		boost::chart add_chart(const std::string& name, const std::string& cell_range,
 				std::size_t left, std::size_t top, std::size_t width,
-				std::size_t height, boost::chart_type::type t, bool enable_3d) {
-				return pimpl_->add_chart(name, cell_range, left, top, width, height, t, enable_3d);
+				std::size_t height) {
+				return pimpl_->add_chart(name, cell_range, left, top, width, height);
 		}
 
 		//! \brief Deletes a chart of the

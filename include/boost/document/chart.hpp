@@ -62,6 +62,19 @@ namespace boost {
         pimpl_->set_type(t, enable_3d);
     }
 
+    //! \brief Set the cell range in the form
+    //!        CELL_START:CELL_END
+    void set_range(std::string cell_range) {
+        pimpl_->set_range(cell_range);
+    }
+
+    void set_position(std::size_t top, std::size_t left) {
+        pimpl_->set_position(top, left);
+    }
+
+    void set_size(std::size_t width, std::size_t height) {
+        pimpl_->set_size(width, height);
+    }
 
 
     //! \brief Toggle between showing the
