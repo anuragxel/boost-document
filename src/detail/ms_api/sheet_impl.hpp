@@ -93,10 +93,16 @@ namespace boost {
 				return 1024;
 			}
 
-			boost::chart add_chart(const std::string& name, const std::string& cell_range, int left, int top, int width, int height, boost::chart_type::type t) {
+			boost::chart add_chart(const std::string& name, const std::string& cell_range, std::size_t left, std::size_t top, std::size_t width, std::size_t height) {
 				IDispatch* chart_ptr;
-				boost::doc::ms_chart_func::add_chart(this->sheet_ptr_, name, cell_range, left, top, width, height, t, chart_ptr);
-				return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::ms_chart>(chart_ptr, name, cell_range, left, top, width, height, t)));
+				boost::doc::ms_chart_func::add_chart(this->sheet_ptr_, name, cell_range, left, top, width, height, chart_ptr);
+				return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::ms_chart>(chart_ptr, this->sheet_ptr_, name, cell_range, (int)left, (int)top, (int)width, (int)height)));
+			}
+
+			boost::chart get_chart(const std::string& name) {
+				IDispatch* chart_ptr;				
+				boost::doc::ms_chart_func::get_chart(this->sheet_ptr_, name, chart_ptr);
+				return boost::chart(boost::dynamic_pointer_cast<chart_interface>(boost::make_shared<boost::detail::ms_chart>(chart_ptr, this->sheet_ptr_, name, "", 0, 0, 0, 0)));
 			}
 
 			void delete_chart(const std::string& name) {

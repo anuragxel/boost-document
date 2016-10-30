@@ -16,9 +16,11 @@
 #include <boost/filesystem.hpp>
 
 #include <boost/document/detail/chart_type.hpp>
+#include <boost/document/detail/chart_axis.hpp>
 
 #include <boost/document/detail/ms_api/com_variant.hpp>
 #include <boost/document/detail/ms_api/ms_functions.hpp>
+
 
 namespace boost { namespace doc { namespace ms_chart_func {
 
@@ -68,11 +70,22 @@ void set_type(IDispatch* chart_ptr, boost::chart_type::type t, bool enable_3d) {
 }
 
 void set_legend(IDispatch* chart_ptr, bool set) {
+}
 
+void set_axis_title(IDispatch* chart_ptr, boost::chart_axis::type t, const std::string& title) {
+}
+
+void set_axis_orientation(IDispatch* chart_ptr, boost::chart_axis::type t, bool set) {
+}
+
+void set_cell_range(IDispatch* chart_ptr, IDispatch* sheet_ptr, const std::string& cell_range) {
+}
+
+void set_rectangle(IDispatch* chart_ptr, IDispatch* sheet_ptr, int top, int left, int width, int height) {
 }
 
 void add_chart(IDispatch* sheet_ptr, const std::string& name, const std::string& cell_range,
-                int left, int top, int width, int height, boost::chart_type::type t, IDispatch*& chart_ptr) {
+                int left, int top, int width, int height, IDispatch*& chart_ptr) {
     // Get the range
     IDispatch* range_ptr;
     VARIANT result;
@@ -120,7 +133,7 @@ void add_chart(IDispatch* sheet_ptr, const std::string& name, const std::string&
 
     set_legend(chart_ptr, true);
     set_title(chart_ptr, name);
-    set_type(chart_ptr, t, false);
+    set_type(chart_ptr, boost::chart_type::SCATTER, false);
 
     VariantInit(&result);
     boost::detail::com_variant plotby(1);
@@ -128,7 +141,21 @@ void add_chart(IDispatch* sheet_ptr, const std::string& name, const std::string&
         plotby.native(), 
         var_range_dispatch
     );
-}   
+}
+
+void get_chart(IDispatch* sheet_ptr, const std::string& name, IDispatch*& chart_ptr) {
+    // Get the chart objects
+    VARIANT result;
+    IDispatch *chart_objects_ptr;
+    VariantInit(&result);
+    boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheet_ptr, L"ChartObjects", 0);
+    chart_objects_ptr = result.pdispVal;
+    VariantClear(&result);
+
+    // Get from the chart objects
+    chart_ptr = NULL;   
+}
+
 
 void delete_chart(IDispatch* sheet_ptr, const std::string& name) {
     // Get the chart objects
@@ -138,8 +165,9 @@ void delete_chart(IDispatch* sheet_ptr, const std::string& name) {
     boost::doc::ms_functions::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, sheet_ptr, L"ChartObjects", 0);
     chart_objects_ptr = result.pdispVal;
     VariantClear(&result);
-}
 
+    // Delete from the chart objects
+}
 
 }}}
 
