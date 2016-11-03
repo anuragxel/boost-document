@@ -28,7 +28,7 @@ void set_legend(IDispatch* chart_ptr, bool set);
 void set_axis_title(IDispatch* chart_ptr, boost::chart_axis::type t, const std::string& title);
 void set_axis_orientation(IDispatch* chart_ptr, boost::chart_axis::type t, bool set);
 void set_cell_range(IDispatch* chart_ptr, IDispatch* sheet_ptr, const std::string& cell_range);
-void set_rectangle(IDispatch* chart_ptr, IDispatch* sheet_ptr, int top, int left, int width, int height);
+void set_rectangle(std::string& chart_name, IDispatch* sheet_ptr, int top, int left, int width, int height);
 
 }}}
 #endif

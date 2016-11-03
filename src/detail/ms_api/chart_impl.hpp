@@ -66,13 +66,13 @@ class ms_chart : public chart_interface {
     void set_position(std::size_t top, std::size_t left) {
         left_ = left;
         top_ = top;
-        boost::doc::ms_chart_func::set_rectangle(chart_ptr_, sheet_ptr_, (int)top_, (int)left_, (int)width_, (int)height_);
+        boost::doc::ms_chart_func::set_rectangle(name_, sheet_ptr_, (int)top_, (int)left_, (int)width_, (int)height_);
     }
 
     void set_size(std::size_t width, std::size_t height) {
         width_ = width;
         height_ = height;
-        boost::doc::ms_chart_func::set_rectangle(chart_ptr_, sheet_ptr_, (int)top_, (int)left_, (int)width_, (int)height_);
+        boost::doc::ms_chart_func::set_rectangle(name_, sheet_ptr_, (int)top_, (int)left_, (int)width_, (int)height_);
     }
 
     void set_type(boost::chart_type::type t, bool enable_3d) {
