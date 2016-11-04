@@ -29,7 +29,9 @@ void set_title(IDispatch* chart_ptr, const std::string& title) {
     VARIANT result;
     VariantInit(&result);
     boost::detail::com_variant hastitle(true);
-    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chart_ptr, L"HasTitle", 1, hastitle.native());
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chart_ptr, L"HasTitle", 1, 
+        hastitle.native()
+    );
     
     IDispatch *chart_title_ptr;
     VariantInit(&result);
@@ -42,7 +44,9 @@ void set_title(IDispatch* chart_ptr, const std::string& title) {
     ms_func::auto_wrap_helper(DISPATCH_METHOD, &result, chart_title_ptr, L"Characters", 0);
     chars_ptr=result.pdispVal;
     boost::detail::com_variant vt_title(title);
-    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chars_ptr, L"Text", 1, vt_title.native());
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chars_ptr, L"Text", 1, 
+        vt_title.native()
+    );
     VariantClear(&result);
 
 }
@@ -71,12 +75,20 @@ void set_type(IDispatch* chart_ptr, boost::chart_type::type t, bool enable_3d) {
 }
 
 void set_legend(IDispatch* chart_ptr, bool set) {
+    VARIANT result;
+    VariantInit(&result);
+    boost::detail::com_variant haslegend(set);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chart_ptr, L"HasLegend", 1, 
+        haslegend.native()
+    );
 }
 
 void set_axis_title(IDispatch* chart_ptr, boost::chart_axis::type t, const std::string& title) {
+
 }
 
 void set_axis_orientation(IDispatch* chart_ptr, boost::chart_axis::type t, bool set) {
+
 }
 
 void set_cell_range(IDispatch* chart_ptr, IDispatch* sheet_ptr, const std::string& cell_range) {
