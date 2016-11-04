@@ -21,6 +21,8 @@
 #include <boost/document/detail/ms_api/com_variant.hpp>
 #include <boost/document/detail/ms_api/ms_functions.hpp>
 
+#include <boost/document/detail/document_exception.hpp>
+
 namespace ms_func = boost::doc::ms_functions;
 
 namespace boost { namespace doc { namespace ms_chart_func {
@@ -84,11 +86,121 @@ void set_legend(IDispatch* chart_ptr, bool set) {
 }
 
 void set_axis_title(IDispatch* chart_ptr, boost::chart_axis::type t, const std::string& title) {
+    // https://msdn.microsoft.com/en-us/library/office/ff198060.aspx
+    boost::detail::com_variant axes_type;
+    if(t == boost::chart_axis::X) {
+        axes_type = 1;
+    }
+    else if (t == boost::chart_axis::Y) {
+        axes_type = 2;
+    }
+    else if(t == boost::chart_axis::Z) {
+        axes_type = 3;
+    }
+    // check if axis exists
+    VARIANT result;
+    VariantInit(&result);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, chart_ptr, L"HasAxis", 1,
+        axes_type.native()
+    );
+    bool check = (result.boolVal==VARIANT_TRUE)?true:false;
+    VariantClear(&result);
+
+    if(!check) {
+        boost::throw_exception(document_exception(
+              "Error: Chart type doesn't support axis."));
+    }
+
+    // get the axis
+    IDispatch *axis_ptr;
+    VariantInit(&result);
+    // https://msdn.microsoft.com/en-us/library/office/ff196160.aspx
+    boost::detail::com_variant axes_group(1);
+    // https://msdn.microsoft.com/en-us/library/office/ff821055.aspx
+    // Reverse as usual
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, chart_ptr, L"Axes", 2,
+        axes_group.native(),
+        axes_type.native()
+    );
+    axis_ptr = result.pdispVal;
+    VariantClear(&result);
+
+    // Get the Axis Title Obj
+    IDispatch *axis_title_ptr;
+    VariantInit(&result);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, axis_ptr, L"AxisTitle", 0);
+    axis_title_ptr=result.pdispVal;
+    VariantClear(&result);
+
+    // Set the title 
+    IDispatch *chars_ptr;
+    VariantInit(&result);
+    ms_func::auto_wrap_helper(DISPATCH_METHOD, &result, axis_title_ptr, L"Characters", 0);
+    chars_ptr = result.pdispVal;
+    boost::detail::com_variant vt_title(title);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, &result, chars_ptr, L"Text", 1, 
+        vt_title.native()
+    );
+    VariantClear(&result);
+
 
 }
 
 void set_axis_orientation(IDispatch* chart_ptr, boost::chart_axis::type t, bool set) {
+    // https://msdn.microsoft.com/en-us/library/office/ff198060.aspx
+    boost::detail::com_variant axes_type;
+    if(t == boost::chart_axis::X) {
+        axes_type = 1;
+    }
+    else if (t == boost::chart_axis::Y) {
+        axes_type = 2;
+    }
+    else if(t == boost::chart_axis::Z) {
+        axes_type = 3;
+    }
+    // check if axis exists
+    VARIANT result;
+    VariantInit(&result);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, chart_ptr, L"HasAxis", 1,
+        axes_type.native()
+    );
+    bool check = (result.boolVal==VARIANT_TRUE)?true:false;
+    VariantClear(&result);
 
+    if(!check) {
+        boost::throw_exception(document_exception(
+              "Error: Chart type doesn't support axis."));
+    }
+
+    // get the axis
+    IDispatch *axis_ptr;
+    VariantInit(&result);
+    // https://msdn.microsoft.com/en-us/library/office/ff196160.aspx
+    boost::detail::com_variant axes_group(1);
+    // https://msdn.microsoft.com/en-us/library/office/ff821055.aspx
+    // Reverse as usual
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, chart_ptr, L"Axes", 2,
+        axes_group.native(),
+        axes_type.native()
+    );
+    axis_ptr = result.pdispVal;
+    VariantClear(&result);
+
+    // Change the axis orientation
+    // Crosses property: https://msdn.microsoft.com/en-us/library/office/ff820959.aspx
+    // XlAxisCrosses Enum: https://msdn.microsoft.com/en-us/library/office/ff195050.aspx
+    // Maximum = 2, Minimum = 4
+    VariantInit(&result);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYGET, &result, axis_ptr, L"Crosses", 0);
+    int current_axis_orient = result.lVal;
+    VariantClear(&result);
+
+    // Reverse direction
+    int setter = (current_axis_orient == 4)?2:4;
+    boost::detail::com_variant vt_prop(setter);
+    ms_func::auto_wrap_helper(DISPATCH_PROPERTYPUT, NULL, axis_ptr, L"Crosses", 1, 
+        vt_prop.native()
+    );
 }
 
 void set_cell_range(IDispatch* chart_ptr, IDispatch* sheet_ptr, const std::string& cell_range) {
